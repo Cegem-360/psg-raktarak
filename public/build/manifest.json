@@ -1,0 +1,220 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-Cq7ZrX3K.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/fonts/DejaVuSans-Bold.ttf": {
+    "file": "assets/DejaVuSans-Bold-D3XZ3B4H.ttf",
+    "src": "resources/fonts/DejaVuSans-Bold.ttf"
+  },
+  "resources/fonts/DejaVuSans-BoldOblique.ttf": {
+    "file": "assets/DejaVuSans-BoldOblique-DbcNr4hY.ttf",
+    "src": "resources/fonts/DejaVuSans-BoldOblique.ttf"
+  },
+  "resources/fonts/DejaVuSans-ExtraLight.ttf": {
+    "file": "assets/DejaVuSans-ExtraLight-D1HobU3F.ttf",
+    "src": "resources/fonts/DejaVuSans-ExtraLight.ttf"
+  },
+  "resources/fonts/DejaVuSans-Oblique.ttf": {
+    "file": "assets/DejaVuSans-Oblique-0Gknk7ff.ttf",
+    "src": "resources/fonts/DejaVuSans-Oblique.ttf"
+  },
+  "resources/fonts/DejaVuSans.ttf": {
+    "file": "assets/DejaVuSans-CHjR2eXl.ttf",
+    "src": "resources/fonts/DejaVuSans.ttf"
+  },
+  "resources/fonts/DejaVuSansCondensed-Bold.ttf": {
+    "file": "assets/DejaVuSansCondensed-Bold-Zt1gdCpq.ttf",
+    "src": "resources/fonts/DejaVuSansCondensed-Bold.ttf"
+  },
+  "resources/fonts/DejaVuSansCondensed-BoldOblique.ttf": {
+    "file": "assets/DejaVuSansCondensed-BoldOblique-DZ-Mge73.ttf",
+    "src": "resources/fonts/DejaVuSansCondensed-BoldOblique.ttf"
+  },
+  "resources/fonts/DejaVuSansCondensed-Oblique.ttf": {
+    "file": "assets/DejaVuSansCondensed-Oblique-BhAbJCYS.ttf",
+    "src": "resources/fonts/DejaVuSansCondensed-Oblique.ttf"
+  },
+  "resources/fonts/DejaVuSansCondensed.ttf": {
+    "file": "assets/DejaVuSansCondensed-PmSUFxgz.ttf",
+    "src": "resources/fonts/DejaVuSansCondensed.ttf"
+  },
+  "resources/images/12_pont_0_jpg.jpg": {
+    "file": "assets/12_pont_0_jpg-C5TNfYAE.jpg",
+    "src": "resources/images/12_pont_0_jpg.jpg"
+  },
+  "resources/images/aegon_logo_800x600.png": {
+    "file": "assets/aegon_logo_800x600-BnEmxMsL.png",
+    "src": "resources/images/aegon_logo_800x600.png"
+  },
+  "resources/images/ai-generated-8614999_1280.jpg": {
+    "file": "assets/ai-generated-8614999_1280-CcZpqDrz.jpg",
+    "src": "resources/images/ai-generated-8614999_1280.jpg"
+  },
+  "resources/images/aip_logo_800x600.jpg": {
+    "file": "assets/aip_logo_800x600-CN7C2BRg.jpg",
+    "src": "resources/images/aip_logo_800x600.jpg"
+  },
+  "resources/images/andrassy_palace_iroda_5__384x246.jpg": {
+    "file": "assets/andrassy_palace_iroda_5__384x246-MsF5UV-a.jpg",
+    "src": "resources/images/andrassy_palace_iroda_5__384x246.jpg"
+  },
+  "resources/images/arena_corner_irodahaz_1__384x246.jpg": {
+    "file": "assets/arena_corner_irodahaz_1__384x246-BLDHkoD_.jpg",
+    "src": "resources/images/arena_corner_irodahaz_1__384x246.jpg"
+  },
+  "resources/images/artera_800x600.jpg": {
+    "file": "assets/artera_800x600-DTCIrSnc.jpg",
+    "src": "resources/images/artera_800x600.jpg"
+  },
+  "resources/images/azonnali_szolgaltatott_irodak-2.webp": {
+    "file": "assets/azonnali_szolgaltatott_irodak-2-v8VLIFmH.webp",
+    "src": "resources/images/azonnali_szolgaltatott_irodak-2.webp"
+  },
+  "resources/images/azonnali_szolgaltatott_irodak.webp": {
+    "file": "assets/azonnali_szolgaltatott_irodak-DrBU8mCq.webp",
+    "src": "resources/images/azonnali_szolgaltatott_irodak.webp"
+  },
+  "resources/images/bakerstreet_irodahaz_1__800x600.jpg": {
+    "file": "assets/bakerstreet_irodahaz_1__800x600-D9dzjevI.jpg",
+    "src": "resources/images/bakerstreet_irodahaz_1__800x600.jpg"
+  },
+  "resources/images/bank_center_1_2_3_4_5_384x246.jpg": {
+    "file": "assets/bank_center_1_2_3_4_5_384x246-BzKQXCoo.jpg",
+    "src": "resources/images/bank_center_1_2_3_4_5_384x246.jpg"
+  },
+  "resources/images/belvarosi_kiado_irodak-2.webp": {
+    "file": "assets/belvarosi_kiado_irodak-2-DNWTrQ4V.webp",
+    "src": "resources/images/belvarosi_kiado_irodak-2.webp"
+  },
+  "resources/images/belvarosi_kiado_irodak.webp": {
+    "file": "assets/belvarosi_kiado_irodak-HWMIfXMC.webp",
+    "src": "resources/images/belvarosi_kiado_irodak.webp"
+  },
+  "resources/images/budai_kiado_irodak.webp": {
+    "file": "assets/budai_kiado_irodak-B1aInjwQ.webp",
+    "src": "resources/images/budai_kiado_irodak.webp"
+  },
+  "resources/images/centrica_800x600.png": {
+    "file": "assets/centrica_800x600-CsMXSgTg.png",
+    "src": "resources/images/centrica_800x600.png"
+  },
+  "resources/images/collabit_logo_800x600.png": {
+    "file": "assets/collabit_logo_800x600-CAH6dotu.png",
+    "src": "resources/images/collabit_logo_800x600.png"
+  },
+  "resources/images/conclave-mas-largo-1268_1200_800.webp": {
+    "file": "assets/conclave-mas-largo-1268_1200_800-DaiybDyR.webp",
+    "src": "resources/images/conclave-mas-largo-1268_1200_800.webp"
+  },
+  "resources/images/datapao_logo_800x600.png": {
+    "file": "assets/datapao_logo_800x600-Ce0pc8LT.png",
+    "src": "resources/images/datapao_logo_800x600.png"
+  },
+  "resources/images/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc.webp": {
+    "file": "assets/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc-BzcoeXRE.webp",
+    "src": "resources/images/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc.webp"
+  },
+  "resources/images/finotive_logo_1_800x600.jpg": {
+    "file": "assets/finotive_logo_1_800x600-C-8hHe45.jpg",
+    "src": "resources/images/finotive_logo_1_800x600.jpg"
+  },
+  "resources/images/greening-2025-03-15-00-55-00-utc.webp": {
+    "file": "assets/greening-2025-03-15-00-55-00-utc-Dq2-l97-.webp",
+    "src": "resources/images/greening-2025-03-15-00-55-00-utc.webp"
+  },
+  "resources/images/hirek_office_800x600.jpg": {
+    "file": "assets/hirek_office_800x600-BWuCOO7d.jpg",
+    "src": "resources/images/hirek_office_800x600.jpg"
+  },
+  "resources/images/home_office_800x600.png": {
+    "file": "assets/home_office_800x600-CBnLskb1.png",
+    "src": "resources/images/home_office_800x600.png"
+  },
+  "resources/images/kapcsolat.jpg": {
+    "file": "assets/kapcsolat-CJpzeMla.jpg",
+    "src": "resources/images/kapcsolat.jpg"
+  },
+  "resources/images/office-building-2025-03-18-12-43-13-utc.webp": {
+    "file": "assets/office-building-2025-03-18-12-43-13-utc-C3GtFy1K.webp",
+    "src": "resources/images/office-building-2025-03-18-12-43-13-utc.webp"
+  },
+  "resources/images/pdf/footer.png": {
+    "file": "assets/footer-DG70CxwM.png",
+    "src": "resources/images/pdf/footer.png"
+  },
+  "resources/images/psg-irodahazak-logo.png": {
+    "file": "assets/psg-irodahazak-logo-Ct32wOUi.png",
+    "src": "resources/images/psg-irodahazak-logo.png"
+  },
+  "resources/images/psg-symbol.svg": {
+    "file": "assets/psg-symbol-UIy-SfbG.svg",
+    "src": "resources/images/psg-symbol.svg"
+  },
+  "resources/images/psg_montazs.webp": {
+    "file": "assets/psg_montazs-BQ0EqbRU.webp",
+    "src": "resources/images/psg_montazs.webp"
+  },
+  "resources/images/reflections-in-modern-dutch-design-architecture-2025-03-23-22-04-59-utc.webp": {
+    "file": "assets/reflections-in-modern-dutch-design-architecture-2025-03-23-22-04-59-utc-CHeEckbb.webp",
+    "src": "resources/images/reflections-in-modern-dutch-design-architecture-2025-03-23-22-04-59-utc.webp"
+  },
+  "resources/images/the-office-building-2025-04-02-15-55-34-utc.webp": {
+    "file": "assets/the-office-building-2025-04-02-15-55-34-utc-HgOPYWUs.webp",
+    "src": "resources/images/the-office-building-2025-04-02-15-55-34-utc.webp"
+  },
+  "resources/images/vaci-uti-irodak.webp": {
+    "file": "assets/vaci-uti-irodak-C6Exxh6E.webp",
+    "src": "resources/images/vaci-uti-irodak.webp"
+  },
+  "resources/images/vaci_uti_kiado_irodak.webp": {
+    "file": "assets/vaci_uti_kiado_irodak-De27YJWi.webp",
+    "src": "resources/images/vaci_uti_kiado_irodak.webp"
+  },
+  "resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp": {
+    "file": "assets/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc-BcqXNL4N.webp",
+    "src": "resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp"
+  },
+  "resources/images/welsec_logo_800x600.png": {
+    "file": "assets/welsec_logo_800x600-D1f66OJb.png",
+    "src": "resources/images/welsec_logo_800x600.png"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Boa6CoCR.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-DxkI-1En.css",
+      "assets/app-Cq7ZrX3K.css"
+    ],
+    "assets": [
+      "assets/psg-symbol-UIy-SfbG.svg"
+    ]
+  },
+  "resources/js/google-maps-utils.js": {
+    "file": "assets/google-maps-utils-YxLbDfuB.js",
+    "name": "google-maps-utils",
+    "src": "resources/js/google-maps-utils.js",
+    "isEntry": true
+  },
+  "resources/js/rent-offices-map.js": {
+    "file": "assets/rent-offices-map-CQzSeXzj.js",
+    "name": "rent-offices-map",
+    "src": "resources/js/rent-offices-map.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/google-maps-utils.js"
+    ]
+  },
+  "resources/js/sale-offices-map.js": {
+    "file": "assets/sale-offices-map-BbhrpLWk.js",
+    "name": "sale-offices-map",
+    "src": "resources/js/sale-offices-map.js",
+    "isEntry": true,
+    "imports": [
+      "resources/js/google-maps-utils.js"
+    ]
+  }
+}

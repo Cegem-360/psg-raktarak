@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
     /*
@@ -58,6 +60,14 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
             'report' => false,
+        ],
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST', 'sftp.szervered.hu'),
+            'username' => env('FTP_USERNAME', 'ftp_felhasznalo'),
+            'password' => env('FTP_PASSWORD', 'ftp_jelszo'),
+            'root' => env('FTP_ROOT', storage_path('app/public')),
+            'port' => 22,
         ],
 
     ],
