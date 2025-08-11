@@ -337,8 +337,8 @@ final class PropertyResource extends Resource
                 Select::make('elado_v_kiado')
                     ->label('Eladó v. kiadó')
                     ->options([
-                        'kiado-iroda' => 'Kiadó',
-                        'elado-iroda' => 'Eladó',
+                        'kiado-raktar' => 'Kiadó',
+                        'elado-raktar' => 'Eladó',
                     ])
                     ->required(),
                 DatePicker::make('updated')

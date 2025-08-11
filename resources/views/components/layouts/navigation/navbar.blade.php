@@ -32,8 +32,8 @@
                         aria-current="page">{{ __('navigation.home') }}</a>
                 </li>
                 <li>
-                    <a href="{{ localized_route('kiado-irodak') }}"
-                        class="block py-4 px-8 hover:bg-primary/80 drop-shadow duration-1000 transition-color ease-[cubic-bezier(0.19,1,0.22,1)] {{ request()->routeIs(['kiado-irodak', 'en.kiado-irodak']) ? 'active' : '' }}">
+                    <a href="{{ localized_route('kiado-raktarak') }}"
+                        class="block py-4 px-8 hover:bg-primary/80 drop-shadow duration-1000 transition-color ease-[cubic-bezier(0.19,1,0.22,1)] {{ request()->routeIs(['kiado-raktarak', 'en.kiado-raktarak']) ? 'active' : '' }}">
                         {{ __('navigation.offices_for_rent') }}</a>
                 </li>
                 <li>

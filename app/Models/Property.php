@@ -134,6 +134,56 @@ final class Property extends Model
         return $result;
     }
 
+    /**
+     * Convert Budapest postal code to district Roman numeral
+     */
+    public static function postalCodeToDistrict(string $postalCode): ?string
+    {
+        // Check if it's a valid 4-digit Budapest postal code
+        if (mb_strlen($postalCode) !== 4 || ! ctype_digit($postalCode)) {
+            return null;
+        }
+
+        $code = (int) $postalCode;
+
+        // Check if it's a Budapest postal code (1000-1999)
+        if ($code < 1000 || $code > 1999) {
+            return null;
+        }
+
+        // Calculate district number using the mathematical formula
+        $districtNum = floor($code / 10) - 100;
+
+        // Roman numerals mapping
+        $romanNumerals = [
+            1 => 'I',
+            2 => 'II',
+            3 => 'III',
+            4 => 'IV',
+            5 => 'V',
+            6 => 'VI',
+            7 => 'VII',
+            8 => 'VIII',
+            9 => 'IX',
+            10 => 'X',
+            11 => 'XI',
+            12 => 'XII',
+            13 => 'XIII',
+            14 => 'XIV',
+            15 => 'XV',
+            16 => 'XVI',
+            17 => 'XVII',
+            18 => 'XVIII',
+            19 => 'XIX',
+            20 => 'XX',
+            21 => 'XXI',
+            22 => 'XXII',
+            23 => 'XXIII',
+        ];
+
+        return $romanNumerals[$districtNum] ?? null;
+    }
+
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class);
@@ -189,12 +239,12 @@ final class Property extends Model
 
     public function isRent(): bool
     {
-        return $this->elado_v_kiado === 'kiado-iroda';
+        return $this->elado_v_kiado === 'kiado-raktar';
     }
 
     public function isSale(): bool
     {
-        return $this->elado_v_kiado === 'elado-iroda';
+        return $this->elado_v_kiado === 'elado-raktar';
     }
 
     #[Scope]
@@ -226,13 +276,13 @@ final class Property extends Model
     #[Scope]
     protected function sale(Builder $query): void
     {
-        $query->where('elado_v_kiado', 'elado-iroda');
+        $query->where('elado_v_kiado', 'elado-raktar');
     }
 
     #[Scope]
     protected function rent(Builder $query): void
     {
-        $query->where('elado_v_kiado', 'kiado-iroda');
+        $query->where('elado_v_kiado', 'kiado-raktar');
     }
 
     #[Scope]
@@ -413,6 +463,26 @@ final class Property extends Model
         return Attribute::make(
             get: fn ($value) => $value ?: Str::slug($this->title),
             set: fn ($value) => $value ?: Str::slug($this->title)
+        );
+    }
+
+    /**
+     * Automatically set district when postal code is set
+     */
+    protected function cimIrsz(): Attribute
+    {
+        return Attribute::make(
+            set: function ($value) {
+                // Auto-set district if it's a Budapest postal code
+                if ($value && $this->cim_varos && str_contains($this->cim_varos, 'Budapest')) {
+                    $district = self::postalCodeToDistrict($value);
+                    if ($district) {
+                        $this->attributes['district'] = $district;
+                    }
+                }
+
+                return $value;
+            }
         );
     }
 }

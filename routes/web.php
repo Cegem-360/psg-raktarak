@@ -20,7 +20,7 @@ Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('l
 // Hungarian routes (default, no prefix)
 Route::view('/', 'index')->name('home');
 Route::view('/adatlap-oldal', 'index')->name('adatlap-oldal');
-Route::view('/kiado-irodak', 'index')->name('kiado-irodak');
+Route::view('/kiado-raktarak', 'index')->name('kiado-raktarak');
 Route::view('/elado-irodahazak', 'index')->name('elado-irodahazak');
 Route::view('/rolunk', 'index')->name('rolunk');
 
@@ -40,7 +40,7 @@ Route::get('/budapest/{category}', function ($category) {
     $queryParams = [];
     $queryParams['category'] = $category;
 
-    if ($category === 'elado-irodak') {
+    if ($category === 'elado-raktarak') {
         return redirect()->route('elado-irodahazak');
     }
 
@@ -50,7 +50,7 @@ Route::get('/login', function () {
     return redirect()->route('filament.admin.auth.login'); // Redirect to the login page
 })->name('login');
 Route::get('/ingatlanok', [PropertyController::class, 'index'])->name('properties.index');
-Route::get('/kiado-iroda/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
+Route::get('/kiado-raktar/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
 Route::get('/elado-irodahaz/{property:slug}', [PropertyController::class, 'show'])->name('properties.show-for-sale');
 
 Route::get('/hirek', [NewsController::class, 'index'])->name('news.index');
@@ -60,7 +60,7 @@ Route::get('/hirek/{slug}', [NewsController::class, 'show'])->name('news.show');
 Route::group(['as' => 'en.'], function (): void {
     Route::view('/home', 'index')->name('home');
     Route::view('/data-sheet', 'index')->name('adatlap-oldal');
-    Route::view('/offices-for-rent', 'index')->name('kiado-irodak');
+    Route::view('/offices-for-rent', 'index')->name('kiado-raktarak');
     Route::view('/office-buildings-for-sale', 'index')->name('elado-irodahazak');
     Route::view('/about-us', 'index')->name('rolunk');
     Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
@@ -73,7 +73,7 @@ Route::group(['as' => 'en.'], function (): void {
         $queryParams = [];
         $queryParams['category'] = $category;
 
-        if ($category === 'elado-irodak') {
+        if ($category === 'elado-raktarak') {
             return redirect()->route('en.elado-irodahazak');
         }
 

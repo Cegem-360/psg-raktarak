@@ -15,7 +15,7 @@
 
                     <table class="table-auto w-full mt-4">
                         <tbody>
-                            @if ($property->elado_v_kiado === 'elado-iroda')
+                            @if ($property->elado_v_kiado === 'elado-raktar')
 
                                 <tr>
                                     <td class="font-bold">{{ __('Address') }}:</td>

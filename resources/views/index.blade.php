@@ -17,7 +17,7 @@
             @include('pages.home')
         @elseif (request()->routeIs('adatlap-oldal') || request()->routeIs('en.adatlap-oldal'))
             <x-pages.adatlap-oldal />
-        @elseif (request()->routeIs('kiado-irodak') || request()->routeIs('en.kiado-irodak'))
+        @elseif (request()->routeIs('kiado-raktarak') || request()->routeIs('en.kiado-raktarak'))
             @include('pages.offices-for-rent')
         @elseif (request()->routeIs('elado-irodahazak') || request()->routeIs('en.elado-irodahazak'))
             @include('pages.offices-for-sale')

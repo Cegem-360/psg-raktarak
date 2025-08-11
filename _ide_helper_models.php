@@ -393,21 +393,9 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * @property string $iranyitoszam
- * @property string $helyiseg
- * @property string $megye
- * @property string|null $created_at
- * @property string|null $updated_at
- * @property int $id
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereHelyiseg($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereIranyitoszam($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereMegye($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|PostCode whereUpdatedAt($value)
  */
 	final class PostCode extends \Eloquent {}
 }
@@ -431,7 +419,7 @@ namespace App\Models{
  * @property string|null $meta_description
  * @property string|null $meta_description_en
  * @property string|null $epites_eve
- * @property string|null $osszterulet
+ * @property string|null $total_area
  * @property string|null $jelenleg_kiado
  * @property string|null $min__kiado
  * @property string|null $min__berleti_dij
@@ -448,8 +436,6 @@ namespace App\Models{
  * @property string|null $district
  * @property string|null $cim_utca
  * @property string|null $cim_hazszam
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
  * @property string|null $maps_lat
  * @property string|null $maps_lng
  * @property string|null $azonosito
@@ -484,19 +470,21 @@ namespace App\Models{
  * @property string|null $cimke
  * @property string|null $service
  * @property string|null $maps
- * @property string|null $elado_v__kiado
- * @property string|null $elado_v__kiado_addons
+ * @property string|null $elado_v_kiado
+ * @property string|null $elado_v_kiado_addons
  * @property string|null $updated
  * @property string|null $test
  * @property string|null $egyeb
- * @property string|null $afa
+ * @property bool|null $vat
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Category> $categories
  * @property-read int|null $categories_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Gallery> $images
  * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
  * @property-read int|null $services_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
  * @property-read int|null $tags_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property active()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property agglomeration()
@@ -515,7 +503,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property rent()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property sale()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property searchText(string $search)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereAfa($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereAzonosito($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCimHazszam($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCimIrsz($value)
@@ -569,7 +556,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereMinParkolasDija($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereMinParkolasDijaAddons($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereOrd($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereOsszterulet($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereOsszteruletAddons($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereParkolas($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereParkolasDija($value)
@@ -580,16 +566,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereRaktarTerulet($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereRaktarTeruletAddons($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereService($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereServices($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereTags($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereTest($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereTotalArea($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereUpdated($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereUzemeletetesiDij($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereUzemeletetesiDijAddons($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereVat($value)
  */
 	final class Property extends \Eloquent {}
 }

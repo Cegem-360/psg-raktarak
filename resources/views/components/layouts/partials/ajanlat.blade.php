@@ -32,7 +32,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ localized_route('budapest.category', ['category' => 'kiado-irodak-v-kerulet']) }}"
+                    <a href="{{ localized_route('budapest.category', ['category' => 'kiado-raktarak-v-kerulet']) }}"
                         class="hover:text-blue-600 hover:underline transition-colors duration-200">
                         {{ __('Offices for rent in District V') }}
                     </a>
@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ localized_route('budapest.category', ['category' => 'kiado-irodak-xi-kerulet']) }}"
+                    <a href="{{ localized_route('budapest.category', ['category' => 'kiado-raktarak-xi-kerulet']) }}"
                         class="hover:text-blue-600 hover:underline transition-colors duration-200">
                         {{ __('Offices for rent in District XI.') }}
                     </a>

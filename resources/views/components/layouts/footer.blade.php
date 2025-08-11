@@ -43,7 +43,7 @@
                                  class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Homepage') }}</a>
                          </li>
                          <li class="mb-4">
-                             <a href="{{ localized_route('kiado-irodak') }}"
+                             <a href="{{ localized_route('kiado-raktarak') }}"
                                  class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Rental Offices') }}</a>
                          </li>
                          <li class="mb-4">

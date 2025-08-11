@@ -5,7 +5,7 @@ declare(strict_types=1);
 return [
     'home' => '',
     'adatlap-oldal' => 'adatlap-oldal',
-    'offices-for-rent' => 'kiado-irodak',
+    'offices-for-rent' => 'kiado-raktarak',
     'office-buildings-for-sale' => 'elado-irodahazak',
     'about-us' => 'rolunk',
     'contact' => 'kapcsolat',
