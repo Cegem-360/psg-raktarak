@@ -46,7 +46,7 @@ final class ConvertJsonToManyToMany extends Command
         try {
             $properties = Property::whereNotNull('tags')
                 ->orWhereNotNull('services')
-                ->orWhereNotNull('categories')
+               /*  ->orWhereNotNull('categories') */
                 ->get();
 
             $this->info("📊 Found {$properties->count()} properties with JSON relations");
@@ -95,9 +95,9 @@ final class ConvertJsonToManyToMany extends Command
         }
 
         // Convert Categories
-        if ($property->categories && is_array($property->categories)) {
+        /* if ($property->categories && is_array($property->categories)) {
             $this->convertCategories($property, $property->categories, $dryRun);
-        }
+        } */
     }
 
     private function convertTags(Property $property, array $tagNames, bool $dryRun): void
