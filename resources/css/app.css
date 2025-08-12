@@ -19,10 +19,10 @@
     --accent-kekes2: hsl(218, 42%, 32%);
     --accent-dark-lilas: hsl(238, 35%, 15%);
     --accent-dark-kekes: hsl(216, 35%, 15%); */
-    --color-primary: 11 130 198;
+    --color-primary: 127 35 6;
     --color-secondary: 247 144 30;
-    --color-accent: 218 42 32;
-    --color-accentdark: 216 35% 15%;
+    --color-accent: 14 90 20;
+    --color-accentdark: 14 10% 10%;
     --color-logogray: 48 48 50;
 }
 body {
@@ -63,7 +63,7 @@ body {
 
 @layer base {
   :root {
-    --color-primary: 255 115 179;
+    --color-primary: 127 35 6;
     --color-secondary: 111 114 185;
   }
 }
