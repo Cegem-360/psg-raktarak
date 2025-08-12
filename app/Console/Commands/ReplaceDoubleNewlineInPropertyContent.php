@@ -13,10 +13,10 @@ final class ReplaceDoubleNewlineInPropertyContent extends Command
 
     protected $description = 'Replace all double newlines (\\n\\n) with empty string in Property content fields';
 
-    public function handle()
+    public function handle(): void
     {
         $count = 0;
-        Property::chunk(100, function ($properties) use (&$count) {
+        Property::chunk(100, function ($properties) use (&$count): void {
             foreach ($properties as $property) {
                 $originalContent = $property->content;
                 $originalEnContent = $property->en_content ?? '';
@@ -28,10 +28,10 @@ final class ReplaceDoubleNewlineInPropertyContent extends Command
 
                 $count++;
 
-                $this->info("Updated Property ID: {$property->id}");
+                $this->info('Updated Property ID: ' . $property->id);
 
             }
         });
-        $this->info("Done. Updated {$count} properties.");
+        $this->info(sprintf('Done. Updated %d properties.', $count));
     }
 }

@@ -6,6 +6,8 @@ namespace App\Livewire;
 
 use App\Models\Category;
 use App\Models\Property as Offices;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -86,9 +88,9 @@ final class ListRentOffices extends Component
         $this->totalOffices = $this->buildQuery()->count();
     }
 
-    public function getOffices()
+    #[Computed(cache: true)]
+    public function getOffices(): LengthAwarePaginator
     {
-
         return $this->buildQuery()
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
