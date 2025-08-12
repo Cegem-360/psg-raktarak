@@ -3,7 +3,7 @@
     <div class="relative">
 
         <div class="kategoria-valaszto grid grid-cols-1 md:grid-cols-3 font-bold">
-            <a href="{{ localized_route('budapest.category', ['category' => 'kiado-belvarosi-irodak']) }}"
+            <a href="{{ localized_route('budapest.category', ['category' => 'pesti-oldal']) }}"
                 class="hero-image relative group">
                 <img src="{{ Vite::asset('resources/images/pesti_oldal.webp') }}" alt="Pesti oldal és agglomeráció"
                     class="w-full h-auto object-cover aspect-[3/2]" loading="lazy" />
