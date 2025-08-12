@@ -10,7 +10,7 @@
                 <div
                     class="flex items-center justify-center text-xl text-center text-white _bg-accentdark/90_ bg-primary backdrop-blur-xl h-[4.5rem] group-hover:bg-accent {{-- group-hover:h-24 --}} duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
                     <h2 class="group-hover:scale-110 duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
-                        {{ __('Pesti oldal és agglomeráció') }}</h2>
+                        {{ __('Pest side and agglomeration') }}</h2>
                 </div>
             </a>
             <a href="{{ localized_route('budapest.category', ['category' => 'budai-oldal']) }}"
@@ -20,7 +20,7 @@
                 <div
                     class="flex items-center justify-center text-xl text-center text-white _bg-accentdark/90_ bg-logogray backdrop-blur-xl h-[4.5rem] group-hover:bg-accent {{-- group-hover:h-24 --}} duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
                     <h2 class="group-hover:scale-110 duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
-                        {{ __('Budai oldal') }}</h2>
+                        {{ __('Buda side') }}</h2>
                 </div>
             </a>
             <a href="{{ localized_route('budapest.category', ['category' => 'kiado-vaci-uti-irodak']) }}"
@@ -30,7 +30,7 @@
                 <div
                     class="flex items-center justify-center text-xl text-center text-white _bg-accentdark/90_ bg-primary backdrop-blur-xl h-[4.5rem] group-hover:bg-accent {{-- group-hover:h-24 --}} duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
                     <h2 class="group-hover:scale-110 duration-1000 transition-all ease-[cubic-bezier(0.19,1,0.22,1)]">
-                        {{ __('Vidéki raktárak') }}</h2>
+                        {{ __('Warehouses in the countryside') }}</h2>
                 </div>
             </a>
         </div>
