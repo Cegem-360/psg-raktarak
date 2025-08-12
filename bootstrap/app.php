@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Routing\Middleware\ValidateSignature;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             SetLocale::class,
             GoogleTagManagerMiddleware::class,
@@ -22,10 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Register middleware aliases
         $middleware->alias([
-            'signed' => Illuminate\Routing\Middleware\ValidateSignature::class,
+            'signed' => ValidateSignature::class,
 
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
+    ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

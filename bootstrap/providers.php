@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Providers\AppServiceProvider;
+use App\Providers\Filament\AdminPanelServiceProvider;
+use Spatie\GoogleTagManager\GoogleTagManagerServiceProvider;
+use App\Providers\CookiesServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\Filament\AdminPanelServiceProvider::class,
-    Spatie\GoogleTagManager\GoogleTagManagerServiceProvider::class,
-    App\Providers\CookiesServiceProvider::class,
+    AppServiceProvider::class,
+    AdminPanelServiceProvider::class,
+    GoogleTagManagerServiceProvider::class,
+    CookiesServiceProvider::class,
 ];
