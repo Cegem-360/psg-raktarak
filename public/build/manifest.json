@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-dGCjj3Eg.css",
+    "file": "assets/app-3ycuoSek.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -96,6 +96,10 @@
     "file": "assets/budai_kiado_irodak-B1aInjwQ.webp",
     "src": "resources/images/budai_kiado_irodak.webp"
   },
+  "resources/images/budai_oldal.webp": {
+    "file": "assets/budai_oldal-Dxh4D9CE.webp",
+    "src": "resources/images/budai_oldal.webp"
+  },
   "resources/images/centrica_800x600.png": {
     "file": "assets/centrica_800x600-CsMXSgTg.png",
     "src": "resources/images/centrica_800x600.png"
@@ -144,12 +148,20 @@
     "file": "assets/footer-DG70CxwM.png",
     "src": "resources/images/pdf/footer.png"
   },
+  "resources/images/pesti_oldal.webp": {
+    "file": "assets/pesti_oldal-CTZBSRJR.webp",
+    "src": "resources/images/pesti_oldal.webp"
+  },
   "resources/images/psg-irodahazak-logo.png": {
     "file": "assets/psg-irodahazak-logo-Ct32wOUi.png",
     "src": "resources/images/psg-irodahazak-logo.png"
   },
+  "resources/images/psg-raktarak-logo.webp": {
+    "file": "assets/psg-raktarak-logo-CGwvD9WW.webp",
+    "src": "resources/images/psg-raktarak-logo.webp"
+  },
   "resources/images/psg-symbol.svg": {
-    "file": "assets/psg-symbol-UIy-SfbG.svg",
+    "file": "assets/psg-symbol-DsJ9lz_r.svg",
     "src": "resources/images/psg-symbol.svg"
   },
   "resources/images/psg_montazs.webp": {
@@ -172,6 +184,10 @@
     "file": "assets/vaci_uti_kiado_irodak-De27YJWi.webp",
     "src": "resources/images/vaci_uti_kiado_irodak.webp"
   },
+  "resources/images/videki_raktarak.webp": {
+    "file": "assets/videki_raktarak-Cn3UZr-m.webp",
+    "src": "resources/images/videki_raktarak.webp"
+  },
   "resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp": {
     "file": "assets/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc-BcqXNL4N.webp",
     "src": "resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp"
@@ -181,16 +197,16 @@
     "src": "resources/images/welsec_logo_800x600.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-BCOYaZQJ.js",
+    "file": "assets/app-BHdyjBuv.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
       "assets/app-DxkI-1En.css",
-      "assets/app-dGCjj3Eg.css"
+      "assets/app-3ycuoSek.css"
     ],
     "assets": [
-      "assets/psg-symbol-UIy-SfbG.svg"
+      "assets/psg-symbol-DsJ9lz_r.svg"
     ]
   },
   "resources/js/google-maps-utils.js": {
