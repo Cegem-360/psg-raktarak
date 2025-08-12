@@ -114,6 +114,7 @@ final class MigrateHirekToNews extends Command
                     'source_link' => $content->link ?? '',
                     'original_content_id' => $content->id,
                 ]),
+                'source' => $content->link ?? '',
                 'views_count' => 0,
                 'priority' => 2, // Normal priority
                 'is_breaking' => false,

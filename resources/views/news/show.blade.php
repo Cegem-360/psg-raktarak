@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <!-- Article Content -->
-                @if ($news->source)
+                @if ($news?->source)
                     <div class="px-8 pb-8">
                         <div class="prose prose-lg max-w-none">
                             <span class="font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">

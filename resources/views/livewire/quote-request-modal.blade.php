@@ -157,10 +157,10 @@
                                     <select id="subject" wire:model="subject"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('subject') border-red-500 @enderror">
                                         <option value="">{{ __('modal.select_subject') }}</option>
-                                        <option value="{{ __('modal.subject_office_search') }}">
-                                            {{ __('modal.subject_office_search') }}</option>
-                                        <option value="{{ __('modal.subject_office_rent') }}">
-                                            {{ __('modal.subject_office_rent') }}</option>
+                                        <option value="{{ __('modal.subject_storage_search') }}">
+                                            {{ __('modal.subject_storage_search') }}</option>
+                                        <option value="{{ __('modal.subject_storage_rent') }}">
+                                            {{ __('modal.subject_storage_rent') }}</option>
                                         <option value="{{ __('modal.subject_property_valuation') }}">
                                             {{ __('modal.subject_property_valuation') }}</option>
                                         <option value="{{ __('modal.subject_investment') }}">
