@@ -9,7 +9,7 @@ return [
         'office_buildings_for_sale' => 'Eladó raktárak',
     ],
     'hero' => [
-        'slogan' => '<strong>Kiadó és eladó raktárak</strong> <br>az Ön igényeire szabva!',
+        'slogan' => '<strong>Kiadó és eladó raktárak</strong> az Ön igényeire szabva!',
     ],
     'results' => 'találat',
     'sort' => [
