@@ -104,7 +104,7 @@ final class BlogPost extends Model
     }
 
     #[Scope]
-    protected function draft(Builder $query)
+    protected function draft(Builder $query): void
     {
         $query->where('is_published', false);
     }

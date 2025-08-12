@@ -58,7 +58,7 @@ final class PropertyResource extends Resource
                 TextInput::make('title')
                     ->label('Cím')
                     ->maxLength(255)
-                    ->afterStateUpdated(fn (string $state, Set $set) => $set('slug', Str::slug($state, language: 'hu')))
+                    ->afterStateUpdated(fn (string $state, Set $set): mixed => $set('slug', Str::slug($state, language: 'hu')))
                     ->required()
                     ->live(debounce: 1000),
                 TextInput::make('slug')

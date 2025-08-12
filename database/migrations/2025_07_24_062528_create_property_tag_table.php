@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_tag', function (Blueprint $table) {
+        Schema::create('property_tag', function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(Property::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Tag::class)->constrained()->onDelete('cascade');

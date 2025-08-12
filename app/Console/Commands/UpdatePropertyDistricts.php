@@ -26,7 +26,7 @@ final class UpdatePropertyDistricts extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $dryRun = $this->option('dry-run');
 
@@ -36,19 +36,19 @@ final class UpdatePropertyDistricts extends Command
         }
 
         // Get all Budapest properties that need district updates
-        $properties = Property::where(function ($query) {
+        $properties = Property::where(function ($query): void {
             $query->where('cim_varos', 'like', '%Budapest%')
                 ->orWhere('cim_irsz', 'like', '1%');
         })
             ->whereNotNull('cim_irsz')
-            ->where(function ($query) {
+            ->where(function ($query): void {
                 $query->whereNull('district')
                     ->orWhere('district', '')
                     ->orWhere('district', 'not like', '%I%'); // Not already a Roman numeral
             })
             ->get();
 
-        $this->info("Found {$properties->count()} properties to update");
+        $this->info(sprintf('Found %s properties to update', $properties->count()));
 
         if ($properties->isEmpty()) {
             $this->info('No properties need district updates.');
@@ -64,24 +64,25 @@ final class UpdatePropertyDistricts extends Command
 
             if ($district) {
                 if ($dryRun) {
-                    $this->line("Would update Property ID {$property->id}: {$property->cim_irsz} → {$district}");
+                    $this->line(sprintf('Would update Property ID %s: %s → %s', $property->id, $property->cim_irsz, $district));
                 } else {
                     $property->update(['district' => $district]);
-                    $this->line("Updated Property ID {$property->id}: {$property->cim_irsz} → {$district}");
+                    $this->line(sprintf('Updated Property ID %s: %s → %s', $property->id, $property->cim_irsz, $district));
                 }
+
                 $updated++;
             } else {
-                $this->line("Skipped Property ID {$property->id}: Invalid postal code {$property->cim_irsz}");
+                $this->line(sprintf('Skipped Property ID %s: Invalid postal code %s', $property->id, $property->cim_irsz));
                 $skipped++;
             }
         }
 
         $this->line('');
         if ($dryRun) {
-            $this->info("Would update {$updated} properties, {$skipped} skipped");
+            $this->info(sprintf('Would update %d properties, %d skipped', $updated, $skipped));
             $this->info('Run without --dry-run to apply changes');
         } else {
-            $this->info("Updated {$updated} properties, {$skipped} skipped");
+            $this->info(sprintf('Updated %d properties, %d skipped', $updated, $skipped));
         }
     }
 }

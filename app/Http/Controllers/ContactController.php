@@ -22,7 +22,7 @@ final class ContactController extends Controller
     {
         $contactPage = ContactPage::getActiveByLanguage(app()->getLocale());
 
-        return view('pages.contact', compact('contactPage'));
+        return view('pages.contact', ['contactPage' => $contactPage]);
     }
 
     /**

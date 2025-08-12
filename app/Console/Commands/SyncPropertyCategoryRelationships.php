@@ -50,7 +50,7 @@ final class SyncPropertyCategoryRelationships extends Command
             return Command::SUCCESS;
         }
 
-        $this->info("Found {$propertyCategories->count()} property categories with content data.");
+        $this->info(sprintf('Found %d property categories with content data.', $propertyCategories->count()));
 
         $relationshipCount = 0;
         $skippedCount = 0;
@@ -63,25 +63,25 @@ final class SyncPropertyCategoryRelationships extends Command
                 ->first();
 
             if (! $category) {
-                $this->error("Category '{$viewPageCategory->title}' not found in categories table. Run migrate:property-categories first.");
+                $this->error(sprintf("Category '%s' not found in categories table. Run migrate:property-categories first.", $viewPageCategory->title));
                 $errorCount++;
 
                 continue;
             }
 
-            $this->info("Processing category: '{$category->name}' (ID: {$category->id})");
+            $this->info(sprintf("Processing category: '%s' (ID: %s)", $category->name, $category->id));
 
             // Decode the JSON content
             $propertyIds = json_decode($viewPageCategory->content_json, true);
             if (! is_array($propertyIds)) {
-                $this->warn("  Invalid JSON content for category '{$category->name}', skipping...");
+                $this->warn(sprintf("  Invalid JSON content for category '%s', skipping...", $category->name));
                 $skippedCount++;
 
                 continue;
             }
 
-            if (empty($propertyIds)) {
-                $this->info("  No property IDs found for category '{$category->name}'");
+            if ($propertyIds === []) {
+                $this->info(sprintf("  No property IDs found for category '%s'", $category->name));
 
                 continue;
             }
@@ -90,7 +90,7 @@ final class SyncPropertyCategoryRelationships extends Command
 
             foreach ($propertyIds as $propertyId) {
                 if (! is_numeric($propertyId)) {
-                    $this->warn("    Invalid property ID '{$propertyId}', skipping...");
+                    $this->warn(sprintf("    Invalid property ID '%s', skipping...", $propertyId));
 
                     continue;
                 }
@@ -103,7 +103,7 @@ final class SyncPropertyCategoryRelationships extends Command
                     ->exists();
 
                 if (! $propertyExists) {
-                    $this->warn("    Property ID {$propertyId} does not exist, skipping...");
+                    $this->warn(sprintf('    Property ID %d does not exist, skipping...', $propertyId));
 
                     continue;
                 }
@@ -115,7 +115,7 @@ final class SyncPropertyCategoryRelationships extends Command
                     ->exists();
 
                 if ($relationshipExists) {
-                    $this->comment("    Relationship already exists: Category {$category->id} - Property {$propertyId}");
+                    $this->comment(sprintf('    Relationship already exists: Category %s - Property %d', $category->id, $propertyId));
                     $skippedCount++;
 
                     continue;
@@ -132,15 +132,15 @@ final class SyncPropertyCategoryRelationships extends Command
                 $relationshipCount++;
             }
 
-            $this->info("  ✓ Processed relationships for '{$category->name}'");
+            $this->info(sprintf("  ✓ Processed relationships for '%s'", $category->name));
         }
 
         $this->info('Sync completed!');
-        $this->info("Created relationships: {$relationshipCount}");
-        $this->info("Skipped relationships: {$skippedCount}");
+        $this->info('Created relationships: ' . $relationshipCount);
+        $this->info('Skipped relationships: ' . $skippedCount);
 
         if ($errorCount > 0) {
-            $this->error("Errors encountered: {$errorCount}");
+            $this->error('Errors encountered: ' . $errorCount);
 
             return Command::FAILURE;
         }

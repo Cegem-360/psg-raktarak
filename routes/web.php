@@ -110,7 +110,7 @@ Route::get('/property-preview/{property}', function (Property $property) {
     return view('pdf.property', ['property' => $property]);
 })->name('property.preview');
 
-Route::get('/clearCache', function () {
+Route::get('/clearCache', function (): string {
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('route:clear');

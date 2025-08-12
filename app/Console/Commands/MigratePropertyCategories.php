@@ -26,7 +26,7 @@ final class MigratePropertyCategories extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Starting migration of property categories...');
 
@@ -41,7 +41,7 @@ final class MigratePropertyCategories extends Command
             return;
         }
 
-        $this->info("Found {$propertyCategories->count()} property categories to migrate.");
+        $this->info(sprintf('Found %d property categories to migrate.', $propertyCategories->count()));
 
         $migratedCount = 0;
         $skippedCount = 0;
@@ -53,7 +53,7 @@ final class MigratePropertyCategories extends Command
                 ->first();
 
             if ($existingCategory) {
-                $this->warn("Category '{$category->title}' already exists, skipping...");
+                $this->warn(sprintf("Category '%s' already exists, skipping...", $category->title));
                 $skippedCount++;
 
                 continue;
@@ -66,12 +66,12 @@ final class MigratePropertyCategories extends Command
                 'updated_at' => now(),
             ]);
 
-            $this->info("Migrated: '{$category->title}'");
+            $this->info(sprintf("Migrated: '%s'", $category->title));
             $migratedCount++;
         }
 
         $this->info('Migration completed!');
-        $this->info("Migrated: {$migratedCount} categories");
-        $this->info("Skipped: {$skippedCount} categories");
+        $this->info(sprintf('Migrated: %d categories', $migratedCount));
+        $this->info(sprintf('Skipped: %d categories', $skippedCount));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
+use Illuminate\Support\Facades\URL;
 use App\Filament\Resources\PropertyResource;
 use App\Models\Property;
 use Filament\Pages\Page;
@@ -82,7 +83,7 @@ final class ListRentProperties extends Page implements HasTable
                     ->label('PDF')
                     ->icon('heroicon-o-document-arrow-down')
                     ->color('success')
-                    ->url(fn (Property $record) => \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                    ->url(fn (Property $record) => URL::temporarySignedRoute(
                         'property.pdf',
                         now()->addDays(21),
                         ['property' => $record->id]

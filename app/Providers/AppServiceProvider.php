@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\Gallery;
-use App\Observers\GalleryObserver;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
@@ -33,7 +31,6 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Register model observers
-        Gallery::observe(GalleryObserver::class);
 
         // Set locale from session
         if (session()->has('locale')) {
@@ -44,9 +41,11 @@ final class AppServiceProvider extends ServiceProvider
         if (Cookies::hasConsentFor('ad_storage')) {
             GoogleTagManager::set('ad_storage', 'granted');
         }
+
         if (Cookies::hasConsentFor('ad_user_data')) {
             GoogleTagManager::set('ad_user_data', 'granted');
         }
+
         if (Cookies::hasConsentFor('ad_personalization')) {
             GoogleTagManager::set('ad_personalization', 'granted');
         }

@@ -25,7 +25,7 @@ final class MigrateHirekToNews extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $isDryRun = $this->option('dry-run');
 
@@ -42,7 +42,7 @@ final class MigrateHirekToNews extends Command
             return Command::FAILURE;
         }
 
-        $this->info("Found Hírek page with ID: {$hirekPage->id}");
+        $this->info('Found Hírek page with ID: ' . $hirekPage->id);
 
         // 2. Parse the content_json to get content IDs
         $contentIds = json_decode($hirekPage->content_json, true);
@@ -70,10 +70,8 @@ final class MigrateHirekToNews extends Command
             ->whereRaw("JSON_EXTRACT(meta_data, '$.original_content_id') IS NOT NULL")
             ->count();
 
-        if ($existingCount > 0) {
-            if (! $this->confirm("Found {$existingCount} already migrated news items. Continue anyway?")) {
-                return self::FAILURE;
-            }
+        if ($existingCount > 0 && ! $this->confirm(sprintf('Found %d already migrated news items. Continue anyway?', $existingCount))) {
+            return self::FAILURE;
         }
 
         // 5. Migrate each content to news
@@ -99,7 +97,7 @@ final class MigrateHirekToNews extends Command
             // Prepare data for news table
             $newsData = [
                 'title' => $content->title,
-                'slug' => $this->generateSlug($content->title, $content->id),
+                'slug' => $this->generateSlug($content->title),
                 'excerpt' => $this->extractExcerpt($content->lead ?? ''),
                 'content' => $content->content ?? '',
                 'featured_image' => null, // We'll extract this later if needed
@@ -127,7 +125,7 @@ final class MigrateHirekToNews extends Command
                     DB::table('news')->insert($newsData);
                     $migratedCount++;
                 } catch (Exception $e) {
-                    $this->error("Failed to migrate content ID {$content->id}: ".$e->getMessage());
+                    $this->error(sprintf('Failed to migrate content ID %s: ', $content->id).$e->getMessage());
 
                     continue;
                 }
@@ -174,7 +172,7 @@ final class MigrateHirekToNews extends Command
                 $this->info("\nLast 5 migrated news articles:");
                 $this->table(
                     ['ID', 'Title', 'Published At'],
-                    $migratedNews->map(fn ($news) => [
+                    $migratedNews->map(fn ($news): array => [
                         $news->id,
                         Str::limit($news->title, 50),
                         $news->published_at,
@@ -189,7 +187,7 @@ final class MigrateHirekToNews extends Command
     /**
      * Generate a slug for the news article
      */
-    private function generateSlug(string $title, int $contentId): string
+    private function generateSlug(string $title): string
     {
         // Basic Hungarian character replacement and slug generation
         $slug = mb_strtolower($title);
