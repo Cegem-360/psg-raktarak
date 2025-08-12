@@ -9,7 +9,7 @@ return [
         'office_buildings_for_sale' => 'Eladó raktárak',
     ],
     'hero' => [
-        'slogan' => 'A teljes budapesti <br><strong>„A" kategóriás kiadó irodaház kínálat</strong> <br>egy helyen',
+        'slogan' => '<strong>Kiadó és eladó raktárak</strong> <br>az Ön igényeire szabva!',
     ],
     'results' => 'találat',
     'sort' => [

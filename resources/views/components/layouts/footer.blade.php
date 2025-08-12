@@ -4,7 +4,7 @@
          <div class="md:flex md:gap-8 md:justify-between">
              <div class="mb-6 md:mb-0">
                  <a href="/" class="flex items-center">
-                     <img src="{{ Vite::asset('resources/images/psg-irodahazak-logo.png') }}" class="mr-3 h-8 sm:h-16"
+                     <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="mr-3 h-8 sm:h-16"
                          alt="PSG Irodaházak logo" loading="lazy">
                  </a>
              </div>
@@ -21,8 +21,8 @@
                                  3917 </a>
                          </li>
                          <li class="mb-4">
-                             <a href="mailto:info@psg-irodahazak.hu"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">info@psg-irodahazak.hu</a>
+                             <a href="mailto:info@psg-raktarak.hu"
+                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">info@psg-raktarak.hu</a>
                          </li>
                          <li class="mb-4">
                              <a wire:navigate href="{{ localized_route('kapcsolat') }}"
@@ -44,11 +44,11 @@
                          </li>
                          <li class="mb-4">
                              <a href="{{ localized_route('kiado-raktarak') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Rental Offices') }}</a>
+                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for rent') }}</a>
                          </li>
                          <li class="mb-4">
-                             <a href="{{ localized_route('elado-raktarak') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Office Buildings for Sale') }}</a>
+                             <a href="{{ localized_route('elado-irodahazak') }}"
+                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for Sale') }}</a>
                          </li>
                          @if (app()->getLocale() === 'hu')
                              <li class="mb-4">
