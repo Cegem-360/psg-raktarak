@@ -30,12 +30,15 @@ final class Content extends Model
         'link',
     ];
 
-    protected $casts = [
-        'content_json' => 'array',
-    ];
-
     public function pages(): BelongsToMany
     {
         return $this->belongsToMany(Page::class, 'page_content');
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'content_json' => 'array',
+        ];
     }
 }

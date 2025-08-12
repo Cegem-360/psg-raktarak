@@ -48,7 +48,6 @@ final class ListSaleOffices extends Component
     public function getOffices()
     {
         return Offices::query()
-            ->with('images') // Eager load images
             ->when($this->search, function ($query): void {
                 $query->searchText($this->search);
             })
@@ -62,7 +61,6 @@ final class ListSaleOffices extends Component
     {
         // Get only the currently paginated offices
         $paginatedOffices = Offices::query()
-            ->with('images')
             ->when($this->search, function ($query): void {
                 $query->searchText($this->search);
             })

@@ -18,6 +18,8 @@ return RectorConfig::configure()
         __DIR__.'/database',
         __DIR__.'/resources',
         __DIR__.'/routes',
+        __DIR__.'/bootstrap',
+        __DIR__.'/public',
     ])
 
     ->withImportNames(true)

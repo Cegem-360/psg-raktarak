@@ -36,18 +36,6 @@ final class News extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'is_breaking' => 'boolean',
-        'published_at' => 'date',
-        'meta_data' => 'array',
-        'views_count' => 'integer',
-        'priority' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'date',
-
-    ];
-
     // Relationships
     public function category(): BelongsTo
     {
@@ -162,6 +150,21 @@ final class News extends Model
                 $news->excerpt = Str::limit(strip_tags($news->content), 160);
             }
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'is_breaking' => 'boolean',
+            'published_at' => 'date',
+            'meta_data' => 'array',
+            'views_count' => 'integer',
+            'priority' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'date',
+
+        ];
     }
 
     #[Scope]

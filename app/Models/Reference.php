@@ -23,10 +23,13 @@ final class Reference extends Model
         'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'order' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'order' => 'integer',
+        ];
+    }
 
     #[Scope]
     protected function active(Builder $query): void

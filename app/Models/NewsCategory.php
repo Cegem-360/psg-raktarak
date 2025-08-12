@@ -23,11 +23,6 @@ final class NewsCategory extends Model
         'sort_order',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-        'sort_order' => 'integer',
-    ];
-
     public function news(): HasMany
     {
         return $this->hasMany(News::class);
@@ -67,5 +62,13 @@ final class NewsCategory extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+            'sort_order' => 'integer',
+        ];
     }
 }

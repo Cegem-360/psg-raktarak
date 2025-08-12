@@ -14,10 +14,7 @@ final class ContactPage extends Model
     protected $fillable = [
         'language',
         'content',
-    ];
-
-    protected $casts = [
-        'content' => 'string',
+        'image',
     ];
 
     /**
@@ -26,5 +23,12 @@ final class ContactPage extends Model
     public static function getActiveByLanguage(string $language = 'hu'): ?self
     {
         return self::where('language', $language)->first();
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'content' => 'string',
+        ];
     }
 }

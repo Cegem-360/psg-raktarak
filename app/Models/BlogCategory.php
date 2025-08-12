@@ -21,10 +21,6 @@ final class BlogCategory extends Model
         'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
     public function blogPosts(): HasMany
     {
         return $this->hasMany(BlogPost::class);
@@ -50,5 +46,12 @@ final class BlogCategory extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
     }
 }

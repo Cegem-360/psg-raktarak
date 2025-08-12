@@ -21,12 +21,6 @@ final class QuoteRequest extends Model
         'notes',
     ];
 
-    protected $casts = [
-        'contacted_at' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
     public function getStatusColorAttribute(): string
     {
         return match ($this->status) {
@@ -45,6 +39,15 @@ final class QuoteRequest extends Model
             'closed' => 'Lezárva',
             default => 'Ismeretlen',
         };
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'contacted_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
     }
 
     #[Scope]

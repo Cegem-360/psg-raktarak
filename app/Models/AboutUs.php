@@ -18,14 +18,17 @@ final class AboutUs extends Model
         'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
     #[Scope]
     public function byLanguage($query, $language): void
     {
         $query->where('language', $language);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
     }
 
     #[Scope]

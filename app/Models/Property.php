@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -82,14 +81,6 @@ final class Property extends Model
         'property_photos',
         'created_at',
         'updated_at',
-    ];
-
-    protected $casts = [
-        'updated_at' => 'datetime',
-        'created_at' => 'datetime',
-        'featured' => 'boolean',
-        'vat' => 'boolean',
-        'property_photos' => 'array',
     ];
 
     public static function countByDistrict(): array
@@ -199,13 +190,6 @@ final class Property extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function images(): HasMany
-    {
-        return $this->hasMany(Gallery::class, 'target_table_id')
-            ->where('target_table', 'property')
-            ->orderBy('ord');
-    }
-
     public function getAddressFormated(): string
     {
         $address = mb_trim(sprintf('%s %s, %s %s %s', $this->cim_irsz, $this->cim_varos, $this->cim_utca, $this->cim_utca_addons, $this->cim_hazszam));
@@ -224,14 +208,6 @@ final class Property extends Model
         return sprintf('%s %s,<br><strong>', $this->cim_irsz, $this->cim_varos).__('Total Area').sprintf(':</strong> %s m²<br><strong>', $this->total_area).__('Price').sprintf(':</strong> %s %s', $this->min_berleti_dij, $this->min_berleti_dij_addons);
     }
 
-    /**
-     * Get gallery images ordered by ord field
-     */
-    public function galleryImages()
-    {
-        return $this->images()->get();
-    }
-
     public function getFirstImageUrl(): ?string
     {
         return Storage::url(collect($this->property_photos)->first());
@@ -245,6 +221,17 @@ final class Property extends Model
     public function isSale(): bool
     {
         return $this->elado_v_kiado === 'elado-raktar';
+    }
+
+    protected function casts()
+    {
+        return [
+            'updated_at' => 'datetime',
+            'created_at' => 'datetime',
+            'featured' => 'boolean',
+            'vat' => 'boolean',
+            'property_photos' => 'array',
+        ];
     }
 
     #[Scope]

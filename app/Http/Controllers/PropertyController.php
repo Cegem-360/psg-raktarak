@@ -13,7 +13,7 @@ final class PropertyController extends Controller
      */
     public function index()
     {
-        $query = Property::with('images')->active();
+        $query = Property::active();
 
         // Filter by districts (multiple)
         if (request('districts')) {
@@ -123,42 +123,6 @@ final class PropertyController extends Controller
             'property' => $property,
             'similarProperties' => $similarProperties,
         ]);
-    }
-
-    /**
-     * API endpoint to get property images
-     */
-    public function images(Property $property)
-    {
-        $images = $property->images()->orderBy('ord')->get()->map(function ($image): array {
-            return [
-                'id' => $image->id,
-                'url' => $image->image_url,
-                'alt' => $image->alt,
-                'size' => $image->size,
-                'order' => $image->ord,
-            ];
-        });
-
-        return response()->json($images);
-    }
-
-    /**
-     * Get property images in different sizes
-     */
-    public function imagesWithSize(Property $property, $size = null)
-    {
-        $images = $property->images()->orderBy('ord')->get()->map(function ($image) use ($size): array {
-            return [
-                'id' => $image->id,
-                'url' => $image->getImageUrl($size),
-                'alt' => $image->alt,
-                'size' => $size ?? $image->size,
-                'order' => $image->ord,
-            ];
-        });
-
-        return response()->json($images);
     }
 
     /**

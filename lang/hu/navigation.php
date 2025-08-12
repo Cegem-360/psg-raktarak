@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 return [
     'home' => 'Főoldal',
-    'offices_for_rent' => 'Kiadó irodák',
-    'office_buildings_for_sale' => 'Eladó irodaházak',
+    'offices_for_rent' => 'Kiadó raktárak',
+    'office_buildings_for_sale' => 'Eladó raktárak',
     'news' => 'Hírek',
     'about_us' => 'Rólunk',
     'blog' => 'Blog',

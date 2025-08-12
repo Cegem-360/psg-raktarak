@@ -14,8 +14,6 @@ final class PropertyPdfService
 {
     public function generatePdf(Property $property): StreamedResponse
     {
-        // Betöltjük a kapcsolódó képek adatokat
-        $property->load(['images']);
 
         // HTML tartalom generálása
         $html = view('pdf.property', ['property' => $property])->render();
@@ -58,8 +56,6 @@ final class PropertyPdfService
 
     public function savePdf(Property $property, ?string $path = null): string
     {
-        // Betöltjük a kapcsolódó képek adatokat
-        $property->load(['images']);
 
         // HTML tartalom generálása
         $html = view('pdf.property', ['property' => $property])->render();
@@ -99,8 +95,6 @@ final class PropertyPdfService
 
     public function generatePdfForView(Property $property): Response
     {
-        // Betöltjük a kapcsolódó képek adatokat
-        $property->load(['images']);
 
         // HTML tartalom generálása
         $html = view('pdf.property', ['property' => $property])->render();

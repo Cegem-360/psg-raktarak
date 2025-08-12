@@ -18,14 +18,17 @@ final class Impresszum extends Model
         'is_active',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
-
     #[Scope]
     public function byLanguage($query, $language)
     {
         return $query->where('language', $language);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
     }
 
     #[Scope]

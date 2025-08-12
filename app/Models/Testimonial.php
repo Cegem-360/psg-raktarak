@@ -24,11 +24,14 @@ final class Testimonial extends Model
         'lang',
     ];
 
-    protected $casts = [
-        'is_featured' => 'boolean',
-        'is_active' => 'boolean',
-        'rating' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+            'is_active' => 'boolean',
+            'rating' => 'integer',
+        ];
+    }
 
     #[Scope]
     protected function active($query): void

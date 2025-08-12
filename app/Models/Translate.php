@@ -17,13 +17,16 @@ final class Translate extends Model
         'updated_at',
     ];
 
-    protected $casts = [
-        'date' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
-
     protected $attributes = [
         'lang' => 'EN',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'date' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
 }

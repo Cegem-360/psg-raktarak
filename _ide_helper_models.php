@@ -73,8 +73,8 @@ namespace App\Models{
  * @property string|null $excerpt
  * @property string|null $content
  * @property string|null $featured_image
- * @property int $blog_category_id
- * @property int $user_id
+ * @property int|null $blog_category_id
+ * @property int|null $user_id
  * @property bool|null $is_published
  * @property \Carbon\CarbonImmutable|null $published_at
  * @property array<array-key, mixed>|null $meta_data
@@ -82,8 +82,8 @@ namespace App\Models{
  * @property string|null $link
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read \App\Models\User $author
- * @property-read \App\Models\BlogCategory $category
+ * @property-read \App\Models\User|null $author
+ * @property-read \App\Models\BlogCategory|null $category
  * @property-read string $reading_time
  * @property-read string $status
  * @method static \Illuminate\Database\Eloquent\Builder<static>|BlogPost byCategory(int $categoryId)
@@ -136,6 +136,7 @@ namespace App\Models{
  * @property int $id
  * @property string $language
  * @property string|null $content
+ * @property string $image
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage newModelQuery()
@@ -144,6 +145,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereLanguage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ContactPage whereUpdatedAt($value)
  */
@@ -204,46 +206,6 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
- * @property string|null $path
- * @property int $target_table_id
- * @property int|null $ord
- * @property string|null $size
- * @property \Carbon\CarbonImmutable|null $date
- * @property string|null $target_table
- * @property string|null $path_without_size_and_ext
- * @property string|null $alt
- * @property int|null $gallery_category_id
- * @property string|null $video_url
- * @property array<array-key, mixed>|null $images
- * @property \Carbon\CarbonImmutable|null $created_at
- * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read string $image_url
- * @property-read string $public_url
- * @property-read \App\Models\Property|null $property
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereAlt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereGalleryCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereImages($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereOrd($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery wherePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery wherePathWithoutSizeAndExt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereSize($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereTargetTable($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereTargetTableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Gallery whereVideoUrl($value)
- */
-	final class Gallery extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * @property int $id
  * @property string $language
  * @property string $title
  * @property string|null $content
@@ -273,6 +235,7 @@ namespace App\Models{
  * @property string $slug
  * @property string|null $excerpt
  * @property string $content
+ * @property string $source
  * @property string|null $featured_image
  * @property int|null $news_category_id
  * @property int $user_id
@@ -310,6 +273,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News wherePriority($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News wherePublishedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|News whereSource($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|News whereUserId($value)
@@ -418,7 +382,7 @@ namespace App\Models{
  * @property string|null $meta_keywords_en
  * @property string|null $meta_description
  * @property string|null $meta_description_en
- * @property string|null $epites_eve
+ * @property string|null $construction_year
  * @property string|null $total_area
  * @property string|null $jelenleg_kiado
  * @property string|null $min__kiado
@@ -480,8 +444,6 @@ namespace App\Models{
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Category> $categories
  * @property-read int|null $categories_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Gallery> $images
- * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
  * @property-read int|null $services_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
@@ -510,6 +472,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCimUtcaAddons($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCimVaros($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCimke($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereConstructionYear($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereDate($value)
@@ -518,7 +481,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereEladoVKiado($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereEladoVKiadoAddons($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereEnContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereEpitesEve($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereFeatured($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Property whereJelenlegKiado($value)

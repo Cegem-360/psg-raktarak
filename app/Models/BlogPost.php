@@ -29,13 +29,6 @@ final class BlogPost extends Model
         'link',
     ];
 
-    protected $casts = [
-        'is_published' => 'boolean',
-        'published_at' => 'datetime',
-        'meta_data' => 'array',
-        'views_count' => 'integer',
-    ];
-
     // Relationships
     public function category(): BelongsTo
     {
@@ -101,6 +94,16 @@ final class BlogPost extends Model
             'is_published' => false,
             'published_at' => null,
         ]);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'published_at' => 'datetime',
+            'meta_data' => 'array',
+            'views_count' => 'integer',
+        ];
     }
 
     #[Scope]
