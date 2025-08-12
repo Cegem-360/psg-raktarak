@@ -21,7 +21,7 @@ Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('l
 Route::view('/', 'index')->name('home');
 Route::view('/adatlap-oldal', 'index')->name('adatlap-oldal');
 Route::view('/kiado-raktarak', 'index')->name('kiado-raktarak');
-Route::view('/elado-irodahazak', 'index')->name('elado-irodahazak');
+Route::view('/elado-raktarak', 'index')->name('elado-raktarak');
 Route::view('/rolunk', 'index')->name('rolunk');
 
 Route::get('/kapcsolat', [ContactController::class, 'show'])->name('kapcsolat');
@@ -41,7 +41,7 @@ Route::get('/budapest/{category}', function ($category) {
     $queryParams['category'] = $category;
 
     if ($category === 'elado-raktarak') {
-        return redirect()->route('elado-irodahazak');
+        return redirect()->route('elado-raktarak');
     }
 
     return view('pages.filter', ['queryParams' => $queryParams]);
@@ -51,7 +51,7 @@ Route::get('/login', function () {
 })->name('login');
 Route::get('/ingatlanok', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/kiado-raktar/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
-Route::get('/elado-irodahaz/{property:slug}', [PropertyController::class, 'show'])->name('properties.show-for-sale');
+Route::get('/elado-raktar/{property:slug}', [PropertyController::class, 'show'])->name('properties.show-for-sale');
 
 Route::get('/hirek', [NewsController::class, 'index'])->name('news.index');
 Route::get('/hirek/{slug}', [NewsController::class, 'show'])->name('news.show');
@@ -61,7 +61,7 @@ Route::group(['as' => 'en.'], function (): void {
     Route::view('/home', 'index')->name('home');
     Route::view('/data-sheet', 'index')->name('adatlap-oldal');
     Route::view('/offices-for-rent', 'index')->name('kiado-raktarak');
-    Route::view('/office-buildings-for-sale', 'index')->name('elado-irodahazak');
+    Route::view('/office-buildings-for-sale', 'index')->name('elado-raktarak');
     Route::view('/about-us', 'index')->name('rolunk');
     Route::view('/privacy-policy', 'pages.privacy-policy')->name('privacy-policy');
     Route::get('/impressum', [ImpresszumController::class, 'show'])->name('impressum');
@@ -74,7 +74,7 @@ Route::group(['as' => 'en.'], function (): void {
         $queryParams['category'] = $category;
 
         if ($category === 'elado-raktarak') {
-            return redirect()->route('en.elado-irodahazak');
+            return redirect()->route('en.elado-raktarak');
         }
 
         return view('pages.filter', ['queryParams' => $queryParams]);

@@ -6,7 +6,7 @@ return [
     'home' => '',
     'adatlap-oldal' => 'adatlap-oldal',
     'offices-for-rent' => 'kiado-raktarak',
-    'office-buildings-for-sale' => 'elado-irodahazak',
+    'office-buildings-for-sale' => 'elado-raktarak',
     'about-us' => 'rolunk',
     'contact' => 'kapcsolat',
     'privacy-policy' => 'adatvedelmi-nyilatkozat',

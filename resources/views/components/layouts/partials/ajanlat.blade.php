@@ -86,7 +86,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ localized_route('elado-irodahazak') }}"
+                    <a href="{{ localized_route('elado-raktarak') }}"
                         class="hover:text-blue-600 hover:underline transition-colors duration-200">
                         {{ __('Offices for sale') }}
                     </a>
