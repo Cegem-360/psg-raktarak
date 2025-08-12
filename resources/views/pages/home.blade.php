@@ -13,7 +13,7 @@
                         {{ __('Pesti oldal és agglomeráció') }}</h2>
                 </div>
             </a>
-            <a href="{{ localized_route('budapest.category', ['category' => 'kiado-budai-irodak']) }}"
+            <a href="{{ localized_route('budapest.category', ['category' => 'budai-oldal']) }}"
                 class="hero-image relative group">
                 <img src="{{ Vite::asset('resources/images/budai_oldal.webp') }}" alt="Budai oldal"
                     class="w-full h-auto object-cover aspect-[3/2]" loading="lazy" />
