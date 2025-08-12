@@ -3,7 +3,7 @@
      <div class="mx-auto max-w-screen-xl">
          <div class="md:flex md:gap-8 md:justify-between">
              <div class="mb-6 md:mb-0">
-                 <a href="/" class="flex items-center">
+                 <a href="{{ localized_route('home') }}" class="flex items-center">
                      <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="mr-3 h-8 sm:h-16"
                          alt="PSG Irodaházak logo" loading="lazy">
                  </a>
@@ -97,6 +97,13 @@
                  <a href="https://www.facebook.com/psgirodahazak" target="_blank"
                      class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
                      <x-svg.fb-icon />
+                 </a>
+             </div>
+             <div class="flex items-center gap-4 text-xs">
+                 <div>Weboldalt készítette:</div>
+                 <a href="https://cegem360.hu/" target="_blank">
+                     <img src="{{ Vite::asset('resources/images/cegem360logo-black.webp') }}"
+                         alt="Cégem 360 weboldal készítés" style="width:135px;border:0;">
                  </a>
              </div>
          </div>

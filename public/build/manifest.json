@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DeZmi4wb.css",
+    "file": "assets/app-C09afF7m.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -99,6 +99,14 @@
   "resources/images/budai_oldal.webp": {
     "file": "assets/budai_oldal-Dxh4D9CE.webp",
     "src": "resources/images/budai_oldal.webp"
+  },
+  "resources/images/cegem360logo-black.webp": {
+    "file": "assets/cegem360logo-black-BE-4pTb4.webp",
+    "src": "resources/images/cegem360logo-black.webp"
+  },
+  "resources/images/cegem360logo-white.webp": {
+    "file": "assets/cegem360logo-white-CvrfbhD1.webp",
+    "src": "resources/images/cegem360logo-white.webp"
   },
   "resources/images/centrica_800x600.png": {
     "file": "assets/centrica_800x600-CsMXSgTg.png",
@@ -225,13 +233,13 @@
     "src": "resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CrgWPID1.js",
+    "file": "assets/app-BNziHgoe.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
       "assets/app-DxkI-1En.css",
-      "assets/app-DeZmi4wb.css"
+      "assets/app-C09afF7m.css"
     ],
     "assets": [
       "assets/psg-symbol-DsJ9lz_r.svg"

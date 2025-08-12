@@ -2,12 +2,12 @@
     <x-language-switcher />
     <div
         class="flex flex-col sm:flex-row justify-start items-center gap-8 sm:gap-16 lg:gap-32 mx-auto sm:pl-16 py-8 sm:py-16 max-w-screen-xl">
-        <div class="absolute -left-56 -top-16 z-10 w-[40%] text-primary/15">
+        <div class="absolute -left-56 -top-16 z-0 w-[40%] text-primary/15">
             <x-svg.psg-irodahazak-symbol />
         </div>
-        <div class="logo pt-8 sm:pt-0">
+        <div class="logo relative z-10 pt-8 sm:pt-0">
             <a href="{{ localized_route('home') }}" class="flex items-center">
-                <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="mr-3 h-12 sm:h-24"
+                <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="mr-3 h-12 sm:h-20"
                     alt="PSG Raktárak logo" loading="lazy">
             </a>
         </div>
