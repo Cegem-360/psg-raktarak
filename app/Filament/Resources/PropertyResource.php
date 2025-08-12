@@ -9,7 +9,6 @@ use App\Filament\Imports\PropertyImporter;
 use App\Filament\Resources\PropertyResource\Pages\CreateProperty;
 use App\Filament\Resources\PropertyResource\Pages\EditProperty;
 use App\Filament\Resources\PropertyResource\Pages\ListProperties;
-use App\Filament\Resources\PropertyResource\RelationManagers\ImagesRelationManager;
 use App\Models\Property;
 use App\Services\WatermarkService;
 use Filament\Forms\Components\CheckboxList;
@@ -440,7 +439,7 @@ final class PropertyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            /*  ImagesRelationManager::class, */
+
         ];
     }
 
