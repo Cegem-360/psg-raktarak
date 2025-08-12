@@ -1,6 +1,6 @@
 @use('App\Models\Property')
 <div class="relative bg-cover bg-center bg-no-repeat"
-    style="background-image: url({{ Vite::asset('resources/images/the-office-building-2025-04-02-15-55-34-utc.webp') }});">
+    style="background-image: url({{ Vite::asset('resources/images/owner-silhouetted-and-standing-in-a-loading-dock-d-2025-04-04-01-58-01-utc.webp') }});">
     <div class="absolute inset-0 z-1 bg-gradient-to-b from-white to-white/30"></div>
     <div class="kiemelt-ajanlatok relative z-10 container mx-auto pt-12 pb-20">
         <h2 class="mt-4 mb-16 font-bold text-5xl text-center drop-shadow text-logogray/80">

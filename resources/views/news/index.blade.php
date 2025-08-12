@@ -9,7 +9,7 @@
         <link rel="canonical" href="{{ Request::url() }}">
     </x-slot>
     <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
-        style="background-image: url({{ Vite::asset('resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp') }});">
+        style="background-image: url({{ Vite::asset('resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
         <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
             <h2 class="mt-4 mb-16 font-bold text-5xl text-center drop-shadow text-logogray/80">

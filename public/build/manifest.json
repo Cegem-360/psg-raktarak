@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-3ycuoSek.css",
+    "file": "assets/app-DeZmi4wb.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -112,6 +112,10 @@
     "file": "assets/conclave-mas-largo-1268_1200_800-DaiybDyR.webp",
     "src": "resources/images/conclave-mas-largo-1268_1200_800.webp"
   },
+  "resources/images/conveyor-for-manual-sorting-of-garbage-modern-was-2025-03-05-12-00-53-utc.webp": {
+    "file": "assets/conveyor-for-manual-sorting-of-garbage-modern-was-2025-03-05-12-00-53-utc-72g2AuAx.webp",
+    "src": "resources/images/conveyor-for-manual-sorting-of-garbage-modern-was-2025-03-05-12-00-53-utc.webp"
+  },
   "resources/images/datapao_logo_800x600.png": {
     "file": "assets/datapao_logo_800x600-Ce0pc8LT.png",
     "src": "resources/images/datapao_logo_800x600.png"
@@ -136,6 +140,14 @@
     "file": "assets/home_office_800x600-CBnLskb1.png",
     "src": "resources/images/home_office_800x600.png"
   },
+  "resources/images/huge-logistics-center-with-racks-and-goods-blurre-2025-02-12-23-01-14-utc.webp": {
+    "file": "assets/huge-logistics-center-with-racks-and-goods-blurre-2025-02-12-23-01-14-utc-De8T1RdH.webp",
+    "src": "resources/images/huge-logistics-center-with-racks-and-goods-blurre-2025-02-12-23-01-14-utc.webp"
+  },
+  "resources/images/industrial-warehouse-with-stacked-pallets-of-packa-2025-02-24-18-26-52-utc.webp": {
+    "file": "assets/industrial-warehouse-with-stacked-pallets-of-packa-2025-02-24-18-26-52-utc-B-GLUZv9.webp",
+    "src": "resources/images/industrial-warehouse-with-stacked-pallets-of-packa-2025-02-24-18-26-52-utc.webp"
+  },
   "resources/images/kapcsolat.jpg": {
     "file": "assets/kapcsolat-CJpzeMla.jpg",
     "src": "resources/images/kapcsolat.jpg"
@@ -143,6 +155,10 @@
   "resources/images/office-building-2025-03-18-12-43-13-utc.webp": {
     "file": "assets/office-building-2025-03-18-12-43-13-utc-C3GtFy1K.webp",
     "src": "resources/images/office-building-2025-03-18-12-43-13-utc.webp"
+  },
+  "resources/images/owner-silhouetted-and-standing-in-a-loading-dock-d-2025-04-04-01-58-01-utc.webp": {
+    "file": "assets/owner-silhouetted-and-standing-in-a-loading-dock-d-2025-04-04-01-58-01-utc-BnStNMus.webp",
+    "src": "resources/images/owner-silhouetted-and-standing-in-a-loading-dock-d-2025-04-04-01-58-01-utc.webp"
   },
   "resources/images/pdf/footer.png": {
     "file": "assets/footer-DG70CxwM.png",
@@ -167,6 +183,10 @@
   "resources/images/psg_montazs.webp": {
     "file": "assets/psg_montazs-BQ0EqbRU.webp",
     "src": "resources/images/psg_montazs.webp"
+  },
+  "resources/images/rain-gutter-of-aluminum-roof-with-steel-rainwater-2025-03-11-16-50-40-utc.webp": {
+    "file": "assets/rain-gutter-of-aluminum-roof-with-steel-rainwater-2025-03-11-16-50-40-utc-BRqekqAU.webp",
+    "src": "resources/images/rain-gutter-of-aluminum-roof-with-steel-rainwater-2025-03-11-16-50-40-utc.webp"
   },
   "resources/images/reflections-in-modern-dutch-design-architecture-2025-03-23-22-04-59-utc.webp": {
     "file": "assets/reflections-in-modern-dutch-design-architecture-2025-03-23-22-04-59-utc-CHeEckbb.webp",
@@ -196,14 +216,22 @@
     "file": "assets/welsec_logo_800x600-D1f66OJb.png",
     "src": "resources/images/welsec_logo_800x600.png"
   },
+  "resources/images/wide-angle-view-of-empty-warehouse-building-with-m-2025-02-12-00-35-56-utc.webp": {
+    "file": "assets/wide-angle-view-of-empty-warehouse-building-with-m-2025-02-12-00-35-56-utc-DCfsRHfS.webp",
+    "src": "resources/images/wide-angle-view-of-empty-warehouse-building-with-m-2025-02-12-00-35-56-utc.webp"
+  },
+  "resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp": {
+    "file": "assets/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc-BlpFQskw.webp",
+    "src": "resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp"
+  },
   "resources/js/app.js": {
-    "file": "assets/app-BHdyjBuv.js",
+    "file": "assets/app-CrgWPID1.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
       "assets/app-DxkI-1En.css",
-      "assets/app-3ycuoSek.css"
+      "assets/app-DeZmi4wb.css"
     ],
     "assets": [
       "assets/psg-symbol-DsJ9lz_r.svg"
