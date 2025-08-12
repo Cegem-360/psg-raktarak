@@ -47,7 +47,7 @@
                                  class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for rent') }}</a>
                          </li>
                          <li class="mb-4">
-                             <a href="{{ localized_route('elado-irodahazak') }}"
+                             <a href="{{ localized_route('elado-raktarak') }}"
                                  class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for Sale') }}</a>
                          </li>
                          @if (app()->getLocale() === 'hu')
