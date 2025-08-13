@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-C5cJHYEO.css",
+    "file": "assets/app-C3VPmiKP.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -233,13 +233,13 @@
     "src": "resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp"
   },
   "resources/js/app.js": {
-    "file": "assets/app-DP-4HNh9.js",
+    "file": "assets/app-CyWP2Vli.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
       "assets/app-DxkI-1En.css",
-      "assets/app-C5cJHYEO.css"
+      "assets/app-C3VPmiKP.css"
     ],
     "assets": [
       "assets/psg-symbol-DsJ9lz_r.svg"

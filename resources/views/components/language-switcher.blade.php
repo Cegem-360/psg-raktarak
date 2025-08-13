@@ -17,10 +17,6 @@
             </a>
         @endauth
 
-        <a href="https://www.facebook.com/psgirodahazak" target="_blank" title="https://www.facebook.com/psgirodahazak"
-            class="text-primary hover:text-logogray">
-            <x-svg.fb-icon class="w-6 h-6" />
-        </a>
         <div class="lang text-logogray">
             @php
                 $currentLocale = app()->getLocale();

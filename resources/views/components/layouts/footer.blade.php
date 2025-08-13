@@ -97,12 +97,7 @@
                      Property Solution Group
                     </a> - {{ __('All rights reserved') }}.
                 </span>
-             <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
-                 <a href="https://www.facebook.com/psgirodahazak" target="_blank"
-                     class="text-gray-500 hover:text-blue-600 transition-colors duration-200">
-                     <x-svg.fb-icon />
-                 </a>
-             </div>
+             
              <div class="flex items-center gap-4 text-xs">
                  <div>Weboldalt készítette:</div>
                  <a href="https://cegem360.hu/" target="_blank">
