@@ -333,9 +333,9 @@
                 $('.terulet-slider').ionRangeSlider({
                     type: "double",
                     min: 0,
-                    max: 3000,
+                    max: 10000,
                     from: 0,
-                    to: 3000,
+                    to: 10000,
                     grid: true,
                     skin: "round",
                     postfix: "&nbsp;m²",
@@ -347,10 +347,10 @@
 
                 $('.ar-slider').ionRangeSlider({
                     type: "double",
-                    min: 1,
-                    max: 30,
-                    from: 1,
-                    to: 30,
+                    min: 0,
+                    max: 10,
+                    from: 0,
+                    to: 10,
                     grid: true,
                     skin: "round",
                     postfix: "&nbsp;€/m²",
