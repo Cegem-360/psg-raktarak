@@ -13,4 +13,5 @@ return [
     'online_contact' => 'Online kapcsolatfelvétel',
     'login' => 'Bejelentkezés',
     'coming_soon' => 'Hamarosan elérhető',
+    'offices_for_rent_outer_link' => 'Kiadó irodák',
 ];

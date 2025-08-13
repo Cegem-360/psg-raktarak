@@ -65,6 +65,12 @@
                         class="block py-4 px-8 hover:bg-primary/80 drop-shadow duration-1000 transition-color ease-[cubic-bezier(0.19,1,0.22,1)] {{ request()->routeIs(['kapcsolat', 'en.kapcsolat']) ? 'active' : '' }}">
                         {{ __('navigation.contact') }}</a>
                 </li>
+
+                <li>
+                    <a href="https://psg-irodahazak.hu" target="_blank"
+                        class="block py-4 px-8 hover:bg-primary/80 drop-shadow duration-1000 transition-color ease-[cubic-bezier(0.19,1,0.22,1)]">
+                        {{ __('navigation.offices_for_rent_outer_link') }}</a>
+                </li>
             </ul>
         </div>
     </div>

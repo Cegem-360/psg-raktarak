@@ -36,7 +36,7 @@
         </div>
 
     </div>
-    <x-pages.sections.home.bizalomerosito />
+    {{-- <x-pages.sections.home.bizalomerosito /> --}}
 
     @include('pages.forms.szuro')
 

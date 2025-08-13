@@ -13,4 +13,5 @@ return [
     'online_contact' => 'Online Contact',
     'login' => 'Login',
     'coming_soon' => 'Coming Soon',
+    'offices_for_rent_outer_link' => 'Kiadó irodák',
 ];
