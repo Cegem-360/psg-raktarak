@@ -3,7 +3,6 @@
 @use('App\Models\Service')
 <!DOCTYPE html>
 <html lang="hu">
-
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,21 +30,15 @@
                     print-color-adjust: exact;
                 }
             }
-
             @media print {
                 .pagebreak {
                     page-break-before: always;
                 }
-
-                /* page-break-after works, as well */
             }
-
             @media print {
                 body {
                     -webkit-print-color-adjust: exact;
                 }
-
-                /* I am using this to make Tailwind colours i.e bg-gray-300 etc.. to also print in the PDF */
             }
         </style>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -121,7 +114,6 @@
                                 {{ $property->jelenleg_kiado_addons }}</span>
                         </div>
                     @endif
-
                     @if ($property->min_kiado)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Min. Available') }}:</span>
@@ -130,7 +122,6 @@
                                 {{ $property->min_kiado_addons }}</span>
                         </div>
                     @endif
-
                     @if ($property->isSale())
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600"> {{ __('Price') }}:</span>
@@ -140,17 +131,19 @@
                             </span>
                         </div>
                     @endif
-
-                    @if ($property->max_berleti_dij)
+                    @if ($property->isRent())
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Rent') }}:</span>
                             <span class="font-medium text-gray-900">
-                                {{ $property->min_berleti_dij ? number_format((int) $property->min_berleti_dij, 0, ',', ' ') . ' - ' : '' }}
-                                {{ number_format((int) $property->max_berleti_dij, 0, ',', ' ') }}
-                                {{ $property->min_berleti_dij_addons }}</span>
+                                @if ($property->min_berleti_dij && $property->max_berleti_dij)
+                                    {{ number_format((int) $property->min_berleti_dij, 0, ',', ' ') . ' - ' . number_format((int) $property->max_berleti_dij, 0, ',', ' ') }}
+                                @else
+                                    {{ number_format((int) $property->min_berleti_dij, 0, ',', ' ') }}
+                                @endif
+                                {{ $property->min_berleti_dij_addons }}
+                            </span>
                         </div>
                     @endif
-
                     @if ($property->uzemeletetesi_dij)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Operating Fee') }}:</span>
@@ -159,7 +152,6 @@
                                 {{ $property->uzemeletetesi_dij_addons }}</span>
                         </div>
                     @endif
-
                     @if ($property->raktar_terulet)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Storage Area') }}:</span>
@@ -168,7 +160,6 @@
                                 {{ $property->raktar_terulet_addons }}</span>
                         </div>
                     @endif
-
                     @if ($property->raktar_berleti_dij)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Storage Rent') }}:</span>
@@ -177,106 +168,108 @@
                                 {{ $property->raktar_berleti_dij_addons }}</span>
                         </div>
                     @endif
-
                     @if ($property->parkolas)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Parking') }}:</span>
                             <span class="font-medium text-gray-900">{{ $property->parkolas }}</span>
                         </div>
                     @endif
-
                     @if ($property->min_parkolas_dija)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Parking Fee') }}:</span>
-                            <span
-                                class="font-medium text-gray-900">{{ $property->min_parkolas_dija ? number_format((int) $property->min_parkolas_dija, 0, ',', ' ') . ' - ' : '' }}
-                                {{ number_format((int) $property->max_parkolas_dija, 0, ',', ' ') }}
-                                {{ $property->min_parkolas_dija_addons }}</span>
-                        </div>
+                            <span class="font-medium text-gray-900">
+                                @if ($property->min_parkolas_dija_addons && $property->max_parkolas_dija_addons)
+                                    {{ (int) $property->min_parkolas_dija_addons . ' - ' . (int) $property->max_parkolas_dija_addons }}
+                                @else
+                                    {{ (int) $property->min_parkolas_dija }}
+                                @endif
+                            </span>
                     @endif
+                    {{ $property->min_parkolas_dija_addons }}
+                    </span>
+                </div>
 
-                    @if ($property->kozos_teruleti_arany)
-                        <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
-                            <span class="font-bold text-gray-600">{{ __('Common Area Ratio') }}:</span>
-                            <span class="font-medium text-gray-900">{{ $property->kozos_teruleti_arany }}%</span>
-                        </div>
-                    @endif
+                @if ($property->kozos_teruleti_arany)
+                    <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
+                        <span class="font-bold text-gray-600">{{ __('Common Area Ratio') }}:</span>
+                        <span class="font-medium text-gray-900">{{ $property->kozos_teruleti_arany }}%</span>
+                    </div>
+                @endif
 
-                    @if ($property->min_berleti_idoszak)
-                        <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
-                            <span class="font-bold text-gray-600">{{ __('Min. Rental Period') }}:</span>
-                            <span class="font-medium text-gray-900">{{ $property->min_berleti_idoszak }}
-                                {{ $property->min_berleti_idoszak_addons }}</span>
-                        </div>
-                    @endif
+                @if ($property->min_berleti_idoszak)
+                    <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
+                        <span class="font-bold text-gray-600">{{ __('Min. Rental Period') }}:</span>
+                        <span class="font-medium text-gray-900">{{ $property->min_berleti_idoszak }}
+                            {{ $property->min_berleti_idoszak_addons }}</span>
+                    </div>
+                @endif
 
-                    @if ($property->kodszam)
-                        <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
-                            <span class="font-bold text-gray-600">{{ __('Code') }}:</span>
-                            <span class="font-medium text-gray-900">{{ $property->kodszam }}</span>
-                        </div>
-                    @endif
+                @if ($property->kodszam)
+                    <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
+                        <span class="font-bold text-gray-600">{{ __('Code') }}:</span>
+                        <span class="font-medium text-gray-900">{{ $property->kodszam }}</span>
+                    </div>
+                @endif
 
-                    @if ($property->vat)
-                        <div class="mt-3 p-3 text-sm">
-                            <span
-                                class="font-bold text-red-600">{{ __('The above fees are subject to an additional 27% VAT!') }}</span>
+                @if ($property->vat)
+                    <div class="mt-3 p-3 text-sm">
+                        <span
+                            class="font-bold text-red-600">{{ __('The above fees are subject to an additional 27% VAT!') }}</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Images Gallery -->
+        @if ($property->property_photos && collect($property->property_photos)->count() > 1)
+            <div class="mt-6 px-6">
+                <div class="grid grid-cols-3 gap-3">
+                    @foreach (collect($property->property_photos)->skip(1)->take($property->isSale() ? 12 : 9) as $image)
+                        <div class="image-item">
+                            <img src="{{ Storage::url($image) }}" alt="{{ __('Property image') }}"
+                                class="w-full h-24 object-cover rounded border border-gray-200" loading="lazy">
                         </div>
-                    @endif
+                    @endforeach
                 </div>
             </div>
-
-            <!-- Images Gallery -->
-            @if ($property->property_photos && collect($property->property_photos)->count() > 1)
-                <div class="mt-6 px-6">
-                    <div class="grid grid-cols-3 gap-3">
-                        @foreach (collect($property->property_photos)->skip(1)->take($property->isSale() ? 12 : 9) as $image)
-                            <div class="image-item">
-                                <img src="{{ Storage::url($image) }}" alt="{{ __('Property image') }}"
-                                    class="w-full h-24 object-cover rounded border border-gray-200" loading="lazy">
-                            </div>
-                        @endforeach
-                    </div>
+        @endif
+        <!-- Egyéb mezők -->
+        @if ($property->egyeb)
+            <div class="mt-6 px-6 py-4 bg-gray-50">
+                <div class="text-sm text-gray-700 leading-relaxed">
+                    {!! $property->egyeb !!}
                 </div>
-            @endif
-            <!-- Egyéb mezők -->
-            @if ($property->egyeb)
-                <div class="mt-6 px-6 py-4 bg-gray-50">
-                    <div class="text-sm text-gray-700 leading-relaxed">
-                        {!! $property->egyeb !!}
-                    </div>
-                </div>
-            @endif
+            </div>
+        @endif
 
-            <!-- Description -->
-            @if ($property->content)
-                <div class="mt-6 px-6 py-4 bg-gray-50">
-                    <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
-                        {!! $property->content !!}
-                    </div>
+        <!-- Description -->
+        @if ($property->content)
+            <div class="mt-6 px-6 py-4 bg-gray-50">
+                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
+                    {!! $property->content !!}
                 </div>
-            @endif
-            @if ($property->tags || $property->services)
-                <div class="mt-6 px-6 py-4 bg-gray-50" style="page-break-inside: auto;">
-                    <h3 class="text-base font-bold text-gray-800 mb-3">Műszaki paraméterek és szolgáltatások</h3>
-                    <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
-                        <ul class="list-disc list-inside mb-4 ">
-                            @if ($property->tags->count() > 0)
-                                @foreach ($property->tags as $item)
-                                    <li class="mb-1">{{ $item->name }}</li>
-                                @endforeach
+            </div>
+        @endif
+        @if ($property->tags || $property->services)
+            <div class="mt-6 px-6 py-4 bg-gray-50" style="page-break-inside: auto;">
+                <h3 class="text-base font-bold text-gray-800 mb-3">Műszaki paraméterek és szolgáltatások</h3>
+                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
+                    <ul class="list-disc list-inside mb-4 ">
+                        @if ($property->tags->count() > 0)
+                            @foreach ($property->tags as $item)
+                                <li class="mb-1">{{ $item->name }}</li>
+                            @endforeach
 
-                            @endif
-                            @if ($property->services->count() > 0)
-                                @foreach ($property->services as $item)
-                                    <li class="mb-1">{{ $item->name }}</li>
-                                @endforeach
-
-                            @endif
-                        </ul>
-                    </div>
+                        @endif
+                        @if ($property->services->count() > 0)
+                            @foreach ($property->services as $item)
+                                <li class="mb-1">{{ $item->name }}</li>
+                            @endforeach
+                        @endif
+                    </ul>
                 </div>
-            @endif
+            </div>
+        @endif
 
         </div>
 
