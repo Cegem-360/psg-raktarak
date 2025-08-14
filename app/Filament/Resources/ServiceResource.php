@@ -31,6 +31,11 @@ final class ServiceResource extends Resource
 
     protected static ?string $navigationGroup = 'Tartalomkezelés';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

@@ -43,11 +43,11 @@ final class PropertyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?string $navigationLabel = 'Ingatlanok';
+    protected static ?string $navigationLabel = 'Raktárak';
 
-    protected static ?string $modelLabel = 'Ingatlan';
+    protected static ?string $modelLabel = 'Raktár';
 
-    protected static ?string $pluralModelLabel = 'Ingatlanok';
+    protected static ?string $pluralModelLabel = 'Raktárak';
 
     protected static ?string $navigationGroup = 'Ingatlanok';
 
@@ -287,22 +287,22 @@ final class PropertyResource extends Resource
                                 ]),
                         ]),
                 ]),
-                Section::make('Műszaki paraméterek')->schema([
+                Section::make('Jellemzők')->schema([
                     CheckboxList::make('tags')
-                        ->label('Műszaki paraméterek')
+                        ->label('Jellemzők')
                         ->relationship('tags', 'name')
                         ->columns(4)
                         ->gridDirection('row')
                         ->columnSpanFull(),
                 ]),
-                Section::make('Szolgáltatások')->schema([
+                /* Section::make('Szolgáltatások')->schema([
                     CheckboxList::make('services')
                         ->label('Szolgáltatások')
                         ->relationship('services', 'name')
                         ->columns(4)
                         ->gridDirection('row')
                         ->columnSpanFull(),
-                ]),
+                ]), */
                 Section::make('Kategóriák')->schema([
                     CheckboxList::make('categories')
                         ->label('Kategóriák')

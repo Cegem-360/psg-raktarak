@@ -112,6 +112,9 @@ final class QuoteRequestModal extends Component
                 $message->to(env('ADMIN_EMAIL', 'info@psg-irodahazak.hu'))
                     ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
                     ->replyTo($this->email, $this->name);
+                $message->to(env('ADMIN_EMAIL', 'richard.fekete@psg-irodahazak.hu'))
+                    ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
+                    ->replyTo($this->email, $this->name);
             });
             Mail::send('emails.quote-request', [
                 'name' => $this->name,

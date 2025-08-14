@@ -26,9 +26,9 @@ final class ListSaleProperties extends Page implements HasTable
 
     protected static ?string $navigationGroup = 'Ingatlanok';
 
-    protected static ?string $navigationLabel = 'Eladó ingatlanok';
+    protected static ?string $navigationLabel = 'Eladó raktárak';
 
-    protected static ?string $title = 'Eladó ingatlanok';
+    protected static ?string $title = 'Eladó raktárak';
 
     public function table(Table $table): Table
     {

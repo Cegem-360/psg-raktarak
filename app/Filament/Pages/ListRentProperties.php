@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Pages;
 
-use Illuminate\Support\Facades\URL;
 use App\Filament\Resources\PropertyResource;
 use App\Models\Property;
 use Filament\Pages\Page;
@@ -15,6 +14,7 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\URL;
 
 final class ListRentProperties extends Page implements HasTable
 {
@@ -24,13 +24,13 @@ final class ListRentProperties extends Page implements HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
-    protected static ?string $modelLabel = 'Ingatlan';
+    protected static ?string $modelLabel = 'Raktár';
 
     protected static ?string $pluralModelLabel = 'Ingatlanok';
 
     protected static ?string $navigationGroup = 'Ingatlanok';
 
-    protected static ?string $title = 'Kiadó ingatlanok';
+    protected static ?string $title = 'Kiadó raktárak';
 
     public function table(Table $table): Table
     {
