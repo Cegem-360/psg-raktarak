@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="relative bg-cover bg-center bg-no-repeat"
-        style="background-image: url({{ Vite::asset('resources/images/industrial-warehouse-with-stacked-pallets-of-packa-2025-02-24-18-26-52-utc.webp') }});">
+        style="background-image: url({{ Vite::asset('resources/images/aerial-view-of-industrial-commerce-office-building-2024-09-11-08-34-11-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
         <div class="relative z-10 container mx-auto pt-12 pb-20">
             <form id="filterForm" method="GET" action="{{ route('kiado-raktarak') }}" class="search-form">
