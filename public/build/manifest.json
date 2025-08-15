@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-C3VPmiKP.css",
+    "file": "assets/app-C09afF7m.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -47,6 +47,10 @@
   "resources/images/aegon_logo_800x600.png": {
     "file": "assets/aegon_logo_800x600-BnEmxMsL.png",
     "src": "resources/images/aegon_logo_800x600.png"
+  },
+  "resources/images/aerial-view-of-industrial-commerce-office-building-2024-09-11-08-34-11-utc.webp": {
+    "file": "assets/aerial-view-of-industrial-commerce-office-building-2024-09-11-08-34-11-utc-Dxx5cuFm.webp",
+    "src": "resources/images/aerial-view-of-industrial-commerce-office-building-2024-09-11-08-34-11-utc.webp"
   },
   "resources/images/ai-generated-8614999_1280.jpg": {
     "file": "assets/ai-generated-8614999_1280-CcZpqDrz.jpg",
@@ -100,6 +104,14 @@
     "file": "assets/budai_oldal-Dxh4D9CE.webp",
     "src": "resources/images/budai_oldal.webp"
   },
+  "resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-30-21-45-22-utc.webp": {
+    "file": "assets/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-30-21-45-22-utc-CtMEvOyT.webp",
+    "src": "resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-30-21-45-22-utc.webp"
+  },
+  "resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc.webp": {
+    "file": "assets/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc-BVUccb2L.webp",
+    "src": "resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc.webp"
+  },
   "resources/images/cegem360logo-black.webp": {
     "file": "assets/cegem360logo-black-BE-4pTb4.webp",
     "src": "resources/images/cegem360logo-black.webp"
@@ -131,6 +143,10 @@
   "resources/images/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc.webp": {
     "file": "assets/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc-BzcoeXRE.webp",
     "src": "resources/images/details-in-the-facade-of-modern-architecture-2025-03-23-22-01-52-utc.webp"
+  },
+  "resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp": {
+    "file": "assets/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc-urTkbUn0.webp",
+    "src": "resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp"
   },
   "resources/images/finotive_logo_1_800x600.jpg": {
     "file": "assets/finotive_logo_1_800x600-C-8hHe45.jpg",
@@ -233,13 +249,13 @@
     "src": "resources/images/wide-shot-of-area-of-construction-in-electrical-or-2025-03-08-11-55-09-utc.webp"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CyWP2Vli.js",
+    "file": "assets/app-BNziHgoe.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "css": [
       "assets/app-DxkI-1En.css",
-      "assets/app-C3VPmiKP.css"
+      "assets/app-C09afF7m.css"
     ],
     "assets": [
       "assets/psg-symbol-DsJ9lz_r.svg"
