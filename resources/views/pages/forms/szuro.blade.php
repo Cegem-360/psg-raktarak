@@ -20,7 +20,7 @@
         style="background-image: url({{ Vite::asset('resources/images/aerial-view-of-industrial-commerce-office-building-2024-09-11-08-34-11-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
         <div class="relative z-10 container mx-auto pt-12 pb-20">
-            <form id="filterForm" method="GET" action="{{ route('kiado-raktarak') }}" class="search-form">
+            <form id="filterForm" method="GET" action="{{ localized_route('kiado-raktarak') }}" class="search-form">
                 <!-- Hidden inputs for map selection and parameters -->
                 <input type="hidden" name="type" value="rent">
                 <input type="hidden" name="districts" id="selectedDistricts" value="">

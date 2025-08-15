@@ -53,16 +53,21 @@ final class FetchBloghuFeed extends Command
             if (! property_exists($item, 'title') || ! property_exists($item, 'link') || ! property_exists($item, 'description') || ! property_exists($item, 'pubDate')) {
                 continue; // Skip items that do not have the required properties
             }
-
             if (empty($item->title) || empty($item->link) || empty($item->description) || empty($item->pubDate)) {
                 continue; // Skip items with empty required properties
             }
-
             $title = (string) $item->title;
             $link = (string) $item->link;
             $description = (string) $item->description;
             $pubDate = date('Y-m-d H:i:s', strtotime((string) $item->pubDate));
-            $featuredImage = (string) $item->enclosure['url'] ?? null;
+            $featuredImage = null;
+            $namespaces = $item->getNameSpaces(true);
+            $all = [];
+            foreach ($namespaces as $prefix => $ns) {
+                $all[$prefix] = $item->children($ns);
+            }
+
+            $featuredImage = $all['blh']->image ?? null;
             $blog = BlogPost::firstOrCreate([
                 'slug' => Str::slug($title),
             ]);

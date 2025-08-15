@@ -196,7 +196,7 @@ final class ListRentOffices extends Component
         if ($this->areaMin || $this->areaMax) {
             $query->whereBetween('jelenleg_kiado', [
                 $this->areaMin ? (int) $this->areaMin : 0,
-                $this->areaMax ? (int) $this->areaMax : 3000,
+                $this->areaMax ? (int) $this->areaMax : 10000,
             ]);
         }
 
