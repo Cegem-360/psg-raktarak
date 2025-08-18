@@ -150,20 +150,13 @@ final class ListRentOffices extends Component
             ->rent()
             ->active();
 
-        if ($this->min_rent) {
-            $query->where('min_berleti_idoszak', $this->min_rent);
-        }
-
-        if ($this->min_rent_addons) {
-            $query->where('min_berleti_idoszak_addons', $this->min_rent_addons);
-        }
-
-        // If agglomeration is not included, only show Budapest properties
-        if ($this->includeAgglomeration) {
-            $query->whereNot(function ($query): void {
-                $query->budapestOnly();
-            });
-        }
+        $query->when($this->min_rent, fn ($query) => $query->where('min_berleti_idoszak', $this->min_rent));
+        $query->when($this->min_rent_addons, fn ($query) => $query->where('min_rent_addons', $this->min_rent_addons));
+        $query->when($this->includeAgglomeration, fn ($query) => $query->whereNot(fn ($query) => $query->agglomeration()));
+        $query->when($this->search, fn ($query) => $query->searchText($this->search));
+        $query->when($this->officeName, fn ($query) => $query->byOfficeName($this->officeName));
+        $query->when($this->includeAgglomeration, fn ($query) => $query->agglomeration());
+        $query->when($this->district, fn ($query) => $query->inDistrict($this->district));
 
         if ($this->category) {
             $category_model = Category::where('slug', 'like', $this->category)->first();
@@ -171,31 +164,13 @@ final class ListRentOffices extends Component
             $query->byCategory(stripslashes($category_model->name));
         }
 
-        // Apply search filter
-        if ($this->search) {
-            if (
-                mb_stripos($this->search, '2 csöves fan-coil') !== false ||
-                mb_stripos($this->search, '2 csoves fan-coil') !== false ||
-                mb_stripos($this->search, '2 csöves') !== false ||
-                mb_stripos($this->search, '2 csoves') !== false
-            ) {
-                $query->whereRaw('JSON_SEARCH(LOWER(tags), "one", LOWER(?)) IS NOT NULL', ['%2 csöves fan-coil%']);
-            } elseif (
-                mb_stripos($this->search, '4 csöves fan-coil') !== false ||
-                mb_stripos($this->search, '4 csoves fan-coil') !== false ||
-                mb_stripos($this->search, '4 csöves') !== false ||
-                mb_stripos($this->search, '4 csoves') !== false
-            ) {
-                $query->whereRaw('JSON_SEARCH(LOWER(tags), "one", LOWER(?)) IS NOT NULL', ['%4 csöves fan-coil%']);
-            } else {
-                $query->searchText($this->search);
-            }
-        }
-
-        // Apply area range filter
         if ($this->areaMin || $this->areaMax) {
             $query->whereBetween('jelenleg_kiado', [
-                $this->areaMin ? (int) $this->areaMin : 0,
+                $this->areaMin ? (int) $this->areaMin : 1,
+                $this->areaMax ? (int) $this->areaMax : 10000,
+            ]);
+            $query->whereBetween('min_kiado', [
+                $this->areaMin ? (int) $this->areaMin : 1,
                 $this->areaMax ? (int) $this->areaMax : 10000,
             ]);
         }
@@ -206,22 +181,6 @@ final class ListRentOffices extends Component
                 $this->priceMin ? (int) $this->priceMin : null,
                 $this->priceMax ? (int) $this->priceMax : null
             );
-        }
-
-        // Apply office name filter
-        if ($this->officeName) {
-            $query->byOfficeName($this->officeName);
-        }
-
-        // If agglomeration is included, return only agglomeration properties and skip district filters
-        if ($this->includeAgglomeration) {
-
-            return $query->agglomeration();
-        }
-
-        // Apply district filter (single district for backward compatibility)
-        if ($this->district) {
-            $query->inDistrict($this->district);
         }
 
         // Apply multiple districts filter
