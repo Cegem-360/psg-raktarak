@@ -188,11 +188,11 @@
                     {{ __($property->min_parkolas_dij_addons ?? '') }}
                     </span>
                     @if ($property->kozos_teruleti_arany)
-                    <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
-                        <span class="font-bold text-gray-600">{{ __('Common Area Ratio') }}:</span>
-                        <span class="font-medium text-gray-900">{{ $property->kozos_teruleti_arany }}%</span>
-                    </div>
-                @endif
+                        <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
+                            <span class="font-bold text-gray-600">{{ __('Common Area Ratio') }}:</span>
+                            <span class="font-medium text-gray-900">{{ $property->kozos_teruleti_arany }}%</span>
+                        </div>
+                    @endif
 
                 @if ($property->min_berleti_idoszak)
                     <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
