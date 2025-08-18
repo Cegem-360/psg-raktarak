@@ -61,9 +61,7 @@
                                 </tr>
                                 <tr>
                                     <td class="font-bold">{{ __('Currently Available') }}:</td>
-                                    <td>{{ $property->jelenleg_kiado }}
-                                        {{ __($property->jelenleg_kiado_addons ?? '') }}
-                                    </td>
+                                    <td>{{ $property->jelenleg_kiado }} m²</td>
                                 </tr>
                                 <tr>
                                     <td class="font-bold">{{ __('Min. Available') }}:</td>
