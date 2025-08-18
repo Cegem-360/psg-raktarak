@@ -32,7 +32,7 @@
                                 </tr>
                                 <tr>
                                     <td class="font-bold">{{ __('Parking') }}:</td>
-                                    <td>{{ $property->parkolas }}</td>
+                                    <td>{{ __($property->parkolas) }}</td>
                                 </tr>
                                 @if ($property->kodszam)
                                     <tr>

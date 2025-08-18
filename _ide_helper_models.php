@@ -116,6 +116,7 @@ namespace App\Models{
 /**
  * @property int $id
  * @property string $name
+ * @property string $slug
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Property> $properties
@@ -126,6 +127,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category whereUpdatedAt($value)
  */
 	final class Category extends \Eloquent {}
@@ -697,9 +699,19 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * @property int $id
+ * @property string $name
+ * @property string $translated
+ * @property \Carbon\CarbonImmutable|null $date
+ * @property string|null $lang
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate whereLang($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Translate whereTranslated($value)
  */
 	final class Translate extends \Eloquent {}
 }
