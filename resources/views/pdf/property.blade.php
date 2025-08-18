@@ -140,7 +140,7 @@
                                 @else
                                     {{ number_format((int) $property->min_berleti_dij, 0, ',', ' ') }}
                                 @endif
-                                {{ $property->min_berleti_dij_addons }}
+                                {{ __($property->min_berleti_dij_addons) }}
                             </span>
                         </div>
                     @endif
