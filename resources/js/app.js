@@ -12,6 +12,8 @@ import "swiper/css";
 import "swiper/css/bundle";
 import "swiper/css/navigation";
 
+import 'flowbite';
+
 document.addEventListener("DOMContentLoaded", function () {
     const galleryCarouselSwiperThumbs = new Swiper(
         ".gallery-carousel-swiper-thumbs",
