@@ -12,7 +12,8 @@ import "swiper/css";
 import "swiper/css/bundle";
 import "swiper/css/navigation";
 
-import 'flowbite';
+import "flowbite";
+import { initFlowbite } from "flowbite";
 
 document.addEventListener("DOMContentLoaded", function () {
     const galleryCarouselSwiperThumbs = new Swiper(
@@ -145,7 +146,9 @@ function getCookie(name) {
     }
     return null;
 }
-
+document.addEventListener("livewire:navigated", () => {
+    initFlowbite();
+});
 // Listen for Livewire events
 document.addEventListener("livewire:initialized", function () {
     // Listen for cookie setting events from Livewire
