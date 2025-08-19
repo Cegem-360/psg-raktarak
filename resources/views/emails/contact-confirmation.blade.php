@@ -92,19 +92,19 @@
                 </div>
             </div>
 
-            <h3>{{ __('Nyitvatartás') }}:</h3>
+            <h3>{{ __('Opening Hours') }}:</h3>
             <div class="contact-info">
                 <div class="contact-item">
-                    <strong>{{ __('Hétfő-Péntek') }}:</strong>
+                    <strong>{{ __('Monday-Friday') }}:</strong>
                     <span>9:00 - 18:00</span>
                 </div>
                 <div class="contact-item">
-                    <strong>{{ __('Szombat') }}:</strong>
+                    <strong>{{ __('Saturday') }}:</strong>
                     <span>10:00 - 14:00</span>
                 </div>
                 <div class="contact-item">
-                    <strong>{{ __('Vasárnap') }}:</strong>
-                    <span>{{ __('Zárva') }}</span>
+                    <strong>{{ __('Sunday') }}:</strong>
+                    <span>{{ __('Closed') }}</span>
                 </div>
             </div>
 
