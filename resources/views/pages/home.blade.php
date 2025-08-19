@@ -2,9 +2,9 @@
 
     <div class="relative">
 
-        <div class="kategoria-valaszto grid grid-cols-1 md:grid-cols-3 font-bold">
+        <div class="grid grid-cols-1 font-bold kategoria-valaszto md:grid-cols-3">
             <a href="{{ localized_route('budapest.category', ['category' => 'pesti-oldal']) }}"
-                class="hero-image relative group">
+                class="relative hero-image group">
                 <img src="{{ Vite::asset('resources/images/pesti_oldal.webp') }}" alt="Pesti oldal és agglomeráció"
                     class="w-full h-auto object-cover aspect-[3/2]" loading="lazy" />
                 <div
@@ -14,7 +14,7 @@
                 </div>
             </a>
             <a href="{{ localized_route('budapest.category', ['category' => 'budai-oldal']) }}"
-                class="hero-image relative group">
+                class="relative hero-image group">
                 <img src="{{ Vite::asset('resources/images/budai_oldal.webp') }}" alt="Budai oldal"
                     class="w-full h-auto object-cover aspect-[3/2]" loading="lazy" />
                 <div
@@ -23,8 +23,8 @@
                         {{ __('Buda side') }}</h2>
                 </div>
             </a>
-            <a href="{{ localized_route('budapest.category', ['category' => 'kiado-vaci-uti-irodak']) }}"
-                class="hero-image relative group">
+            <a href="{{ localized_route('budapest.category', ['category' => 'videki-raktarak']) }}"
+                class="relative hero-image group">
                 <img src="{{ Vite::asset('resources/images/videki_raktarak.webp') }}" alt="Vidéki raktárak"
                     class="w-full h-auto object-cover aspect-[3/2]" loading="lazy" />
                 <div
