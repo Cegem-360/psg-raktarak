@@ -77,7 +77,7 @@
                 </div>
                 <div class="contact-item">
                     <strong>{{ __('Email') }}:</strong>
-                    <span>info@psg-irodahazak.hu</span>
+                    <span>info@psg-raktarak.hu</span>
                 </div>
                 <div class="contact-item">
                     <strong>{{ __('Iroda') }}:</strong>

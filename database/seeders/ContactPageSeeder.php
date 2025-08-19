@@ -18,10 +18,10 @@ final class ContactPageSeeder extends Seeder
         ContactPage::updateOrCreate(
             ['language' => 'hu'],
             [
-                'content' => '<h3 class="mb-3 text-logogray/80 text-xl">Property Solution Group Kft.</h3>
+                'content' => '<h3 class="mb-3 text-xl text-logogray/80">Property Solution Group Kft.</h3>
 <p class="mb-3 text-gray-600">Iroda: 1016 Budapest, Derék u. 2.</p>
 <p class="mb-3 text-gray-600">Tel.: +36 20 381 3917</p>
-<p>E-mail: <a class="text-primary" href="mailto:info@psg-irodahazak.hu">info@psg-irodahazak.hu</a></p>',
+<p>E-mail: <a class="text-primary" href="mailto:info@psg-raktarak.hu">info@psg-raktarak.hu</a></p>',
             ]
         );
 
@@ -29,10 +29,10 @@ final class ContactPageSeeder extends Seeder
         ContactPage::updateOrCreate(
             ['language' => 'en'],
             [
-                'content' => '<h3 class="mb-3 text-logogray/80 text-xl">Property Solution Group Kft.</h3>
+                'content' => '<h3 class="mb-3 text-xl text-logogray/80">Property Solution Group Kft.</h3>
 <p class="mb-3 text-gray-600">Office: 1016 Budapest, Derék u. 2.</p>
 <p class="mb-3 text-gray-600">Phone: +36 20 381 3917</p>
-<p>E-mail: <a class="text-primary" href="mailto:info@psg-irodahazak.hu">info@psg-irodahazak.hu</a></p>',
+<p>E-mail: <a class="text-primary" href="mailto:info@psg-raktarak.hu">info@psg-raktarak.hu</a></p>',
             ]
         );
     }

@@ -1,22 +1,22 @@
 <x-layouts.app>
     <div>
-        <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
+        <div class="relative bg-fixed bg-center bg-no-repeat bg-cover"
             style="background-image: url({{ Vite::asset('resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp') }});">
             <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-            <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-                <h2 class="mt-4 mb-16 font-bold text-5xl text-center drop-shadow text-logogray/80">
+            <div class="container relative z-10 pt-24 pb-20 mx-auto space-y-3">
+                <h2 class="mt-4 mb-16 text-5xl font-bold text-center drop-shadow text-logogray/80">
                     {{ __('contact.title') }}</h2>
 
-                <div class="max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
+                <div class="max-w-screen-xl p-8 mx-auto border shadow-xl backdrop-blur-3xl rounded-xl border-white/15">
                     <!-- Kapcsolati információk szekció -->
                     <div
-                        class="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 border-b border-gray-300 hover:brightness-95 transition-all duration-300 ease-in-out mb-8">
+                        class="grid grid-cols-1 gap-8 p-6 mb-8 transition-all duration-300 ease-in-out border-b border-gray-300 md:grid-cols-2 hover:brightness-95">
                         <div>
                             @if ($contactPage && $contactPage->content)
                                 {!! $contactPage->content !!}
                             @else
                                 <!-- Alapértelmezett tartalom, ha nincs még beállítva az adatbázisban -->
-                                <h3 class="mb-3 text-logogray/80 text-xl">Property Solution Group Kft.</h3>
+                                <h3 class="mb-3 text-xl text-logogray/80">Property Solution Group Kft.</h3>
                                 <p class="mb-3 text-gray-600">
                                     Iroda: 1016 Budapest, Derék u. 2.
                                 </p>
@@ -24,7 +24,7 @@
                                     Tel.: +36 20 381 3917
                                 </p>
                                 <p>E-mail: <a class="text-primary"
-                                        href="mailto:info@psg-irodahazak.hu">info@psg-irodahazak.hu</a>
+                                        href="mailto:info@psg-raktarak.hu">info@psg-raktarak.hu</a>
                                 </p>
                             @endif
                         </div>
@@ -40,12 +40,12 @@
                     </div>
 
                     <!-- Kapcsolatfelvételi űrlap szekció -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
                         <!-- Kapcsolatfelvételi űrlap -->
-                        <div class="bg-white rounded-xl p-8 shadow-lg">
+                        <div class="p-8 bg-white shadow-lg rounded-xl">
                             <!-- Sikeres/Hiba üzenetek -->
                             @if (session('success'))
-                                <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                                <div class="p-4 mb-6 text-green-700 bg-green-100 border border-green-400 rounded-lg">
                                     <div class="flex">
                                         <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -58,7 +58,7 @@
                             @endif
 
                             @if (session('error'))
-                                <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                <div class="p-4 mb-6 text-red-700 bg-red-100 border border-red-400 rounded-lg">
                                     <div class="flex">
                                         <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -71,7 +71,7 @@
                             @endif
 
                             @if ($errors->any())
-                                <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                <div class="p-4 mb-6 text-red-700 bg-red-100 border border-red-400 rounded-lg">
                                     <div class="flex">
                                         <svg class="w-5 h-5 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -89,14 +89,14 @@
                                 </div>
                             @endif
 
-                            <h3 class="mb-6 text-3xl tracking-tight font-bold text-accent">
+                            <h3 class="mb-6 text-3xl font-bold tracking-tight text-accent">
                                 {{ __('contact.contact_form') }}
                             </h3>
-                            <p class="mb-8 font-light text-gray-500 text-lg">{{ __('contact.contact_description') }}</p>
+                            <p class="mb-8 text-lg font-light text-gray-500">{{ __('contact.contact_description') }}</p>
 
                             <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
                                 @csrf
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div>
                                         <label for="contact_name"
                                             class="block mb-2 text-sm font-medium text-gray-900">{{ __('contact.name') }}
@@ -123,7 +123,7 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                                     <div>
                                         <label for="contact_phone"
                                             class="block mb-2 text-sm font-medium text-gray-900">{{ __('contact.phone') }}
@@ -214,7 +214,7 @@
                                 </div>
 
                                 <button type="submit"
-                                    class="w-full py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary hover:bg-primary/80 focus:ring-4 focus:outline-none focus:ring-primary-300 transition-colors">
+                                    class="w-full px-5 py-3 text-sm font-medium text-center text-white transition-colors rounded-lg bg-primary hover:bg-primary/80 focus:ring-4 focus:outline-none focus:ring-primary-300">
                                     {{ __('contact.send_message') }}
                                 </button>
                             </form>
@@ -223,8 +223,8 @@
                         <!-- További információk -->
                         <div class="space-y-6">
                             <!-- Nyitvatartás -->
-                            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-4">{{ __('contact.opening_hours') }}
+                            <div class="p-6 shadow-lg bg-white/80 backdrop-blur-sm rounded-xl">
+                                <h4 class="mb-4 text-xl font-bold text-gray-800">{{ __('contact.opening_hours') }}
                                 </h4>
                                 <div class="space-y-2 text-gray-600">
                                     <div class="flex justify-between">
@@ -243,11 +243,11 @@
                             </div>
 
                             <!-- Szolgáltatások -->
-                            <div class="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-4">{{ __('contact.our_services') }}</h4>
+                            <div class="p-6 shadow-lg bg-white/80 backdrop-blur-sm rounded-xl">
+                                <h4 class="mb-4 text-xl font-bold text-gray-800">{{ __('contact.our_services') }}</h4>
                                 <ul class="space-y-2 text-gray-600">
                                     <li class="flex items-center">
-                                        <svg class="w-4 h-4 text-primary mr-2" fill="currentColor"
+                                        <svg class="w-4 h-4 mr-2 text-primary" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -256,7 +256,7 @@
                                         {{ __('contact.service_search') }}
                                     </li>
                                     <li class="flex items-center">
-                                        <svg class="w-4 h-4 text-primary mr-2" fill="currentColor"
+                                        <svg class="w-4 h-4 mr-2 text-primary" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -265,7 +265,7 @@
                                         {{ __('contact.service_representation') }}
                                     </li>
                                     <li class="flex items-center">
-                                        <svg class="w-4 h-4 text-primary mr-2" fill="currentColor"
+                                        <svg class="w-4 h-4 mr-2 text-primary" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -274,7 +274,7 @@
                                         {{ __('contact.service_valuation') }}
                                     </li>
                                     <li class="flex items-center">
-                                        <svg class="w-4 h-4 text-primary mr-2" fill="currentColor"
+                                        <svg class="w-4 h-4 mr-2 text-primary" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -283,7 +283,7 @@
                                         {{ __('contact.service_investment') }}
                                     </li>
                                     <li class="flex items-center">
-                                        <svg class="w-4 h-4 text-primary mr-2" fill="currentColor"
+                                        <svg class="w-4 h-4 mr-2 text-primary" fill="currentColor"
                                             viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -295,11 +295,11 @@
                             </div>
 
                             <!-- Gyors kapcsolatfelvétel -->
-                            <div class="bg-gradient-to-r from-primary to-accent text-white rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold mb-4">{{ __('contact.immediate_contact') }}</h4>
+                            <div class="p-6 text-white shadow-lg bg-gradient-to-r from-primary to-accent rounded-xl">
+                                <h4 class="mb-4 text-xl font-bold">{{ __('contact.immediate_contact') }}</h4>
                                 <p class="mb-4">{{ __('contact.urgent_call') }}</p>
                                 <a href="tel:+36203813917"
-                                    class="inline-flex items-center px-4 py-2 bg-white text-primary rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                                    class="inline-flex items-center px-4 py-2 font-medium transition-colors bg-white rounded-lg text-primary hover:bg-gray-100">
                                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path
                                             d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z">

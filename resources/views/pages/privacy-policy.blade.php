@@ -60,10 +60,10 @@
                         <ul class="ml-0 list-none">
                             <li>Cégnév: Property Solution Group Kft.</li>
                             <li>Székhely: 1016 Budapest, Derék utca 2.</li>
-                            <li>Weblap: psg-irodahazak.hu</li>
+                            <li>Weblap: psg-raktarak.hu</li>
                             <li>Kapcsolattartó: Fekete József Richárd, ügyvezető</li>
                             <li>Telefon: +36 20 381 3917</li>
-                            <li>E-mail: info@psg-irodahazak.hu</li>
+                            <li>E-mail: info@psg-raktarak.hu</li>
                         </ul>
                     </div>
                     <div class="mb-2">
