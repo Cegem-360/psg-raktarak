@@ -21,7 +21,7 @@
         <p>Üdvözlettel,</p>
         <p>Fekete Richárd<br>
             mobil: +36 20 381 3917<br>
-            e-mail: richard.fekete@psg-irodahazak.hu</p>
+            e-mail: richard.fekete@psg-raktarak.hu</p>
     </body>
 
 </html>

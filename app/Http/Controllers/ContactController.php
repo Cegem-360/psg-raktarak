@@ -64,10 +64,10 @@ final class ContactController extends Controller
         try {
             // Send email notification to admin
             Mail::send('emails.contact', $validated, function ($message) use ($validated): void {
-                $message->to(env('ADMIN_EMAIL', 'info@psg-irodahazak.hu'))
+                $message->to(env('ADMIN_EMAIL', 'info@psg-raktarak.hu'))
                     ->subject('Új kapcsolatfelvételi üzenet: '.$validated['contact_subject'])
                     ->replyTo($validated['email'], $validated['name']);
-                $message->to('richard.fekete@psg-irodahazak.hu')
+                $message->to('richard.fekete@psg-raktarak.hu')
                     ->subject('Új kapcsolatfelvételi üzenet: '.$validated['contact_subject'])
                     ->replyTo($validated['email'], $validated['name']);
             });

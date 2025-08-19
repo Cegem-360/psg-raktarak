@@ -109,10 +109,10 @@ final class QuoteRequestModal extends Component
                 'userMessage' => $this->message,
                 'quoteId' => $quoteRequest->id,
             ], function ($message): void {
-                $message->to(env('ADMIN_EMAIL', 'info@psg-irodahazak.hu'))
+                $message->to(env('ADMIN_EMAIL', 'info@psg-raktarak.hu'))
                     ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
                     ->replyTo($this->email, $this->name);
-                $message->to('richard.fekete@psg-irodahazak.hu')
+                $message->to('richard.fekete@psg-raktarak.hu')
                     ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
                     ->replyTo($this->email, $this->name);
             });
