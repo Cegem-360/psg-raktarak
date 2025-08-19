@@ -59,7 +59,7 @@
     <body>
         <div class="header">
             <h1>{{ __('Köszönjük üzenetét!') }}</h1>
-            <p>{{ __('PSG Irodaházak') }}</p>
+            <p>{{ __('PSG Raktárak') }}</p>
         </div>
 
         <div class="content">
@@ -84,7 +84,7 @@
                 </div>
                 <div class="contact-item">
                     <strong>Email:</strong>
-                    <span>info@psg-irodahazak.hu</span>
+                    <span>info@psg-raktarak.hu</span>
                 </div>
                 <div class="contact-item">
                     <strong>{{ __('Iroda') }}:</strong>
