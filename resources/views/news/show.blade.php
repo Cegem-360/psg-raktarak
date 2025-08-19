@@ -1,10 +1,10 @@
 <x-layouts.app>
-    <x-slot name="title">{{ $news->title }} | PSG-IRODAHÁZAK Hírek</x-slot>
+    <x-slot name="title">{{ $news->title }} | PSG-RAKTÁRAK Hírek</x-slot>
     <x-slot name="meta">
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
         <meta name="description" content="{{ $news->excerpt }}">
-        <meta name="keywords" content="hír, irodaház, irodabérlet">
+        <meta name="keywords" content="hír, raktár, raktárbérlet">
         <link rel="canonical" href="{{ Request::url() }}">
 
         <!-- Open Graph -->
@@ -27,12 +27,12 @@
     <div class="min-h-screen bg-gray-50">
         <!-- Breadcrumb -->
 
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <article class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="max-w-4xl px-4 py-12 mx-auto sm:px-6 lg:px-8">
+            <article class="overflow-hidden bg-white rounded-lg shadow-sm">
                 <!-- Article Header -->
                 <div class="p-8">
 
-                    <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">{{ $news->title }}</h1>
+                    <h1 class="mb-4 text-3xl font-bold text-gray-900 lg:text-4xl">{{ $news->title }}</h1>
 
                 </div>
 
@@ -40,7 +40,7 @@
                 @if ($news->featured_image)
                     <div class="px-8 mb-8">
                         <img src="{{ Storage::url($news->featured_image) }}" alt="{{ $news->title }}"
-                            class="w-full h-64 lg:h-96 object-cover rounded-lg" loading="lazy">
+                            class="object-cover w-full h-64 rounded-lg lg:h-96" loading="lazy">
                     </div>
                 @endif
 
@@ -61,7 +61,7 @@
                 @if ($news?->source)
                     <div class="px-8 pb-8">
                         <div class="prose prose-lg max-w-none">
-                            <span class="font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">
+                            <span class="px-2 py-1 font-semibold text-blue-700 bg-blue-100 rounded">
                                 Forrás: {{ $news->source }}
                             </span>
                         </div>
@@ -73,7 +73,7 @@
             <!-- Back to News -->
             <div class="mt-12 text-center">
                 <a href="{{ localized_route('news.index') }}"
-                    class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
+                    class="inline-flex items-center px-6 py-3 text-gray-700 transition duration-150 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
                         </path>

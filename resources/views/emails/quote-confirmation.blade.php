@@ -59,7 +59,7 @@
     <body>
         <div class="header">
             <h1>{{ __('Thank you for your quote request!') }}</h1>
-            <p>{{ __('PSG Irodaházak') }}</p>
+            <p>{{ __('PSG Raktárak') }}</p>
         </div>
 
         <div class="content">

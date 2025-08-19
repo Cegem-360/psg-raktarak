@@ -1,25 +1,25 @@
 <x-layouts.app>
-    <x-slot name="title">{{ __('Impresszum') }} | PSG-IRODAHÁZAK</x-slot>
+    <x-slot name="title">{{ __('Impresszum') }} | PSG-RAKTÁRAK</x-slot>
     <x-slot name="meta">
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
-        <meta name="description" content="PSG-IRODAHÁZAK impresszum - {{ __('Jogi információk és elérhetőségek.') }}">
-        <meta name="keywords" content="impresszum, {{ __('jogi információk') }}, PSG-IRODAHÁZAK">
+        <meta name="description" content="PSG-RAKTÁRAK impresszum - {{ __('Jogi információk és elérhetőségek.') }}">
+        <meta name="keywords" content="impresszum, {{ __('jogi információk') }}, PSG-RAKTÁRAK">
         <link rel="canonical" href="{{ Request::url() }}">
     </x-slot>
 
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
+    <div class="relative bg-fixed bg-center bg-no-repeat bg-cover"
         style="background-image: url({{ Vite::asset('resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-8 pt-24 pb-20">
-            <h2 class="mt-4 mb-16 font-bold text-5xl text-center drop-shadow text-logogray/80">
+        <div class="container relative z-10 pt-24 pb-20 mx-auto space-y-8">
+            <h2 class="mt-4 mb-16 text-5xl font-bold text-center drop-shadow text-logogray/80">
                 {{ __('Impresszum') }}
             </h2>
 
-            <div class="max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                <div class="bg-white rounded-lg p-8">
+            <div class="max-w-screen-xl p-8 mx-auto border shadow-xl backdrop-blur-3xl rounded-xl border-white/15">
+                <div class="p-8 bg-white rounded-lg">
                     @if ($impresszum && $impresszum->content)
-                        <div class="prose prose-lg max-w-none text-gray-700">
+                        <div class="prose prose-lg text-gray-700 max-w-none">
                             {!! $impresszum->content !!}
                         </div>
                     @else

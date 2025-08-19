@@ -1,14 +1,14 @@
  <x-layouts.partials.ajanlat />
  <footer class="p-4 bg-white sm:p-12">
-     <div class="mx-auto max-w-screen-xl">
+     <div class="max-w-screen-xl mx-auto">
          <div class="md:flex md:gap-8 md:justify-between">
              <div class="mb-6 md:mb-0">
                  <a href="{{ localized_route('home') }}" class="flex items-center">
-                     <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="mr-3 h-8 sm:h-16"
-                         alt="PSG Irodaházak logo" loading="lazy">
+                     <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" class="h-8 mr-3 sm:h-16"
+                         alt="PSG Raktárak logo" loading="lazy">
                  </a>
              </div>
-             <div class="flex gap-8 lg:gap-20 flex-wrap">
+             <div class="flex flex-wrap gap-8 lg:gap-20">
                  <div>
                      <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">{{ __('Contact') }}</h2>
                      <ul class="text-gray-600">
@@ -17,20 +17,20 @@
                          </li>
                          <li class="mb-4">
                              <a href="tel:+36203813917 "
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200"> +36 20 381
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600"> +36 20 381
                                  3917 </a>
                          </li>
                          <li class="mb-4">
                              <a href="mailto:info@psg-raktarak.hu"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">info@psg-raktarak.hu</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">info@psg-raktarak.hu</a>
                          </li>
                          <li class="mb-4">
                              <a wire:navigate href="{{ localized_route('kapcsolat') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('online contact') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('online contact') }}</a>
                          </li>
                          <li>
                              <a wire:navigate href="{{ route('filament.admin.auth.login') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200"
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600"
                                  title="Coming soon">{{ __('login') }}</a>
                          </li>
                      </ul>
@@ -40,20 +40,20 @@
                      <ul class="text-gray-600">
                          <li class="mb-4">
                              <a href="{{ localized_route('home') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Homepage') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Homepage') }}</a>
                          </li>
                          <li class="mb-4">
                              <a href="{{ localized_route('kiado-raktarak') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for rent') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Warehouses for rent') }}</a>
                          </li>
                          <li class="mb-4">
                              <a href="{{ localized_route('elado-raktarak') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Warehouses for Sale') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Warehouses for Sale') }}</a>
                          </li>
                          @if (app()->getLocale() === 'hu')
                              <li class="mb-4">
                                  <a wire:navigate href="{{ localized_route('news.index') }}"
-                                     class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('News') }}</a>
+                                     class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('News') }}</a>
                              </li>
                          @endif
                      </ul>
@@ -63,13 +63,13 @@
                      <ul class="text-gray-600">
                          <li class="mb-4">
                              <a wire:navigate href="{{ localized_route('rolunk') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('About Us') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('About Us') }}</a>
                          </li>
 
                          </li>
                          <li>
                              <a wire:navigate href="{{ localized_route('kapcsolat') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Contact') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Contact') }}</a>
                          </li>
                      </ul>
                  </div>
@@ -78,11 +78,11 @@
                      <ul class="text-gray-600">
                          <li class="mb-4">
                              <a wire:navigate href="{{ localized_route('privacy-policy') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Privacy Policy') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Privacy Policy') }}</a>
                          </li>
                          <li>
                              <a wire:navigate href="{{ localized_route('impressum') }}"
-                                 class="hover:underline hover:text-blue-600 transition-colors duration-200">{{ __('Imprint') }}</a>
+                                 class="transition-colors duration-200 hover:underline hover:text-blue-600">{{ __('Imprint') }}</a>
                          </li>
                      </ul>
                  </div>
@@ -93,7 +93,7 @@
              <span class="text-sm text-gray-500 sm:text-center">
                 ©{{ date('Y')-1 }}-{{ date('Y') }}
                  <a wire:navigate href="/"
-                     class="hover:underline hover:text-blue-600 transition-colors duration-200">
+                     class="transition-colors duration-200 hover:underline hover:text-blue-600">
                      Property Solution Group
                     </a> - {{ __('All rights reserved') }}.
                 </span>

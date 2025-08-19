@@ -60,7 +60,7 @@
     <body>
         <div class="header">
             <h1>Új kapcsolatfelvételi üzenet</h1>
-            <p>PSG Irodaházak - Kapcsolatfelvételi űrlap</p>
+            <p>PSG Raktárak - Kapcsolatfelvételi űrlap</p>
         </div>
 
         <div class="content">
@@ -103,7 +103,7 @@
             </div>
 
             <p style="margin-top: 30px; font-size: 14px; color: #666;">
-                Ez az üzenet automatikusan lett generálva a PSG Irodaházak weboldaláról.
+                Ez az üzenet automatikusan lett generálva a PSG Raktárak weboldaláról.
             </p>
         </div>
     </body>

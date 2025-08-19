@@ -122,7 +122,7 @@ final class QuoteRequestModal extends Component
                 'name' => $this->name,
             ], function ($message): void {
                 $message->to($this->email, $this->name)
-                    ->subject($this->subject ?: 'Árajánlat kérés megerősítése - PSG Irodaházak');
+                    ->subject($this->subject ?: 'Árajánlat kérés megerősítése - PSG Raktárak');
             });
             Notification::make()
                 ->title('Árajánlat kérés sikeres')

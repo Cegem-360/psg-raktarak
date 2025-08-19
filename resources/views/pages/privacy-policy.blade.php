@@ -1,9 +1,9 @@
 <x-layouts.app>
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
+    <div class="relative bg-fixed bg-center bg-no-repeat bg-cover"
         style="background-image: url({{ Vite::asset('resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-            <h1 class="text-2xl font-bold mb-4">Általános Adatvédelmi Tájékoztató</h1>
+        <div class="container relative z-10 pt-24 pb-20 mx-auto space-y-3">
+            <h1 class="mb-4 text-2xl font-bold">Általános Adatvédelmi Tájékoztató</h1>
             <ul class="mb-6">
                 <li><strong>Cégnév:</strong> Property Solution Group Kft.</li>
                 <li><strong>Székhely:</strong> 1016 Budapest, Derék utca 2.</li>
@@ -11,7 +11,7 @@
                 <li><strong>Adószám:</strong> 24963200-2-41</li>
             </ul>
             <section class="mb-6">
-                <h2 class="text-xl font-semibold mb-2">Adatkezelői és adatfeldolgozói szerepkörök</h2>
+                <h2 class="mb-2 text-xl font-semibold">Adatkezelői és adatfeldolgozói szerepkörök</h2>
                 <p>
                     Társaságunk <strong>adatkezelőként</strong> a személyes adatok kezelésének céljait és eszközeit
                     önállóan
@@ -51,13 +51,13 @@
             </section>
             <section class="mb-6">
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg mb-2">I.</h3>
+                    <h3 class="mb-2 text-lg font-bold">I.</h3>
                     <p class="mb-2">
                         Társaságunk a GDPR 13. cikke alapján az alábbi tájékoztatást adja az érintett személyek részére:
                     </p>
                     <div class="mb-2">
                         <span class="font-semibold">Az Adatkezelő adatai:</span>
-                        <ul class="list-none ml-0">
+                        <ul class="ml-0 list-none">
                             <li>Cégnév: Property Solution Group Kft.</li>
                             <li>Székhely: 1016 Budapest, Derék utca 2.</li>
                             <li>Weblap: psg-irodahazak.hu</li>
@@ -72,7 +72,7 @@
                             <span class="underline">Adatfeldolgozók megnevezése:</span>
                             <div class="mt-2">
                                 <span class="font-semibold">CRM rendszer</span>
-                                <ul class="list-none ml-0">
+                                <ul class="ml-0 list-none">
                                     <li>Név: DevMonkeys Software Kft. (MomoCRM)</li>
                                     <li>Cím: 1141 Budapest, Vízakna utca 4.</li>
                                     <li>Telefon: +36 20 500 1530</li>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="mt-4">
                                 <span class="font-semibold">Webanalitika</span>
-                                <ul class="list-none ml-0">
+                                <ul class="ml-0 list-none">
                                     <li>Név: Google Ireland Limited</li>
                                     <li>Cím: Gordon House Barrow Street Dublin 4, Ireland</li>
                                     <li>Telefon: N/A</li>
@@ -99,7 +99,7 @@
                             <div class="mt-4">
                                 <span class="font-semibold">Fejlesztések, szerver szolgáltatás, adatmentések, email és
                                     dokumentum kezelés</span>
-                                <ul class="list-none ml-0">
+                                <ul class="ml-0 list-none">
                                     <li>Név: e-Communication Kft.</li>
                                     <li>Cím: 1141 Budapest, Vízakna utca 4.</li>
                                     <li>Telefon: +36 1 613 2634</li>
@@ -114,7 +114,7 @@
                                         tárhely
                                         biztosítás, szerver monitoring</li>
                                 </ul>
-                                <ul class="list-disc ml-6 mt-2 text-sm">
+                                <ul class="mt-2 ml-6 text-sm list-disc">
                                     <li>Éles adatokat tartalmazó szerverekhez kizárólag a legszűkebb szükséges körnek
                                         van
                                         hozzáférése.</li>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="mb-2">
                         <span class="font-semibold">Adatvédelmi tisztviselő:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>Társaságunk a GDPR 37. cikke alapján nem köteles adatvédelmi tisztviselő kinevezésére
                             </li>
                         </ul>
@@ -165,7 +165,7 @@
                         <span>
                             amennyiben bármilyen kérése vagy kérdése van az adatkezeléssel kapcsolatban, kérelmét postai
                             úton a
-                            1016 Budapest, Derék utca 2. címre vagy elektronikusan a info@psg-irodahazak.hu címre
+                            1016 Budapest, Derék utca 2. címre vagy elektronikusan a info@psg-raktarak.hu címre
                             küldheti.
                             Válaszainkat késedelem nélkül, de legfeljebb 30 napon belül küldjük az Ön által
                             meghatározott
@@ -174,17 +174,17 @@
                     </div>
                     <div class="mb-2">
                         <span class="font-semibold">Külföldi adattovábbítás:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>adatokat az Európai Gazdasági Térségen (EGT) kívülre nem továbbítunk.</li>
                         </ul>
                     </div>
                 </div>
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg mb-2">II.</h3>
+                    <h3 class="mb-2 text-lg font-bold">II.</h3>
                     <span class="font-semibold">Társaságunk adatkezelésének célja, jogalapja, időtartama:</span>
                     <div class="mb-2">
                         <span class="underline">Adatkezelési célok:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>online és személyes ingatlan közvetítési tevékenység nyújtásához kapcsolódóan a
                                 szolgáltatást
                                 igénybe vevőinek adatait árajánlat, megrendelés, vagy szerződés alapján, mint jogi
@@ -203,7 +203,7 @@
                     </div>
                     <div class="mb-2">
                         <span class="underline">Adatkezelés jogalapja:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>GDPR 6.cikk (1) bekezdés a) pont: érintett hozzájárulása</li>
                             <li>GDPR 6.cikk (1) bekezdés b) pont: szerződés teljesítéséhez szükséges</li>
                             <li>GDPR 6.cikk (1) bekezdés c) pont: jogi kötelezettség teljesítéséhez szükséges</li>
@@ -212,7 +212,7 @@
                     </div>
                     <div class="mb-2">
                         <span class="underline">Az egyes adatkezelési tevékenységek jogalapja:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>a számviteli jogszabályoknak megfelelő számlát kiállítása: jogalap: GDPR 6. cikk (1)
                                 bekezdés c)
                                 pont</li>
@@ -235,7 +235,7 @@
                         <div class="mt-2 text-sm">
                             Az érintett személyes adatainak jogos érdek alapján történő kezelése esetén érdekmérlegelést
                             végzünk, melynek során:
-                            <ul class="list-disc ml-6">
+                            <ul class="ml-6 list-disc">
                                 <li>beazonosítjuk és rögzítjük a jogos érdeket</li>
                                 <li>beazonosítjuk és rögzítjük az érintett érdekeit és jogait</li>
                                 <li>szükségesség és arányosság, a célhoz kötöttség, adattakarékosság, korlátozott
@@ -264,7 +264,7 @@
                     </div>
                     <div class="mb-2">
                         <span class="underline">Az adatkezelés időtartama:</span>
-                        <ul class="list-disc ml-6">
+                        <ul class="ml-6 list-disc">
                             <li>A számlákat jogi kötelezettség miatt legalább 8 évig megőrizzük. A számlakiállítás
                                 alapjául
                                 szolgáló iratok megőrzési ideje 8 év.</li>
@@ -278,9 +278,9 @@
                     </div>
                 </div>
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg mb-2">III.</h3>
+                    <h3 class="mb-2 text-lg font-bold">III.</h3>
                     <span class="font-semibold">Érintetti jogok:</span>
-                    <ul class="list-disc ml-6">
+                    <ul class="ml-6 list-disc">
                         <li>hozzáférési jog (adatok megismerése, az a tény, hogy történik-e adatkezelés);</li>
                         <li>amennyiben egy adat elavult vagy helytelen, ennek kiigazítása;</li>
                         <li>törlés (kizárólag a hozzájáruláson alapuló adatkezelés esetén);</li>
@@ -294,7 +294,7 @@
                     </ul>
                 </div>
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg mb-2">IV.</h3>
+                    <h3 class="mb-2 text-lg font-bold">IV.</h3>
                     <span class="font-semibold">Adatvédelmi incidens:</span>
                     <p class="mb-2">
                         Az adatbiztonság olyan sérülése, mely a kezelt személyes adatok véletlen vagy jogellenes
@@ -322,7 +322,7 @@
                     </p>
                 </div>
                 <div class="mb-8">
-                    <h3 class="font-bold text-lg mb-2">V.</h3>
+                    <h3 class="mb-2 text-lg font-bold">V.</h3>
                     <span class="font-semibold">Jogorvoslati tájékoztatás:</span>
                     <p class="mb-2">
                         Magyarországon az adatvédelmi felügyeleti hatóság: Nemzeti Adatvédelmi és Információszabadság
@@ -338,7 +338,7 @@
                     </p>
                 </div>
                 <div class="mb-4">
-                    <h3 class="font-bold text-lg mb-2">VI.</h3>
+                    <h3 class="mb-2 text-lg font-bold">VI.</h3>
                     <span class="font-semibold">Tájékoztatás a nyilvántartásokról:</span>
                     <p class="mb-2">
                         Társaságunk az adatok kezelését és feldolgozását jogszerűen, átláthatóan és ellenőrizhetően

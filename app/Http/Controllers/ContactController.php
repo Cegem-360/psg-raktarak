@@ -75,7 +75,7 @@ final class ContactController extends Controller
             // Send confirmation email to user
             Mail::send('emails.contact-confirmation', $validated, function ($message) use ($validated): void {
                 $message->to($validated['email'], $validated['name'])
-                    ->subject('Kapcsolatfelvételi üzenet megerősítése - PSG Irodaházak');
+                    ->subject('Kapcsolatfelvételi üzenet megerősítése - PSG Raktárak');
             });
             Notification::make()
                 ->title(__('Contact message sent successfully!'))

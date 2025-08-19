@@ -15,25 +15,25 @@
         @endisset
         <meta name="author" content="{{ $metaAuthor ?? 'Cegem360 Kft.' }}">
         <meta name="description"
-            content="{{ $metaDescription ?? 'Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes irodapiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ' }}">
+            content="{{ $metaDescription ?? 'Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ' }}">
 
         <meta name="keywords"
-            content="{{ $metaKeywords ?? 'kiadó irodaházak,bérbeadó irodák,azonnali irodák,kiadó iroda,eladó irodaházak,belvárosi irodák,loft iroda,kiadó iroda Budán,kiadó iroda Pesten,A-kategóriás irodaházak,zöld irodák,irodaházak listája,serviced offices,Bérlő képviselet,' }}">
+            content="{{ $metaKeywords ?? 'kiadó raktárak,bérbeadó raktárak,azonnali raktárak,kiadó raktár,eladó raktárak,belvárosi raktárak,loft raktár,kiadó raktár Budán,kiadó raktár Pesten,A-kategóriás raktárak,zöld raktárak,raktárak listája,serviced offices,Bérlő képviselet,' }}">
         <meta property="og:title"
-            content="{{ $metaOgTitle ?? 'PSG-IRODAHÁZAK |  Kiadó irodák, eladó irodaházak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
+            content="{{ $metaOgTitle ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali raktár megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
         <meta property="og:type" content="{{ $metaOgType ?? 'website' }}">
         <meta property="og:url" content="{{ $metaOgUrl ?? Request::url() }}">
         <meta property="og:description" content="{{ $metaOgDescription ?? '' }}">
         <meta name="twitter:card" content="{{ $metaTwitterCard ?? 'summary' }}">
         <meta name="twitter:url" content="{{ $metaTwitterUrl ?? Request::url() }}">
         <meta name="twitter:title"
-            content="{{ $metaTwitterTitle ?? 'PSG-IRODAHÁZAK |  Kiadó irodák, eladó irodaházak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
+            content="{{ $metaTwitterTitle ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
         <meta name="twitter:description"
-            content="{{ $metaTwitterDescription ?? 'Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes irodapiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ' }}">
+            content="{{ $metaTwitterDescription ?? 'Kiadó raktárak Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó raktárak közül. Ajánlatküldés még a mai napon. ' }}">
         <meta itemprop="name"
-            content="{{ $metaItempropName ?? 'PSG-IRODAHÁZAK |  Kiadó irodák, eladó irodaházak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
+            content="{{ $metaItempropName ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
         <meta itemprop="description"
-            content="{{ $metaItempropDescription ?? 'Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes irodapiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ' }}">
+            content="{{ $metaItempropDescription ?? 'Kiadó raktárak Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó raktárak közül. Ajánlatküldés még a mai napon. ' }}">
         <link rel="canonical" href="{{ $metaCanonical ?? Request::url() }}">
         <meta name="robots" content="{{ $metaRobots ?? 'index, follow' }}">
         <meta name="googlebot" content="{{ $metaGooglebot ?? 'index, follow' }}">

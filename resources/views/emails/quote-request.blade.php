@@ -68,7 +68,7 @@
     <body>
         <div class="header">
             <h1>Új árajánlat kérés érkezett</h1>
-            <p>PSG Irodaházak - Online ajánlatkérés</p>
+            <p>PSG Raktárak - Online ajánlatkérés</p>
         </div>
 
         <div class="content">
@@ -109,7 +109,7 @@
             @endif
 
             <p style="margin-top: 30px; font-size: 14px; color: #666;">
-                Ez az üzenet automatikusan lett generálva a PSG Irodaházak weboldaláról.
+                Ez az üzenet automatikusan lett generálva a PSG Raktárak weboldaláról.
                 <br>
                 Kérjük, vegye fel a kapcsolatot az ügyféllel a lehető leghamarabb!
             </p>
