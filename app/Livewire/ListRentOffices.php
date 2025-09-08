@@ -152,10 +152,13 @@ final class ListRentOffices extends Component
 
         $query->when($this->min_rent, fn ($query) => $query->where('min_berleti_idoszak', $this->min_rent));
         $query->when($this->min_rent_addons, fn ($query) => $query->where('min_rent_addons', $this->min_rent_addons));
-        $query->when(! $this->includeAgglomeration, fn ($query) => $query->whereNot(fn ($query) => $query->agglomeration()));
+        $query->when(
+            $this->includeAgglomeration,
+            fn ($q) => $q->agglomeration(), // true => agglomeráció only
+            fn ($q) => $q->whereNot(fn ($q) => $q->agglomeration()) // false => agglomeráció kizárva
+        );
         $query->when($this->search, fn ($query) => $query->searchText($this->search));
         $query->when($this->officeName, fn ($query) => $query->byOfficeName($this->officeName));
-        $query->when($this->includeAgglomeration, fn ($query) => $query->agglomeration());
         $query->when($this->district, fn ($query) => $query->inDistrict($this->district));
 
         if ($this->category) {

@@ -275,7 +275,7 @@ final class Property extends Model
     #[Scope]
     protected function agglomeration(Builder $query): void
     {
-        $query->where('cim_varos', '!=', 'Budapest');
+        $query->where('cim_varos', 'not like', '%Budapest%');
     }
 
     #[Scope]
