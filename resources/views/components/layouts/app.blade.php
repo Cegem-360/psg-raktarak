@@ -8,18 +8,29 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <meta name="author" content="{{ $metaAuthor ?? 'Cegem360 Kft.' }}">
         @isset($title)
             <title>{{ $title }}</title>
         @else
             <title>{{ __('page.title.default') }}</title>
         @endisset
         <meta name="author" content="{{ $metaAuthor ?? 'Cegem360 Kft.' }}">
-        <meta name="description"
-            content="{{ $metaDescription ?? 'Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ' }}">
 
-        <meta name="keywords"
-            content="{{ $metaKeywords ?? 'kiadó raktárak,bérbeadó raktárak,azonnali raktárak,kiadó raktár,eladó raktárak,belvárosi raktárak,loft raktár,kiadó raktár Budán,kiadó raktár Pesten,A-kategóriás raktárak,zöld raktárak,raktárak listája,serviced offices,Bérlő képviselet,' }}">
-        <meta property="og:title"
+        @isset($metaDescription)
+            <meta name="description" content="{{ $metaDescription }}">
+        @else
+            <meta name="description"
+                content="Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes irodapiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ">
+        @endisset
+
+        @isset($metaKeywords)
+            <meta name="keywords" content="{{ $metaKeywords }}">
+        @else
+            <meta name="keywords"
+                content="kiadó irodaházak,bérbeadó irodák,azonnali irodák,kiadó iroda,eladó irodaházak,belvárosi irodák,loft iroda,kiadó iroda Budán,kiadó iroda Pesten,A-kategóriás irodaházak,zöld irodák,irodaházak listája,Bérlő képviselet,">
+        @endisset
+        
+<meta property="og:title"
             content="{{ $metaOgTitle ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali raktár megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
         <meta property="og:type" content="{{ $metaOgType ?? 'website' }}">
         <meta property="og:url" content="{{ $metaOgUrl ?? Request::url() }}">

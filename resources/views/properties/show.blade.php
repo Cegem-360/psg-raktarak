@@ -1,19 +1,42 @@
 @use('App\Models\Translate')
 <x-layouts.app>
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
+    <x-slot name="title">
+        @if (app()->getLocale() === 'en' && $property->meta_title_en)
+            {{ $property->meta_title_en }}
+        @elseif ($property->meta_title)
+            {{ $property->meta_title }}
+        @endif
+    </x-slot>
+
+    <x-slot name="metaDescription">
+        @if (app()->getLocale() === 'en' && $property->meta_description_en)
+            {{ $property->meta_description_en }}
+        @elseif ($property->meta_description)
+            {{ $property->meta_description }}
+        @endif
+    </x-slot>
+
+    <x-slot name="metaKeywords">
+        @if (app()->getLocale() === 'en' && $property->meta_keywords_en)
+            {{ $property->meta_keywords_en }}
+        @elseif ($property->meta_keywords)
+            {{ $property->meta_keywords }}
+        @endif
+    </x-slot>
+    <div class="relative bg-fixed bg-center bg-no-repeat bg-cover"
         style="background-image: url({{ Vite::asset('resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-8 pt-24 pb-20">
-            <h2 class="mt-4 mb-16 font-font-bold text-5xl text-center drop-shadow text-logogray/80">
+        <div class="container relative z-10 pt-24 pb-20 mx-auto space-y-8">
+            <h2 class="mt-4 mb-16 text-5xl text-center font-font-bold drop-shadow text-logogray/80">
                 {{ $property->title }}</h2>
             <div
-                class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
+                class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
                 <div>
                     <x-cards.ingatlan-gallery-carousel :images="collect($property->property_photos)" :title="$property->title" />
                 </div>
                 <div class="p-4">
 
-                    <table class="table-auto w-full mt-4">
+                    <table class="w-full mt-4 table-auto">
                         <tbody>
                             @if ($property->elado_v_kiado === 'elado-raktar')
 
@@ -132,7 +155,7 @@
                                 @endif
                                 @if (!$property->jelenleg_kiado)
                                     <tr>
-                                        <td class="py-8 text-red-500 italic font-font-bold text-center text-xl"
+                                        <td class="py-8 text-xl italic text-center text-red-500 font-font-bold"
                                             colspan="2">
                                             {{ __('The office building is currently 100% rented out!') }}
                                         </td>
@@ -156,13 +179,13 @@
                 </div>
             </div>
             @if (auth()->check() || request()->hasValidSignature())
-                <div class="max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
+                <div class="max-w-screen-xl p-8 mx-auto border shadow-xl backdrop-blur-3xl rounded-xl border-white/15">
                     <div class="text-center">
-                        <h3 class="text-2xl font-bold mb-4">{{ __('Property Details') }}</h3>
+                        <h3 class="mb-4 text-2xl font-bold">{{ __('Property Details') }}</h3>
                         <p class="mb-6 text-gray-600">{{ __('Download detailed information about this property') }}</p>
 
                         <a href="{{ URL::signedRoute('property.pdf', ['property' => $property->id]) }}"
-                            class="inline-flex items-center px-6 py-3 bg-accent text-white font-medium rounded-lg hover:bg-accent/90 transition-colors">
+                            class="inline-flex items-center px-6 py-3 font-medium text-white transition-colors rounded-lg bg-accent hover:bg-accent/90">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -176,7 +199,7 @@
                 </div>
             @endif
             <div
-                class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
+                class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
                 <div>
                     @if (!$property->isSale())
                         @if ($property->maps_lat && $property->maps_lng)
@@ -199,8 +222,8 @@
                 </div>
                 <div class="p-4">
                     <h2 class="text-3xl">{{ __(':title Presentation', ['title' => $property->title]) }}</h2>
-                    <div class="space-y-4 mt-4">
-                        <div class="text-justify leading-relaxed">
+                    <div class="mt-4 space-y-4">
+                        <div class="leading-relaxed text-justify">
                             @if (app()->getLocale() === 'en' && $property->en_content)
                                 {!! $property->en_content !!}
                             @elseif ($property->content)
@@ -213,23 +236,23 @@
             </div>
             @if (!$property->isSale())
                 <div
-                    class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
+                    class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
                     <div class="order-2 md:order-none">
                         <section class="bg-white rounded-xl">
-                            <div class="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-                                <h2 class="mb-4 text-4xl tracking-tight font-extrafont-bold text-center text-accent">
+                            <div class="max-w-screen-md px-4 py-8 mx-auto lg:py-16">
+                                <h2 class="mb-4 text-4xl tracking-tight text-center font-extrafont-bold text-accent">
                                     {{ __('Contact Us!') }}</h2>
-                                <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 sm:text-xl">
+                                <p class="mb-8 font-light text-center text-gray-500 lg:mb-16 sm:text-xl">
                                     {{ __('Request a personalized offer online!') }}</p>
                                 <x-forms.contact :selected_property_id="$property->id" :selected_property_type_is_rent="$property->isRent()" />
                             </div>
                         </section>
 
                     </div>
-                    <div class="order-1 md:order-none space-y-4 p-4">
+                    <div class="order-1 p-4 space-y-4 md:order-none">
                         <div class="space-y-4">
                             <h2 class="text-3xl">{{ __('Features') }}</h2>
-                            <ul class="sm:columns-2 gap-x-8 gap-y-3 list-disc text-lg">
+                            <ul class="text-lg list-disc sm:columns-2 gap-x-8 gap-y-3">
 
                                 @if ($property->services || $property->tags)
                                     @php
@@ -247,7 +270,7 @@
                                             });
                                     @endphp
                                     @foreach ($allItems as $item)
-                                        <li class="jellemzok pb-1">
+                                        <li class="pb-1 jellemzok">
                                             @if (app()->getLocale() === 'en')
                                                 {{ Translate::whereName($item->name)->first()?->translated ?? $item->name }}
                                             @else
@@ -265,13 +288,13 @@
         </div>
     </div>
 
-    <div class="relative bg-cover bg-center bg-no-repeat"
+    <div class="relative bg-center bg-no-repeat bg-cover"
         style="background-image: url({{ Vite::asset('resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc.webp') }});">
         <div class="absolute inset-0 z-1 bg-gradient-to-b from-white to-white/30"></div>
-        <div class="kiemelt-ajanlatok relative z-10 container mx-auto pt-12 pb-20">
-            <h2 class="mt-4 mb-16 font-font-bold text-5xl text-center drop-shadow text-logogray/80">
+        <div class="container relative z-10 pt-12 pb-20 mx-auto kiemelt-ajanlatok">
+            <h2 class="mt-4 mb-16 text-5xl text-center font-font-bold drop-shadow text-logogray/80">
                 {{ __('Similar Offices') }}</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-screen-xl mx-auto">
+            <div class="grid max-w-screen-xl grid-cols-1 gap-4 mx-auto md:grid-cols-2 lg:grid-cols-3">
                 @foreach ($similarProperties ?? [] as $similarProperty)
                     @if ($similarProperty->isRent())
                         <x-cards.ingatlan-card
