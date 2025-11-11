@@ -22,6 +22,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
@@ -154,12 +155,22 @@ final class PropertyResource extends Resource
                             TextInput::make('min_berleti_dij')
                                 ->label('Min. bérleti díj')
                                 ->maxLength(255),
+
                             Select::make('min_berleti_dij_addons')
+                                ->label(fn (Get $get): string => $get('elado_v_kiado') === 'elado-raktar' ? 'Eladási ár addons' : 'Min. bérleti díj addons')
                                 ->options([
                                     'EUR/m2/hó' => 'EUR/m2/hó',
                                     'HUF/m2/hó' => 'HUF/m2/hó',
                                     'HUF/fő/hó' => 'HUF/fő/hó',
                                     'EUR/fő/hó' => 'EUR/fő/hó',
+                                    'EUR/m2' => 'EUR/m2',
+                                    'HUF/m2' => 'HUF/m2',
+                                    'EUR' => 'EUR',
+                                    'HUF' => 'HUF',
+                                    'mHUF' => 'mHUF',
+                                    'm.EUR' => 'm.EUR',
+                                    'm. EUR' => 'm. EUR',
+                                    'mrd HUF' => 'mrd HUF',
                                 ]),
                             TextInput::make('max_berleti_dij')
                                 ->label('Max. bérleti díj')
@@ -335,6 +346,7 @@ final class PropertyResource extends Resource
                     ->maxLength(255),
                 Select::make('elado_v_kiado')
                     ->label('Eladó v. kiadó')
+                    ->live()
                     ->options([
                         'kiado-raktar' => 'Kiadó',
                         'elado-raktar' => 'Eladó',
