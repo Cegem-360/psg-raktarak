@@ -154,8 +154,8 @@ final class PropertyResource extends Resource
                         ->schema([
                             TextInput::make('min_berleti_dij')
                                 ->label('Min. bérleti díj')
+                                ->label(fn (Get $get): string => $get('elado_v_kiado') === 'elado-raktar' ? 'Eladási ár' : 'Min. bérleti díj')
                                 ->maxLength(255),
-
                             Select::make('min_berleti_dij_addons')
                                 ->label(fn (Get $get): string => $get('elado_v_kiado') === 'elado-raktar' ? 'Eladási ár addons' : 'Min. bérleti díj addons')
                                 ->options([
