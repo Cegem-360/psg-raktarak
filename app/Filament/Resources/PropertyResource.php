@@ -79,7 +79,6 @@ final class PropertyResource extends Resource
                     ->label('Kiemelt ajánlat')
                     ->helperText('Kijelölés esetén az ingatlan megjelenik a kiemelt ajánlatok között a főoldalon.')
                     ->default(false),
-
                 TiptapEditor::make('content')
                     ->label('Tartalom')
                     ->columnSpanFull(),
