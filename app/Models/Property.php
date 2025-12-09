@@ -406,6 +406,7 @@ final class Property extends Model
             $subQ->where('title', 'like', '%'.$search.'%')
                 ->orWhere('content', 'like', '%'.$search.'%')
                 ->orWhere('kodszam', 'like', '%'.$search.'%')
+                ->orWhere('cim_varos', 'like', '%'.$search.'%')
                 ->orWhereHas('tags', function (Builder $q) use ($search): void {
                     $q->where('name', 'like', '%'.$search.'%');
                 })
