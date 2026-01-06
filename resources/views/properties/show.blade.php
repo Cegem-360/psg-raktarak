@@ -106,7 +106,7 @@
                                 </tr>
                                 @if ($property->raktar_terulet)
                                     <tr>
-                                        <td class="font-bold">{{ __('Storage Area') }}:</td>
+                                        <td class="font-bold">{{ __('Office Area') }}:</td>
                                         <td>{{ number_format((int) $property->raktar_terulet) }}
                                             {{ __($property->raktar_terulet_addons ?? '') }}
                                         </td>
@@ -114,7 +114,7 @@
                                 @endif
                                 @if ($property->raktar_berleti_dij)
                                     <tr>
-                                        <td class="font-bold">{{ __('Storage Rent') }}:</td>
+                                        <td class="font-bold">{{ __('Office Rent') }}:</td>
                                         <td>{{ $property->raktar_berleti_dij }}
                                             {{ __($property->raktar_berleti_dij_addons ?? '') }}
                                         </td>
