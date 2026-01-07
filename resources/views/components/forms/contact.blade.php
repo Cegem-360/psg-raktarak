@@ -1,8 +1,9 @@
 @props(['selected_property_id' => null, 'selected_property_type_is_rent' => null])
 @use('App\Models\Property')
+@use('App\Models\Translate')
 <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
     @csrf
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
             <label for="contact_name" class="block mb-2 text-sm font-medium text-gray-900">{{ __('contact.name') }}
                 *</label>
@@ -25,7 +26,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
         <div>
             <label for="contact_phone" class="block mb-2 text-sm font-medium text-gray-900">{{ __('contact.phone') }}
                 *</label>
@@ -59,14 +60,22 @@
                 @foreach (Property::rent()->active()->get() as $property)
                     <option value="{{ $property->title }}"
                         {{ $selected_property_id == $property->id ? 'selected' : '' }}>
-                        {{ $property->title }}
+                        @if (app()->getLocale() === 'en')
+                            {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
+                        @else
+                            {{ $property->title }}
+                        @endif
                     </option>
                 @endforeach
             @else
                 @foreach (Property::active()->sale()->get() as $property)
                     <option value="{{ $property->title }}"
                         {{ $selected_property_id == $property->id ? 'selected' : '' }}>
-                        {{ $property->title }}
+                        @if (app()->getLocale() === 'en')
+                            {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
+                        @else
+                            {{ $property->title }}
+                        @endif
                     </option>
                 @endforeach
             @endif
@@ -107,7 +116,7 @@
     </div>
 
     <button type="submit"
-        class="w-full py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-primary hover:bg-primary/80 focus:ring-4 focus:outline-none focus:ring-primary-300 transition-colors">
+        class="w-full px-5 py-3 text-sm font-medium text-center text-white transition-colors rounded-lg bg-primary hover:bg-primary/80 focus:ring-4 focus:outline-none focus:ring-primary-300">
         {{ __('contact.send_message') }}
     </button>
 </form>

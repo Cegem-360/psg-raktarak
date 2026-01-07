@@ -1,8 +1,10 @@
 @use('Illuminate\Support\Facades\Storage')
 @use('App\Models\Tag')
 @use('App\Models\Service')
+@use('App\Models\Translate')
 <!DOCTYPE html>
 <html lang="hu">
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,11 +32,13 @@
                     print-color-adjust: exact;
                 }
             }
+
             @media print {
                 .pagebreak {
                     page-break-before: always;
                 }
             }
+
             @media print {
                 body {
                     -webkit-print-color-adjust: exact;
@@ -51,19 +55,25 @@
         </style>
     </head>
 
-    <body class="text-gray-800 bg-white text-sm leading-normal">
+    <body class="text-sm leading-normal text-gray-800 bg-white">
         <div class="max-w-[210mm] mx-auto p-0">
             <!-- Header -->
             <div class="bg-white text-black px-6 py-4 relative min-h-[80px]">
                 <!-- Logo bal felső sarokban -->
                 <div class="absolute top-3 left-6">
                     <img src="{{ Vite::asset('resources/images/psg-irodahazak-logo.png') }}" alt="PSG Logo"
-                        class="h-16 w-auto" loading="lazy">
+                        class="w-auto h-16" loading="lazy">
                 </div>
 
                 <!-- Cím középen, több távolsággal a logótól -->
-                <div class="text-center pt-8">
-                    <h1 class="text-xl font-bold mb-1">{{ $property->title }}</h1>
+                <div class="pt-8 text-center">
+                    <h1 class="mb-1 text-xl font-bold">
+                        @if (app()->getLocale() === 'en')
+                            {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
+                        @else
+                            {{ $property->title }}
+                        @endif
+                    </h1>
                     <div class="text-sm font-medium opacity-90">
 
                         {{ $property->cim_irsz ?? '' }} {{ $property->cim_varos ?? '' }},
@@ -90,7 +100,7 @@
 
                 <!-- Right Column - Details -->
                 <!-- Right Column - Details -->
-                <div class="w-1/2 p-6 bg-gray-50 text-sm leading-snug">
+                <div class="w-1/2 p-6 text-sm leading-snug bg-gray-50">
                     @if ($property->construction_year)
                         <x-pdf.property-column :first_span="__('Construction Year')" :second_span="$property->construction_year" />
                     @endif
@@ -176,7 +186,7 @@
                     @endif
 
                     @if ($property->vat)
-                        <div class="mt-3 p-3 text-sm">
+                        <div class="p-3 mt-3 text-sm">
                             <span
                                 class="font-bold text-red-600">{{ __('The above fees are subject to an additional 27% VAT!') }}
                             </span>
@@ -188,12 +198,12 @@
 
         <!-- Images Gallery -->
         @if ($property->property_photos && collect($property->property_photos)->count() > 1)
-            <div class="mt-6 px-6">
+            <div class="px-6 mt-6">
                 <div class="grid grid-cols-3 gap-3">
                     @foreach (collect($property->property_photos)->skip(1)->take($property->isSale() ? 12 : 9) as $image)
                         <div class="image-item">
                             <img src="{{ Storage::url($image) }}" alt="{{ __('Property image') }}"
-                                class="w-full h-24 object-cover rounded border border-gray-200" loading="lazy">
+                                class="object-cover w-full h-24 border border-gray-200 rounded" loading="lazy">
                         </div>
                     @endforeach
                 </div>
@@ -201,8 +211,8 @@
         @endif
         <!-- Egyéb mezők -->
         @if ($property->egyeb)
-            <div class="mt-6 px-6 py-4 bg-gray-50">
-                <div class="text-sm text-gray-700 leading-relaxed">
+            <div class="px-6 py-4 mt-6 bg-gray-50">
+                <div class="text-sm leading-relaxed text-gray-700">
                     {!! $property->egyeb !!}
                 </div>
             </div>
@@ -210,17 +220,17 @@
 
         <!-- Description -->
         @if ($property->content)
-            <div class="mt-6 px-6 py-4 bg-gray-50">
-                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
+            <div class="px-6 py-4 mt-6 bg-gray-50">
+                <div class="text-sm leading-relaxed text-justify text-gray-700" style="page-break-inside: auto;">
                     {!! $property->content !!}
                 </div>
             </div>
         @endif
         @if ($property->tags || $property->services)
-            <div class="mt-6 px-6 py-4 bg-gray-50" style="page-break-inside: auto;">
-                <h3 class="text-base font-bold text-gray-800 mb-3">Műszaki paraméterek és szolgáltatások</h3>
-                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
-                    <ul class="list-disc list-inside mb-4 ">
+            <div class="px-6 py-4 mt-6 bg-gray-50" style="page-break-inside: auto;">
+                <h3 class="mb-3 text-base font-bold text-gray-800">Műszaki paraméterek és szolgáltatások</h3>
+                <div class="text-sm leading-relaxed text-justify text-gray-700" style="page-break-inside: auto;">
+                    <ul class="mb-4 list-disc list-inside ">
                         @if ($property->tags->count() > 0)
                             @foreach ($property->tags as $item)
                                 <li class="mb-1">{{ $item->name }}</li>

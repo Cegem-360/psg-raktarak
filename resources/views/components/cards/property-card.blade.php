@@ -1,3 +1,4 @@
+@use('App\Models\Translate')
 @props(['property'])
 
 @php
@@ -5,11 +6,11 @@
 @endphp
 
 <a href="{{ localized_route('properties.show', $property) }}"
-    class="block bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+    class="block overflow-hidden transition-shadow duration-300 bg-white shadow-lg cursor-pointer rounded-xl hover:shadow-xl">
     @if ($firstImage)
         <div class="aspect-[4/3] overflow-hidden">
             <img src="{{ $firstImage }}" alt="{{ $property->title }}"
-                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
+                class="object-cover w-full h-full transition-transform duration-300 hover:scale-105" loading="lazy">
         </div>
     @else
         <div class="aspect-[4/3] bg-gray-100 flex items-center justify-center">
@@ -22,9 +23,15 @@
     @endif
 
     <div class="p-6">
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $property->title }}</h3>
+        <h3 class="mb-2 text-xl font-semibold text-gray-900">
+            @if (app()->getLocale() === 'en')
+                {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
+            @else
+                {{ $property->title }}
+            @endif
+        </h3>
 
-        <div class="flex justify-between items-center">
+        <div class="flex items-center justify-between">
             @if (collect($property->property_photos)->count() > 0)
                 <span class="text-sm text-gray-500">{{ collect($property->property_photos)->count() }} kép</span>
             @endif
