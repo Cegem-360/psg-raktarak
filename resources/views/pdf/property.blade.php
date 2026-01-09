@@ -120,7 +120,7 @@
                     @endif
 
                     @if ($property->isSale())
-                        <x-pdf.property-column :first_span="__('Sale Price')" :second_span="number_format((int) $property->min_berleti_dij, 0, ',', ' ') .
+                        <x-pdf.property-column :first_span="__('Sale Price')" :second_span="number_format((int) $property->min_berleti_dij, 2, ',', ' ') .
                             ' ' .
                             __($property->min_berleti_dij_addons ?? '')" />
                     @endif
@@ -130,16 +130,16 @@
                             <span class="font-bold text-gray-600">{{ __('Rent') }}:</span>
                             <span class="font-medium text-gray-900">
                                 @if ($property->min_berleti_dij && $property->max_berleti_dij)
-                                    {{ number_format((int) $property->min_berleti_dij, 0, ',', ' ') . ' - ' . number_format((int) $property->max_berleti_dij, 0, ',', ' ') }}
+                                    {{ number_format((int) $property->min_berleti_dij, 2, ',', ' ') . ' - ' . number_format((int) $property->max_berleti_dij, 2, ',', ' ') }}
                                 @else
-                                    {{ number_format((int) $property->min_berleti_dij, 0, ',', ' ') }}
+                                    {{ number_format((int) $property->min_berleti_dij, 2, ',', ' ') }}
                                 @endif
                                 {{ __($property->min_berleti_dij_addons ?? '') }}
                             </span>
                         </div>
                     @endif
                     @if ($property->uzemeletetesi_dij)
-                        <x-pdf.property-column :first_span="__('Operating Fee')" :second_span="number_format((int) $property->uzemeletetesi_dij, 0, ',', ' ') .
+                        <x-pdf.property-column :first_span="__('Operating Fee')" :second_span="number_format((int) $property->uzemeletetesi_dij, 2, ',', ' ') .
                             ' ' .
                             __($property->uzemeletetesi_dij_addons ?? '')" />
                     @endif
@@ -150,7 +150,7 @@
                             __($property->raktar_terulet_addons ?? '')" />
                     @endif
                     @if ($property->raktar_berleti_dij)
-                        <x-pdf.property-column :first_span="__('Storage Rent')" :second_span="number_format((int) $property->raktar_berleti_dij, 0, ',', ' ') .
+                        <x-pdf.property-column :first_span="__('Storage Rent')" :second_span="number_format((int) $property->raktar_berleti_dij, 2, ',', ' ') .
                             ' ' .
                             __($property->raktar_berleti_dij_addons ?? '')" />
                     @endif
