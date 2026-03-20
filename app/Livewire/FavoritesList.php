@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\Property;
+use App\Services\FavoritesExcelExportService;
 use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cookie;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class FavoritesList extends Component
 {
@@ -36,7 +40,28 @@ final class FavoritesList extends Component
         $this->dispatch('openSendFavoritesModal')->to('favorites-send-modal');
     }
 
-    public function render()
+    public function downloadExcel(): StreamedResponse
+    {
+        $this->loadFavorites();
+
+        if ($this->favoriteCount === 0) {
+            $this->dispatch('notify', message: 'Nincsenek kedvenc ingatlanok.');
+
+            return response()->streamDownload(function (): void {}, 'empty.xlsx');
+        }
+
+        $service = resolve(FavoritesExcelExportService::class);
+        $tempFile = $service->generate(collect($this->favoriteProperties));
+
+        return response()->streamDownload(function () use ($tempFile): void {
+            echo file_get_contents($tempFile);
+            @unlink($tempFile);
+        }, 'P.S.G. IRODA ajánlatok.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    }
+
+    public function render(): Factory|View
     {
         return view('livewire.favorites-list', [
             'favoriteProperties' => $this->favoriteProperties,

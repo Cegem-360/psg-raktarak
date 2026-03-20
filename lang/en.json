@@ -228,5 +228,6 @@
     "EUR/hely/hó": "EUR/place/month",
     "HUF/hely/hó": "HUF/place/month",
     "EUR/fő/hó": "EUR/person/month",
-    "HUF/fő/hó": "HUF/person/month"
+    "HUF/fő/hó": "HUF/person/month",
+    "Letöltés Excel-ben": "Download as Excel"
 }
