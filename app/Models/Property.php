@@ -333,10 +333,9 @@ final class Property extends Model
                 $q->orWhere(function ($subQ) use ($districtNum): void {
                     // Irányítószám → szám → osztás 10-zel → kivonás 100
                     // Például: 1051 → 1051/10=105 → 105-100=5 → 5. kerület
-                    $subQ->whereRaw('CHAR_LENGTH(cim_irsz) = 4')
-                        ->whereRaw('CAST(cim_irsz AS UNSIGNED) > 999')
-                        ->whereRaw('CAST(cim_irsz AS UNSIGNED) < 10000')
-                        ->whereRaw('FLOOR(CAST(cim_irsz AS UNSIGNED) / 10) - 100 = ?', [$districtNum]);
+                    $subQ->whereRaw('LENGTH(cim_irsz) = 4')
+                        ->whereRaw('SUBSTR(cim_irsz, 1, 1) = ?', ['1'])
+                        ->whereRaw('SUBSTR(cim_irsz, 2, 2) = ?', [sprintf('%02d', $districtNum)]);
                 });
             }
         });
@@ -388,10 +387,9 @@ final class Property extends Model
                         $subQ->orWhere(function ($postalQ) use ($districtNum): void {
                             // Irányítószám → szám → osztás 10-zel → kivonás 100
                             // Például: 1051 → 1051/10=105 → 105-100=5 → 5. kerület
-                            $postalQ->whereRaw('CHAR_LENGTH(cim_irsz) = 4')
-                                ->whereRaw('CAST(cim_irsz AS UNSIGNED) > 999')
-                                ->whereRaw('CAST(cim_irsz AS UNSIGNED) < 10000')
-                                ->whereRaw('FLOOR(CAST(cim_irsz AS UNSIGNED) / 10) - 100 = ?', [$districtNum]);
+                            $postalQ->whereRaw('LENGTH(cim_irsz) = 4')
+                                ->whereRaw('SUBSTR(cim_irsz, 1, 1) = ?', ['1'])
+                                ->whereRaw('SUBSTR(cim_irsz, 2, 2) = ?', [sprintf('%02d', $districtNum)]);
                         });
                     }
                 });

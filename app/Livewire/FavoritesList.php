@@ -56,7 +56,7 @@ final class FavoritesList extends Component
         return response()->streamDownload(function () use ($tempFile): void {
             echo file_get_contents($tempFile);
             @unlink($tempFile);
-        }, 'P.S.G. IRODA ajánlatok.xlsx', [
+        }, 'P.S.G. RAKTÁR ajánlatok.xlsx', [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ]);
     }

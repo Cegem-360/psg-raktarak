@@ -53,7 +53,7 @@ final class FavoritesExcelExportService
         $this->setHeaderRow($sheet);
         $this->setDataRows($sheet, $properties);
 
-        $tempFile = tempnam(sys_get_temp_dir(), 'favorites_export_');
+        $tempFile = sys_get_temp_dir().'/favorites_export_'.bin2hex(random_bytes(16)).'.xlsx';
 
         $writer = new Xlsx($spreadsheet);
         $writer->save($tempFile);
