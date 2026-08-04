@@ -1,8 +1,8 @@
 <x-layouts.app>
-    <x-slot name="title">Keresés: "{{ $search }}" | PSG-IRODAHÁZAK Hírek</x-slot>
+    <x-slot name="title">Keresés: "{{ $search }}" | PSG-RAKTÁRAK Hírek</x-slot>
     <x-slot name="meta">
         <meta name="robots" content="noindex, follow">
-        <meta name="description" content="Keresési eredmények: {{ $search }} - PSG-IRODAHÁZAK hírek">
+        <meta name="description" content="Keresési eredmények: {{ $search }} - PSG-RAKTÁRAK hírek">
     </x-slot>
 
     <div class="min-h-screen bg-gray-50">

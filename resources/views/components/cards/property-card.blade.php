@@ -5,7 +5,7 @@
     $firstImage = $property->getFirstImageUrl();
 @endphp
 
-<a href="{{ localized_route('properties.show', $property) }}"
+<a href="{{ localized_route('properties.show', ['property' => $property->slug]) }}"
     class="block overflow-hidden transition-shadow duration-300 bg-white shadow-lg cursor-pointer rounded-xl hover:shadow-xl">
     @if ($firstImage)
         <div class="aspect-[4/3] overflow-hidden">

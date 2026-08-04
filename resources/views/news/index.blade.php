@@ -1,11 +1,11 @@
 <x-layouts.app>
-    <x-slot name="title">Hírek | PSG-IRODAHÁZAK</x-slot>
+    <x-slot name="title">Hírek | PSG-RAKTÁRAK</x-slot>
     <x-slot name="meta">
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
         <meta name="description"
-            content="PSG-IRODAHÁZAK hírek - Legfrissebb hírek, fejlesztések és szakmai információk az irodapiaci világból.">
-        <meta name="keywords" content="hírek, irodapiac, ingatlan hírek, irodaházak, irodabérlet, szakmai hírek">
+            content="PSG-RAKTÁRAK hírek - Legfrissebb hírek, fejlesztések és szakmai információk a raktárpiaci világból.">
+        <meta name="keywords" content="hírek, raktárpiac, ingatlan hírek, raktárak, raktárbérlet, szakmai hírek">
         <link rel="canonical" href="{{ Request::url() }}">
     </x-slot>
     <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"

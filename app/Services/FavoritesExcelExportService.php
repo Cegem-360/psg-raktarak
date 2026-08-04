@@ -26,8 +26,8 @@ final class FavoritesExcelExportService
     ];
 
     private const array HEADER_LABELS = [
-        'A3' => 'Irodaház neve',
-        'B3' => 'Irodaház címe',
+        'A3' => 'Raktár neve',
+        'B3' => 'Raktár címe',
         'C3' => 'Építés éve',
         'D3' => 'Bérleti díj',
         'E3' => 'Üzemeltetési díj',
@@ -73,7 +73,7 @@ final class FavoritesExcelExportService
 
     private function setTitleRow(Worksheet $sheet): void
     {
-        $sheet->setCellValue('B1', 'PSG-IRODAHAZAK.HU');
+        $sheet->setCellValue('B1', 'PSG-RAKTARAK.HU');
         $sheet->mergeCells('B1:H1');
 
         $titleStyle = $sheet->getStyle('B1');

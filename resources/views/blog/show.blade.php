@@ -202,7 +202,7 @@
                                     </div>
 
                                     <h3 class="mb-2 text-lg font-semibold text-gray-900">
-                                        <a href="{{ localized_route('blog.show', $relatedPost->slug) }}"
+                                        <a href="{{ localized_route('blog.show', ['post' => $relatedPost->slug]) }}"
                                             class="transition duration-150 hover:text-blue-600">
                                             {{ $relatedPost->title }}
                                         </a>

@@ -77,7 +77,7 @@ it('sets the title row correctly', function (): void {
     $spreadsheet = IOFactory::load($this->tempFile);
     $sheet = $spreadsheet->getActiveSheet();
 
-    expect($sheet->getCell('B1')->getValue())->toBe('PSG-IRODAHAZAK.HU');
+    expect($sheet->getCell('B1')->getValue())->toBe('PSG-RAKTARAK.HU');
 
     // Check merge range
     $mergedCells = $sheet->getMergeCells();
@@ -96,8 +96,8 @@ it('sets all header labels in row 3', function (): void {
     $spreadsheet = IOFactory::load($this->tempFile);
     $sheet = $spreadsheet->getActiveSheet();
 
-    expect($sheet->getCell('A3')->getValue())->toBe('Irodaház neve')
-        ->and($sheet->getCell('B3')->getValue())->toBe('Irodaház címe')
+    expect($sheet->getCell('A3')->getValue())->toBe('Raktár neve')
+        ->and($sheet->getCell('B3')->getValue())->toBe('Raktár címe')
         ->and($sheet->getCell('C3')->getValue())->toBe('Építés éve')
         ->and($sheet->getCell('D3')->getValue())->toBe('Bérleti díj')
         ->and($sheet->getCell('E3')->getValue())->toBe('Üzemeltetési díj')
@@ -266,7 +266,7 @@ it('handles empty collection gracefully', function (): void {
     $sheet = $spreadsheet->getActiveSheet();
 
     // Should still have headers but no data
-    expect($sheet->getCell('A3')->getValue())->toBe('Irodaház neve')
+    expect($sheet->getCell('A3')->getValue())->toBe('Raktár neve')
         ->and($sheet->getCell('A4')->getValue())->toBeNull();
 
     $spreadsheet->disconnectWorksheets();

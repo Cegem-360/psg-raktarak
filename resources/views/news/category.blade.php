@@ -1,11 +1,11 @@
 <x-layouts.app>
-    <x-slot name="title">{{ $category->name }} Hírek | PSG-IRODAHÁZAK</x-slot>
+    <x-slot name="title">{{ $category->name }} Hírek | PSG-RAKTÁRAK</x-slot>
     <x-slot name="meta">
         <meta name="robots" content="index, follow">
         <meta name="googlebot" content="index, follow">
         <meta name="description"
-            content="{{ $category->description ?: $category->name . ' kategória hírei a PSG-IRODAHÁZAK oldalán.' }}">
-        <meta name="keywords" content="{{ $category->name }}, hírek, irodaház, irodabérlet">
+            content="{{ $category->description ?: $category->name . ' kategória hírei a PSG-RAKTÁRAK oldalán.' }}">
+        <meta name="keywords" content="{{ $category->name }}, hírek, raktár, raktárbérlet">
         <link rel="canonical" href="{{ Request::url() }}">
     </x-slot>
 
@@ -125,7 +125,7 @@
                                         </div>
 
                                         <h2 class="text-xl font-semibold text-gray-900 mb-3 line-clamp-2">
-                                            <a href="{{ localized_route('news.show', $article->slug) }}"
+                                            <a href="{{ localized_route('news.show', ['slug' => $article->slug]) }}"
                                                 class="hover:text-red-600 transition duration-150">
                                                 {{ $article->title }}
                                             </a>
