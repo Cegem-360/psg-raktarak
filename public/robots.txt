@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://psg-raktarak.hu/sitemap.xml
