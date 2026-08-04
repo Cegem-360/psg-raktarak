@@ -13,6 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Duplicate of 2025_06_24_124408_create_references_table.
+        if (Schema::hasTable('references')) {
+            return;
+        }
+
         Schema::create('references', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('references');
+        //
     }
 };

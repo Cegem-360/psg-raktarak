@@ -13,10 +13,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_codes', function (Blueprint $table): void {
-            /* $table->id(); */
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('post_codes')) {
+            Schema::create('post_codes', function (Blueprint $table): void {
+                $table->id();
+                $table->string('iranyitoszam', 4)->default('')->unique();
+                $table->string('helyiseg', 64)->default('');
+                $table->string('megye', 64)->default('');
+                $table->timestamps();
+            });
+        } else {
+            Schema::table('post_codes', function (Blueprint $table): void {
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,6 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Already part of the create migration on a freshly built database.
+        if (Schema::hasColumn('properties', 'featured')) {
+            return;
+        }
+
         Schema::table('properties', function (Blueprint $table): void {
             $table->boolean('featured')->default(false)->after('slug');
         });

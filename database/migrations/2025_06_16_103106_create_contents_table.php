@@ -13,10 +13,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('contents', function (Blueprint $table): void {
-
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('contents')) {
+            Schema::create('contents', function (Blueprint $table): void {
+                $table->id();
+                $table->string('title')->nullable()->default('');
+                $table->string('status')->nullable()->default('');
+                $table->longText('lead')->nullable();
+                $table->longText('content')->nullable();
+                $table->timestamp('date')->nullable()->useCurrent();
+                $table->integer('ord')->nullable()->default(0);
+                $table->string('meta_title')->nullable();
+                $table->text('meta_keywords')->nullable();
+                $table->text('meta_description')->nullable();
+                $table->string('lang', 2)->nullable()->default('HU');
+                $table->longText('cimke_json')->nullable();
+                $table->string('lead_pic')->nullable()->default('');
+                $table->string('sdf')->nullable()->default('');
+                $table->string('file')->nullable()->default('');
+                $table->integer('ok')->default(0);
+                $table->string('mysep')->nullable()->default('');
+                $table->string('link')->nullable()->default('');
+                $table->timestamps();
+            });
+        } else {
+            Schema::table('contents', function (Blueprint $table): void {
+                $table->timestamps();
+            });
+        }
     }
 
     /**

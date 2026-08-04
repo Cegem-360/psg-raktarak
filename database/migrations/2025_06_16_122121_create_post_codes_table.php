@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('post_codes', function (Blueprint $table): void {
-            $table->id();
-            /*  $table->timestamps(); */
-        });
+        // The legacy import had no primary key on post_codes; a freshly created
+        // table (see the previous migration) already has one.
+        if (Schema::hasTable('post_codes') && ! Schema::hasColumn('post_codes', 'id')) {
+            Schema::table('post_codes', function (Blueprint $table): void {
+                $table->id();
+            });
+        }
     }
 
     /**
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_codes');
+        //
     }
 };

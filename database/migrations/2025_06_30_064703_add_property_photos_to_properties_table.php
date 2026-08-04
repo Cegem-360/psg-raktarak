@@ -13,6 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Already part of the create migration on a freshly built database.
+        if (Schema::hasColumn('properties', 'property_photos')) {
+            return;
+        }
+
         Schema::table('properties', function (Blueprint $table): void {
             $table->json('property_photos')->nullable()->after('featured');
         });

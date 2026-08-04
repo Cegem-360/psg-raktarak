@@ -13,6 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Already part of the create migration on a freshly built database.
+        if (Schema::hasColumn('properties', 'district')) {
+            return;
+        }
+
         Schema::table('properties', function (Blueprint $table): void {
             $table->string('district')->nullable()->after('cim_varos');
         });
