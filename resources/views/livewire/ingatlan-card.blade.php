@@ -14,10 +14,10 @@
                     @endforeach
                 </div>
                 <div
-                    class="swiper-button-prev minicarousel-button-prev !text-accent shadow bg-white/40 hover:bg-white/60 hover:shadow rounded after:!text-xl after:!font-bold after:drop-shadow">
+                    class="swiper-button-prev minicarousel-button-prev !text-accent shadow bg-white/40 hover:bg-white/60 hover:shadow rounded">
                 </div>
                 <div
-                    class="swiper-button-next minicarousel-button-next !text-accent shadow bg-white/40 hover:bg-white/60 hover:shadow rounded after:!text-xl after:!font-bold after:drop-shadow">
+                    class="swiper-button-next minicarousel-button-next !text-accent shadow bg-white/40 hover:bg-white/60 hover:shadow rounded">
                 </div>
             </div>
         @endif

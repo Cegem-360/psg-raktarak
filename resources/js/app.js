@@ -116,17 +116,32 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    const minicarouselSwiper = new Swiper(".minicarousel-swiper", {
-        direction: "horizontal",
-        loop: true,
-        slidesPerView: 1,
-        spaceBetween: 0,
-        navigation: {
-            nextEl: ".minicarousel-button-next",
-            prevEl: ".minicarousel-button-prev",
-        },
-    });
+    initMiniCarousels();
 });
+
+// The property cards are re-rendered by Livewire (pagination, filters), and that
+// new markup never sees DOMContentLoaded. Initialise per element rather than by
+// selector so already-live carousels are skipped, and resolve each card's arrows
+// inside that card — a shared selector would point every instance at the first
+// card's buttons.
+function initMiniCarousels() {
+    document.querySelectorAll(".minicarousel-swiper").forEach((el) => {
+        if (el.swiper) {
+            return;
+        }
+
+        new Swiper(el, {
+            direction: "horizontal",
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            navigation: {
+                nextEl: el.querySelector(".minicarousel-button-next"),
+                prevEl: el.querySelector(".minicarousel-button-prev"),
+            },
+        });
+    });
+}
 
 // Cookie management for favorites
 function setCookie(name, value, days) {
@@ -148,6 +163,7 @@ function getCookie(name) {
 }
 document.addEventListener("livewire:navigated", () => {
     initFlowbite();
+    initMiniCarousels();
 });
 // Listen for Livewire events
 document.addEventListener("livewire:initialized", function () {
@@ -158,6 +174,8 @@ document.addEventListener("livewire:initialized", function () {
     });
 
     Livewire.on("favorites-updated", updateFavoritesCounter);
+
+    Livewire.hook("morphed", () => initMiniCarousels());
 });
 
 // Update favorites counter in navigation
