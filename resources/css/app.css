@@ -217,8 +217,8 @@ li.jellemzok {
    chevron sits inside its box instead of touching the edges. */
 .swiper-button-next .swiper-navigation-icon,
 .swiper-button-prev .swiper-navigation-icon {
-    width: 45%;
-    height: 45%;
+    width: 60%;
+    height: 60%;
 }
 
 .swiper-button-disabled {
