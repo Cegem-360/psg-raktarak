@@ -162,8 +162,14 @@ final class ListRentOffices extends Component
 
         if ($this->category) {
             $category_model = Category::where('slug', 'like', $this->category)->first();
+
+            // A slug with no matching category is a page that does not exist. Without
+            // this the byCategory() call below dereferences null and the request ends
+            // in a 500 rather than a 404.
+            abort_if($category_model === null, 404);
+
             $this->title = $category_model->name ?? __('page.title.offices_for_rent');
-            $query->byCategory(stripslashes($category_model->name));
+            $query->byCategory(stripslashes((string) $category_model->name));
         }
 
         if ($this->areaMin >= 0 || $this->areaMax) {
