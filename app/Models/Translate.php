@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 
 final class Translate extends Model
 {
+    /**
+     * The legacy `translates` table has no created_at / updated_at columns,
+     * only its own `date` column.
+     */
+    public $timestamps = false;
+
     protected $fillable = [
         'name',
         'translated',
         'date',
         'lang',
-        'created_at',
-        'updated_at',
     ];
 
     protected $attributes = [
@@ -25,8 +29,6 @@ final class Translate extends Model
     {
         return [
             'date' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
         ];
     }
 }

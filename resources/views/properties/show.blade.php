@@ -154,7 +154,7 @@
                                 @if ($property->parkolas)
                                     <tr>
                                         <td class="font-bold">{{ __('Parking') }}:</td>
-                                        <td>{{ $property->parkolas }}</td>
+                                        <td>{{ __($property->parkolas) }}</td>
                                     </tr>
                                 @endif
                                 @if ($property->min_parkolas_dija)
