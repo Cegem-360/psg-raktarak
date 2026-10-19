@@ -19,7 +19,7 @@
         <!-- Article Schema -->
         <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
+            "@@context": "https://schema.org",
             "@type": "Article",
             "headline": "{{ $post->title }}",
             "description": "{{ $post->excerpt ?: Str::limit(strip_tags($post->content), 160) }}",
@@ -49,7 +49,7 @@
                     <span>/</span>
                     <a href="#" class="hover:text-blue-600">Blog</a>
                     <span>/</span>
-                    <a href="{{ localized_route('blog.category', ['slug' => $post->category->slug]) }}"
+                    <a href="{{ route('en.blog.category', ['category' => $post->category->slug]) }}"
                         class="hover:text-blue-600">{{ $post->category->name }}</a>
                     <span>/</span>
                     <span class="text-gray-900">{{ Str::limit($post->title, 50) }}</span>
@@ -127,7 +127,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="mb-2 text-sm text-gray-500">Kategória:</p>
-                        <a href="{{ localized_route('blog.category', ['slug' => $post->category->slug]) }}"
+                        <a href="{{ route('en.blog.category', ['category' => $post->category->slug]) }}"
                             class="inline-flex items-center px-3 py-1 text-sm font-medium text-white transition duration-150 rounded-full hover:opacity-90"
                             style="background-color: {{ $post->category->color }}">
                             {{ $post->category->name }}
@@ -202,7 +202,7 @@
                                     </div>
 
                                     <h3 class="mb-2 text-lg font-semibold text-gray-900">
-                                        <a href="{{ localized_route('blog.show', ['post' => $relatedPost->slug]) }}"
+                                        <a href="{{ route('en.blog.show', ['post' => $relatedPost->slug]) }}"
                                             class="transition duration-150 hover:text-blue-600">
                                             {{ $relatedPost->title }}
                                         </a>
