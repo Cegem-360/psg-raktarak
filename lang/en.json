@@ -230,5 +230,6 @@
     "HUF/hely/hó": "HUF/place/month",
     "EUR/fő/hó": "EUR/person/month",
     "HUF/fő/hó": "HUF/person/month",
-    "Letöltés Excel-ben": "Download as Excel"
+    "Letöltés Excel-ben": "Download as Excel",
+    "Köszönjük üzenetét! Visszaigazoló e-mailt küldtünk a(z) :email címre. Hamarosan felvesszük Önnel a kapcsolatot.": "Thank you for your message! We have sent a confirmation email to :email. We will contact you shortly."
 }

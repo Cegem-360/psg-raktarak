@@ -6,7 +6,6 @@ namespace App\Livewire;
 
 use App\Mail\FavoritesSendMail;
 use App\Models\Property;
-use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
@@ -61,11 +60,11 @@ final class FavoritesSendModal extends Component
             $this->properties
         ));
         $this->showSendModal = false;
-        Notification::make()
-            ->title('Kedvencek elküldve')
-            ->body('Az ajánlatot elküldtük!')
-            ->success()
-            ->send();
+        $this->dispatch('notify',
+            type: 'success',
+            title: 'Kedvencek elküldve',
+            body: "Az ajánlatot elküldtük a(z) {$this->recipientEmail} címre!",
+        );
         session()->flash('success', 'Az ajánlatot elküldtük!');
         Cookie::queue(Cookie::forget('property_favorites'));
         session()->flash('success', 'A kedvencek listája kiürítve!');

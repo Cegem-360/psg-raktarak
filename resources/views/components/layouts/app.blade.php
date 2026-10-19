@@ -103,7 +103,7 @@
 
         {{ $slot }}
 
-        @livewire('notifications')
+        <x-toast />
 
         @livewire('quote-request-modal')
 
