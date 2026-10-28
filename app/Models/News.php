@@ -47,50 +47,6 @@ final class News extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeDraft(Builder $query): Builder
-    {
-        return $query->where('is_published', false);
-    }
-
-    public function scopeBreaking(Builder $query): Builder
-    {
-        return $query->where('is_breaking', true);
-    }
-
-    // Accessors
-    public function getReadingTimeAttribute(): string
-    {
-        $wordCount = str_word_count(strip_tags($this->content));
-        $minutes = ceil($wordCount / 200); // Average reading speed
-
-        return $minutes.' perc olvasás';
-    }
-
-    public function getStatusAttribute(): string
-    {
-        if ($this->is_published && $this->published_at && $this->published_at <= now()) {
-            return 'published';
-        }
-
-        if ($this->is_published && $this->published_at && $this->published_at > now()) {
-            return 'scheduled';
-        }
-
-        return 'draft';
-    }
-
-    public function getPriorityLabelAttribute(): string
-    {
-        return match ($this->priority) {
-            1 => 'Alacsony',
-            2 => 'Normál',
-            3 => 'Magas',
-            4 => 'Sürgős',
-            5 => 'Kritikus',
-            default => 'Normál',
-        };
-    }
-
     // Methods
     public function incrementViews(): void
     {
@@ -152,6 +108,50 @@ final class News extends Model
         });
     }
 
+    protected function scopeDraft(Builder $query): Builder
+    {
+        return $query->where('is_published', false);
+    }
+
+    protected function scopeBreaking(Builder $query): Builder
+    {
+        return $query->where('is_breaking', true);
+    }
+
+    // Accessors
+    protected function getReadingTimeAttribute(): string
+    {
+        $wordCount = str_word_count(strip_tags($this->content));
+        $minutes = ceil($wordCount / 200); // Average reading speed
+
+        return $minutes.' perc olvasás';
+    }
+
+    protected function getStatusAttribute(): string
+    {
+        if ($this->is_published && $this->published_at && $this->published_at <= now()) {
+            return 'published';
+        }
+
+        if ($this->is_published && $this->published_at && $this->published_at > now()) {
+            return 'scheduled';
+        }
+
+        return 'draft';
+    }
+
+    protected function getPriorityLabelAttribute(): string
+    {
+        return match ($this->priority) {
+            1 => 'Alacsony',
+            2 => 'Normál',
+            3 => 'Magas',
+            4 => 'Sürgős',
+            5 => 'Kritikus',
+            default => 'Normál',
+        };
+    }
+
     protected function casts(): array
     {
         return [
@@ -171,7 +171,7 @@ final class News extends Model
     protected function byPriority(Builder $query): void
     {
         $query->orderBy('priority', 'desc')
-            ->orderBy('published_at', 'desc');
+            ->latest('published_at');
     }
 
     #[Scope]

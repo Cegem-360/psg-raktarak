@@ -26,11 +26,6 @@ final class BlogCategory extends Model
         return $this->hasMany(BlogPost::class);
     }
 
-    public function getPostsCountAttribute(): int
-    {
-        return $this->blogPosts()->count();
-    }
-
     protected static function boot(): void
     {
         parent::boot();
@@ -46,6 +41,11 @@ final class BlogCategory extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+    }
+
+    protected function getPostsCountAttribute(): int
+    {
+        return $this->blogPosts()->count();
     }
 
     protected function casts(): array

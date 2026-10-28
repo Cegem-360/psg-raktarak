@@ -74,7 +74,7 @@ final class BlogPostsRelationManager extends RelationManager
             ])
             ->actions([
                 ViewAction::make()
-                    ->url(fn ($record) => route('filament.admin.resources.blog-posts.edit', $record))
+                    ->url(fn ($record): string => route('filament.admin.resources.blog-posts.edit', $record))
                     ->openUrlInNewTab(),
             ])
             ->bulkActions([

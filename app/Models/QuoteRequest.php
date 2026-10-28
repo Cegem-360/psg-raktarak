@@ -21,7 +21,7 @@ final class QuoteRequest extends Model
         'notes',
     ];
 
-    public function getStatusColorAttribute(): string
+    protected function getStatusColorAttribute(): string
     {
         return match ($this->status) {
             'new' => 'text-red-600 bg-red-100',
@@ -31,7 +31,7 @@ final class QuoteRequest extends Model
         };
     }
 
-    public function getStatusLabelAttribute(): string
+    protected function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
             'new' => 'Új',

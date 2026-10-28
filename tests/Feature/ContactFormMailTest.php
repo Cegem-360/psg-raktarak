@@ -35,7 +35,7 @@ final class ContactFormMailTest extends TestCase
         $response->assertSessionHas('success');
         $response->assertSessionHas('toast.type', 'success');
 
-        $emails = app('mailer')->getSymfonyTransport()->messages()
+        $emails = resolve('mailer')->getSymfonyTransport()->messages()
             ->map(fn (SentMessage $sent): Email => $sent->getOriginalMessage());
         $adminEmail = $emails->first(fn (Email $email): bool => $email->getTo()[0]->getAddress() === config('mail.admin_address'));
 

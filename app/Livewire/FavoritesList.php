@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\File;
 use Livewire\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -55,7 +56,7 @@ final class FavoritesList extends Component
 
         return response()->streamDownload(function () use ($tempFile): void {
             echo file_get_contents($tempFile);
-            @unlink($tempFile);
+            File::delete($tempFile);
         }, 'P.S.G. RAKTÁR ajánlatok.xlsx', [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ]);

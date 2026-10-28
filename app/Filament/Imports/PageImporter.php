@@ -72,7 +72,7 @@ final class PageImporter extends Importer
         return $body;
     }
 
-    public function resolveRecord(): ?Page
+    public function resolveRecord(): Page
     {
         // return Page::firstOrNew([
         //     // Update existing records, matching them by `$this->data['column_name']`

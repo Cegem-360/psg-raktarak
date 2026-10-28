@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\News;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -42,7 +41,7 @@ final class MigrateHirekToNews extends Command
             return Command::FAILURE;
         }
 
-        $this->info('Found Hírek page with ID: ' . $hirekPage->id);
+        $this->info('Found Hírek page with ID: '.$hirekPage->id);
 
         // 2. Parse the content_json to get content IDs
         $contentIds = json_decode($hirekPage->content_json, true);
@@ -164,11 +163,11 @@ final class MigrateHirekToNews extends Command
             // Show some examples
             $migratedNews = DB::table('news')
                 ->whereRaw("JSON_EXTRACT(meta_data, '$.original_content_id') IS NOT NULL")
-                ->orderBy('published_at', 'desc')
+                ->latest('published_at')
                 ->limit(5)
                 ->get(['id', 'title', 'published_at']);
 
-            if ($migratedNews->count() > 0) {
+            if ($migratedNews->isNotEmpty()) {
                 $this->info("\nLast 5 migrated news articles:");
                 $this->table(
                     ['ID', 'Title', 'Published At'],
@@ -176,7 +175,7 @@ final class MigrateHirekToNews extends Command
                         $news->id,
                         Str::limit($news->title, 50),
                         $news->published_at,
-                    ])->toArray()
+                    ])->all()
                 );
             }
         }

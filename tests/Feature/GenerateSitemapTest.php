@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Property;
+use Illuminate\Support\Facades\File;
 
 it('writes a sitemap with the static pages and published properties', function (): void {
     // forceCreate rather than the factory: PropertyFactory is still an empty stub
@@ -26,7 +27,7 @@ it('writes a sitemap with the static pages and published properties', function (
     $this->artisan('sitemap:generate', ['--path' => $path])->assertSuccessful();
 
     $xml = (string) file_get_contents($path);
-    @unlink($path);
+    File::delete($path);
 
     expect($xml)->toContain('<urlset')
         ->and($xml)->toContain(route('properties.show', ['property' => $property->slug]))

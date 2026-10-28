@@ -19,7 +19,7 @@ final class AboutUs extends Model
     ];
 
     #[Scope]
-    public function byLanguage($query, $language): void
+    protected function byLanguage($query, $language): void
     {
         $query->where('language', $language);
     }

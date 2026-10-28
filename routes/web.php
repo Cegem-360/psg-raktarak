@@ -10,6 +10,8 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PropertyController;
 use App\Models\Property;
 use App\Services\PropertyPdfService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -41,13 +43,13 @@ Route::get('/budapest/{category}', function ($category) {
     $queryParams['category'] = $category;
 
     if ($category === 'elado-raktarak') {
-        return redirect()->route('elado-raktarak');
+        return to_route('elado-raktarak');
     }
 
     return view('pages.filter', ['queryParams' => $queryParams]);
 })->name('budapest.category');
 Route::get('/login', function () {
-    return redirect()->route('filament.admin.auth.login'); // Redirect to the login page
+    return to_route('filament.admin.auth.login'); // Redirect to the login page
 })->name('login');
 Route::get('/ingatlanok', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/kiado-raktar/{property:slug}', [PropertyController::class, 'show'])->name('properties.show');
@@ -74,7 +76,7 @@ Route::group(['as' => 'en.'], function (): void {
         $queryParams['category'] = $category;
 
         if ($category === 'elado-raktarak') {
-            return redirect()->route('en.elado-raktarak');
+            return to_route('en.elado-raktarak');
         }
 
         return view('pages.filter', ['queryParams' => $queryParams]);
@@ -106,7 +108,7 @@ Route::get('/property-pdf/{property}', function (Property $property): Response {
 })->name('property.pdf')->middleware(['signed']);
 
 // PDF preview route (HTML only, no PDF generation)
-Route::get('/property-preview/{property}', function (Property $property) {
+Route::get('/property-preview/{property}', function (Property $property): Factory|View {
     return view('pdf.property', ['property' => $property]);
 })->name('property.preview');
 

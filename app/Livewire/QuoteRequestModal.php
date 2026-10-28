@@ -7,6 +7,8 @@ namespace App\Livewire;
 use App\Models\Property;
 use App\Models\QuoteRequest;
 use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -156,7 +158,7 @@ final class QuoteRequestModal extends Component
         }
     }
 
-    public function render()
+    public function render(): Factory|View
     {
         return view('livewire.quote-request-modal');
     }

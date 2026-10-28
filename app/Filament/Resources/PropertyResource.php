@@ -373,7 +373,7 @@ final class PropertyResource extends Resource
                     ->panelLayout('grid')
                     ->visibility('public')
                     ->directory(fn ($record): string => 'property/'.$record->id.'/gallery_images')
-                    ->saveUploadedFileUsing(fn ($file, $record) => app(WatermarkService::class)->addWatermark($file, $record))
+                    ->saveUploadedFileUsing(fn ($file, $record) => resolve(WatermarkService::class)->addWatermark($file, $record))
                     ->openable()
                     ->downloadable()
                     ->columnSpanFull()

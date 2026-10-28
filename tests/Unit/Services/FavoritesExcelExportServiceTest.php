@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\FavoritesExcelExportService;
+use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
@@ -11,8 +12,8 @@ beforeEach(function (): void {
 });
 
 afterEach(function (): void {
-    if (isset($this->tempFile) && file_exists($this->tempFile)) {
-        @unlink($this->tempFile);
+    if (property_exists($this, 'tempFile') && $this->tempFile !== null && file_exists($this->tempFile)) {
+        File::delete($this->tempFile);
     }
 });
 

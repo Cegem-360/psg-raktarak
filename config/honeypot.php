@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Spatie\Honeypot\SpamProtection;
 use Spatie\Honeypot\SpamResponder\BlankPageResponder;
 
@@ -66,7 +68,7 @@ return [
     'spam_protection' => SpamProtection::class,
 
     /*
-     * need to add @csp https://github.com/spatie/laravel-csp in style tag hidden items 
+     * need to add @csp https://github.com/spatie/laravel-csp in style tag hidden items
     */
     'with_csp' => env('HONEYPOT_WITH_CSP', false),
 ];

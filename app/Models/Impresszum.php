@@ -19,7 +19,7 @@ final class Impresszum extends Model
     ];
 
     #[Scope]
-    public function byLanguage($query, $language)
+    protected function byLanguage($query, $language)
     {
         return $query->where('language', $language);
     }

@@ -40,41 +40,6 @@ final class BlogPost extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Scopes
-    public function scopePublished(Builder $query): Builder
-    {
-        return $query->where('is_published', true)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
-    }
-
-    public function scopeByCategory(Builder $query, int $categoryId): Builder
-    {
-        return $query->where('blog_category_id', $categoryId);
-    }
-
-    // Accessors
-    public function getReadingTimeAttribute(): string
-    {
-        $wordCount = str_word_count(strip_tags($this->content));
-        $minutes = ceil($wordCount / 200); // Average reading speed
-
-        return $minutes.' perc olvasás';
-    }
-
-    public function getStatusAttribute(): string
-    {
-        if ($this->is_published && $this->published_at && $this->published_at <= now()) {
-            return 'published';
-        }
-
-        if ($this->is_published && $this->published_at && $this->published_at > now()) {
-            return 'scheduled';
-        }
-
-        return 'draft';
-    }
-
     public function incrementViews(): void
     {
         $this->increment('views_count');
@@ -94,6 +59,41 @@ final class BlogPost extends Model
             'is_published' => false,
             'published_at' => null,
         ]);
+    }
+
+    // Scopes
+    protected function scopePublished(Builder $query): Builder
+    {
+        return $query->where('is_published', true)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
+    }
+
+    protected function scopeByCategory(Builder $query, int $categoryId): Builder
+    {
+        return $query->where('blog_category_id', $categoryId);
+    }
+
+    // Accessors
+    protected function getReadingTimeAttribute(): string
+    {
+        $wordCount = str_word_count(strip_tags($this->content));
+        $minutes = ceil($wordCount / 200); // Average reading speed
+
+        return $minutes.' perc olvasás';
+    }
+
+    protected function getStatusAttribute(): string
+    {
+        if ($this->is_published && $this->published_at && $this->published_at <= now()) {
+            return 'published';
+        }
+
+        if ($this->is_published && $this->published_at && $this->published_at > now()) {
+            return 'scheduled';
+        }
+
+        return 'draft';
     }
 
     protected function casts(): array

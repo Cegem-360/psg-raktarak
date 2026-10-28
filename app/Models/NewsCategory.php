@@ -33,16 +33,6 @@ final class NewsCategory extends Model
         return $this->hasMany(News::class)->published();
     }
 
-    public function getNewsCountAttribute(): int
-    {
-        return $this->news()->count();
-    }
-
-    public function getPublishedNewsCountAttribute(): int
-    {
-        return $this->publishedNews()->count();
-    }
-
     protected static function boot(): void
     {
         parent::boot();
@@ -62,6 +52,16 @@ final class NewsCategory extends Model
                 $category->slug = Str::slug($category->name);
             }
         });
+    }
+
+    protected function getNewsCountAttribute(): int
+    {
+        return $this->news()->count();
+    }
+
+    protected function getPublishedNewsCountAttribute(): int
+    {
+        return $this->publishedNews()->count();
     }
 
     protected function casts(): array
