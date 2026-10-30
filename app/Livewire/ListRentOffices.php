@@ -53,7 +53,7 @@ final class ListRentOffices extends Component
 
     public ?string $min_rent_addons = '';
 
-    public ?string $title;
+    public ?string $title = null;
 
     public ?string $category = null;
 
@@ -74,7 +74,7 @@ final class ListRentOffices extends Component
         $this->min_rent_addons = $queryParams['min_rent_addons'] ?? request('min_rent_addons');
 
         if ($this->officeName) {
-            $office = Offices::where('title', $this->officeName)->first();
+            $office = Offices::query()->where('title', $this->officeName)->first();
 
             $this->redirect(localized_route('properties.show', ['property' => $office->slug]));
         }
@@ -131,18 +131,16 @@ final class ListRentOffices extends Component
             ->whereNotNull('maps_lng')
             ->where('maps_lat', '!=', '')
             ->where('maps_lng', '!=', '')
-            ->map(function ($office): array {
-                return [
-                    'id' => $office->id,
-                    'title' => $office->title,
-                    'lat' => (float) $office->maps_lat,
-                    'lng' => (float) $office->maps_lng,
-                    'address' => $office->cim_irsz.' '.$office->cim_varos.($office->district ? ' '.$office->district.'. kerület' : '').', '.$office->cim_utca.' '.$office->cim_hazszam,
-                    'rent' => ($office->min_berleti_dij ?? '').' - '.($office->max_berleti_dij ?? '').' '.($office->max_berleti_dij_addons ?? ''),
-                    'operating_fee' => ($office->uzemeletetesi_dij ?? '').' '.($office->uzemeletetesi_dij_addons ?? ''),
-                    'url' => route('properties.show', ['property' => $office]),
-                ];
-            })
+            ->map(fn ($office): array => [
+                'id' => $office->id,
+                'title' => $office->title,
+                'lat' => (float) $office->maps_lat,
+                'lng' => (float) $office->maps_lng,
+                'address' => $office->cim_irsz.' '.$office->cim_varos.($office->district ? ' '.$office->district.'. kerület' : '').', '.$office->cim_utca.' '.$office->cim_hazszam,
+                'rent' => ($office->min_berleti_dij ?? '').' - '.($office->max_berleti_dij ?? '').' '.($office->max_berleti_dij_addons ?? ''),
+                'operating_fee' => (translate_value($office->uzemeletetesi_dij) ?? '').' '.($office->uzemeletetesi_dij_addons ?? ''),
+                'url' => route('properties.show', ['property' => $office]),
+            ])
             ->values(); // Reset array keys to ensure clean JSON
     }
 
@@ -193,8 +191,8 @@ final class ListRentOffices extends Component
 
         // Apply multiple districts filter
         if ($this->districts) {
-            $selectedDistricts = explode(',', $this->districts);
-            $selectedDistricts = array_filter(array_map('trim', $selectedDistricts));
+            $selectedDistricts = explode(',', (string) $this->districts);
+            $selectedDistricts = array_filter(array_map(trim(...), $selectedDistricts));
 
             if ($selectedDistricts !== []) {
                 $query->inDistricts($selectedDistricts);

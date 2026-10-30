@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable([
+    'name',
+    'translated',
+    'date',
+    'lang',
+])]
 final class Translate extends Model
 {
     /**
@@ -13,13 +20,6 @@ final class Translate extends Model
      * only its own `date` column.
      */
     public $timestamps = false;
-
-    protected $fillable = [
-        'name',
-        'translated',
-        'date',
-        'lang',
-    ];
 
     protected $attributes = [
         'lang' => 'EN',
@@ -29,6 +29,8 @@ final class Translate extends Model
     {
         return [
             'date' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 }

@@ -9,23 +9,27 @@ use App\Filament\Resources\ContentResource\Pages\EditContent;
 use App\Filament\Resources\ContentResource\Pages\ListContents;
 use App\Models\Content;
 use App\Models\Tag;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class ContentResource extends Resource
 {
     protected static ?string $model = Content::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $navigationLabel = 'Tartalom';
 
@@ -33,14 +37,16 @@ final class ContentResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Tartalom';
 
-    protected static ?string $navigationGroup = 'Tartalomkezelés';
+    protected static string|UnitEnum|null $navigationGroup = 'Tartalomkezelés';
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('title')
                     ->label('Cím')
                     ->maxLength(255),
@@ -89,9 +95,11 @@ final class ContentResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -130,16 +138,17 @@ final class ContentResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -147,6 +156,7 @@ final class ContentResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

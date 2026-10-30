@@ -8,25 +8,28 @@ use App\Filament\Resources\NewsResource\Pages\CreateNews;
 use App\Filament\Resources\NewsResource\Pages\EditNews;
 use App\Filament\Resources\NewsResource\Pages\ListNews;
 use App\Models\News;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\FontWeight;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -35,16 +38,17 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use FilamentTiptapEditor\TiptapEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Override;
+use UnitEnum;
 
 final class NewsResource extends Resource
 {
     protected static ?string $model = News::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-newspaper';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedNewspaper;
 
     protected static ?string $navigationLabel = 'Hírek';
 
@@ -52,14 +56,16 @@ final class NewsResource extends Resource
 
     protected static ?string $pluralModelLabel = 'hírek';
 
-    protected static ?string $navigationGroup = 'Hírek';
+    protected static string|UnitEnum|null $navigationGroup = 'Hírek';
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Section::make('Alapadatok')
                     ->schema([
                         TextInput::make('title')
@@ -77,7 +83,7 @@ final class NewsResource extends Resource
                             ->label('Forrás')
                             ->maxLength(255)
                             ->placeholder('Pl. https://example.com'),
-                        TiptapEditor::make('excerpt')
+                        RichEditor::make('excerpt')
                             ->label('Alcím')
                             ->columnSpanFull(),
                     ])
@@ -85,7 +91,7 @@ final class NewsResource extends Resource
 
                 Section::make('Tartalom')
                     ->schema([
-                        TiptapEditor::make('content')
+                        RichEditor::make('content')
                             ->label('Tartalom')
                             ->required()
                             ->columnSpanFull(),
@@ -170,9 +176,11 @@ final class NewsResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 ImageColumn::make('featured_image')
                     ->label('Kép')
@@ -216,8 +224,8 @@ final class NewsResource extends Resource
                     ->label('Fontos')
                     ->boolean()
                     ->toggleable()
-                    ->trueIcon('heroicon-o-exclamation-triangle')
-                    ->falseIcon('heroicon-o-minus')
+                    ->trueIcon(Heroicon::OutlinedExclamationTriangle)
+                    ->falseIcon(Heroicon::OutlinedMinus)
                     ->trueColor('warning'),
 
                 TextColumn::make('status')
@@ -291,52 +299,50 @@ final class NewsResource extends Resource
                     ->label('Fontos hír'),
 
                 Filter::make('published_at')
-                    ->form([
+                    ->schema([
                         DatePicker::make('published_from')
                             ->label('Publikálva ettől'),
                         DatePicker::make('published_until')
                             ->label('Publikálva eddig'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['published_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('published_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['published_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('published_at', '<=', $date),
-                            );
-                    }),
+                    ->query(fn (Builder $query, array $data): Builder => $query
+                        ->when(
+                            $data['published_from'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('published_at', '>=', $date),
+                        )
+                        ->when(
+                            $data['published_until'],
+                            fn (Builder $query, $date): Builder => $query->whereDate('published_at', '<=', $date),
+                        )),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
                 Action::make('publish')
                     ->label('Publikálás')
-                    ->icon('heroicon-o-eye')
+                    ->icon(Heroicon::OutlinedEye)
                     ->color('success')
                     ->action(fn (News $record) => $record->publish())
                     ->visible(fn (News $record): bool => ! $record->is_published),
                 Action::make('unpublish')
                     ->label('Publikálás visszavonása')
-                    ->icon('heroicon-o-eye-slash')
+                    ->icon(Heroicon::OutlinedEyeSlash)
                     ->color('gray')
                     ->action(fn (News $record) => $record->unpublish())
                     ->visible(fn (News $record) => $record->is_published),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     BulkAction::make('publish')
                         ->label('Publikálás')
-                        ->icon('heroicon-o-eye')
+                        ->icon(Heroicon::OutlinedEye)
                         ->color('success')
                         ->action(fn ($records) => $records->each->publish()),
                     BulkAction::make('unpublish')
                         ->label('Publikálás visszavonása')
-                        ->icon('heroicon-o-eye-slash')
+                        ->icon(Heroicon::OutlinedEyeSlash)
                         ->color('gray')
                         ->action(fn ($records) => $records->each->unpublish()),
                 ]),
@@ -344,6 +350,7 @@ final class NewsResource extends Resource
             ->defaultSort('published_at', 'desc');
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -351,6 +358,7 @@ final class NewsResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

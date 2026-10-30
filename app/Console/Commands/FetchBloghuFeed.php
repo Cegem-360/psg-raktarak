@@ -6,25 +6,15 @@ namespace App\Console\Commands;
 
 use App\Models\BlogPost;
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
+#[Description('Fetches the latest blog.hu posts and saves them to BlogPost.')]
+#[Signature('bloghu:fetch-feed')]
 final class FetchBloghuFeed extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'bloghu:fetch-feed';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Fetches the latest blog.hu posts and saves them to BlogPost.';
-
     /**
      * Execute the console command.
      */
@@ -70,7 +60,7 @@ final class FetchBloghuFeed extends Command
             }
 
             $featuredImage = $all['blh']->image ?? null;
-            $blog = BlogPost::firstOrCreate([
+            $blog = BlogPost::query()->firstOrCreate([
                 'slug' => Str::slug($title),
             ]);
             $blog->update([

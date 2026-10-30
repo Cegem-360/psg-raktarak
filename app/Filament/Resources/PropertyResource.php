@@ -11,38 +11,43 @@ use App\Filament\Resources\PropertyResource\Pages\EditProperty;
 use App\Filament\Resources\PropertyResource\Pages\ListProperties;
 use App\Models\Property;
 use App\Services\WatermarkService;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ImportAction;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Actions\ImportAction;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
-use FilamentTiptapEditor\TiptapEditor;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
+use Override;
+use UnitEnum;
 
 final class PropertyResource extends Resource
 {
     protected static ?string $model = Property::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
     protected static ?string $navigationLabel = 'Raktárak';
 
@@ -50,12 +55,14 @@ final class PropertyResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Raktárak';
 
-    protected static ?string $navigationGroup = 'Ingatlanok';
+    protected static string|UnitEnum|null $navigationGroup = 'Ingatlanok';
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('title')
                     ->label('Cím')
                     ->maxLength(255)
@@ -79,7 +86,8 @@ final class PropertyResource extends Resource
                     ->label('Kiemelt ajánlat')
                     ->helperText('Kijelölés esetén az ingatlan megjelenik a kiemelt ajánlatok között a főoldalon.')
                     ->default(false),
-                TiptapEditor::make('content')
+
+                RichEditor::make('content')
                     ->label('Tartalom')
                     ->columnSpanFull(),
                 DateTimePicker::make('date')
@@ -328,7 +336,7 @@ final class PropertyResource extends Resource
                 TextInput::make('kodszam')
                     ->label('Kódszám')
                     ->maxLength(255),
-                TiptapEditor::make('en_content')
+                RichEditor::make('en_content')
                     ->label('Angol tartalom')
                     ->columnSpanFull(),
                 TextInput::make('lang')
@@ -353,7 +361,7 @@ final class PropertyResource extends Resource
                     ->required(),
                 DatePicker::make('updated')
                     ->label('Frissítve'),
-                TiptapEditor::make('egyeb')
+                RichEditor::make('egyeb')
                     ->label('Egyéb')
                     ->columnSpanFull(),
                 Select::make('vat')
@@ -381,9 +389,11 @@ final class PropertyResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('status')
                     ->label('Státusz')
@@ -412,12 +422,12 @@ final class PropertyResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
 
                 EditAction::make(),
                 Action::make('generate_pdf')
                     ->label('PDF')
-                    ->icon('heroicon-o-document-arrow-down')
+                    ->icon(Heroicon::OutlinedDocumentArrowDown)
                     ->color('success')
                     ->url(fn (Property $record) => URL::temporarySignedRoute(
                         'property.pdf',
@@ -429,8 +439,8 @@ final class PropertyResource extends Resource
                     ->modalHeading('PDF Generálás')
                     ->modalDescription('Biztosan szeretnéd generálni az ingatlan PDF adatlapját?')
                     ->modalSubmitActionLabel('PDF Megnyitás'),
-            ], position: ActionsPosition::BeforeCells)
-            ->bulkActions([
+            ], position: RecordActionsPosition::BeforeCells)
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
@@ -438,15 +448,16 @@ final class PropertyResource extends Resource
             ->headerActions([
                 ExportAction::make('export')
                     ->label('Export Properties')
-                    ->icon('heroicon-o-arrow-down-tray')
+                    ->icon(Heroicon::OutlinedArrowDownTray)
                     ->exporter(PropertyExporter::class),
                 ImportAction::make('import')
                     ->label('Import Properties')
-                    ->icon('heroicon-o-arrow-up-tray')
+                    ->icon(Heroicon::OutlinedArrowUpTray)
                     ->importer(PropertyImporter::class),
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -454,6 +465,7 @@ final class PropertyResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

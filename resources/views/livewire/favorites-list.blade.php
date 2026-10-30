@@ -25,7 +25,7 @@
     </div>
     @if ($favoriteCount > 0)
         <div class="flex justify-end gap-3 max-w-screen-xl mx-auto px-8 pt-8">
-            <button wire:click="downloadExcel"
+            <a href="{{ localized_route('favorites.export-excel') }}"
                 class="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -33,7 +33,7 @@
                     </path>
                 </svg>
                 {{ __('Letöltés Excel-ben') }}
-            </button>
+            </a>
             <button wire:click="$dispatch('openSendFavoritesModal')"
                 class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

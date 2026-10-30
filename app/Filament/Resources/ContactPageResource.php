@@ -8,22 +8,26 @@ use App\Filament\Resources\ContactPageResource\Pages\CreateContactPage;
 use App\Filament\Resources\ContactPageResource\Pages\EditContactPage;
 use App\Filament\Resources\ContactPageResource\Pages\ListContactPages;
 use App\Models\ContactPage;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use FilamentTiptapEditor\TiptapEditor;
+use Override;
+use UnitEnum;
 
 final class ContactPageResource extends Resource
 {
     protected static ?string $model = ContactPage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-phone';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPhone;
 
     protected static ?string $navigationLabel = 'Kapcsolati oldal';
 
@@ -31,12 +35,14 @@ final class ContactPageResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Kapcsolati oldalak';
 
-    protected static ?string $navigationGroup = 'Tartalom';
+    protected static string|UnitEnum|null $navigationGroup = 'Tartalom';
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Select::make('language')
                     ->label('Nyelv')
                     ->options([
@@ -45,9 +51,8 @@ final class ContactPageResource extends Resource
                     ])
                     ->required()
                     ->default('hu'),
-                TiptapEditor::make('content')
+                RichEditor::make('content')
                     ->label('Kapcsolati információk')
-                    ->profile('default')
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->label('Kapcsolati oldal kép')
@@ -61,9 +66,11 @@ final class ContactPageResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('language')
                     ->label('Nyelv')
@@ -81,16 +88,17 @@ final class ContactPageResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -98,6 +106,7 @@ final class ContactPageResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

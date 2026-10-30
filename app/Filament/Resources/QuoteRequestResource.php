@@ -9,29 +9,33 @@ use App\Filament\Resources\QuoteRequestResource\Pages\EditQuoteRequest;
 use App\Filament\Resources\QuoteRequestResource\Pages\ListQuoteRequests;
 use App\Filament\Resources\QuoteRequestResource\Pages\ViewQuoteRequest;
 use App\Models\QuoteRequest;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class QuoteRequestResource extends Resource
 {
     protected static ?string $model = QuoteRequest::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
     protected static ?string $navigationLabel = 'Árajánlat kérések';
 
@@ -39,14 +43,16 @@ final class QuoteRequestResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Árajánlat kérések';
 
-    protected static ?string $navigationGroup = 'Ügyfélszolgálat';
+    protected static string|UnitEnum|null $navigationGroup = 'Ügyfélszolgálat';
 
     protected static ?int $navigationSort = 1;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Section::make('Kapcsolattartó adatok')
                     ->schema([
                         TextInput::make('name')
@@ -107,9 +113,11 @@ final class QuoteRequestResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -169,10 +177,10 @@ final class QuoteRequestResource extends Resource
                         'closed' => 'Lezárva',
                     ]),
             ])
-            ->actions([
+            ->recordActions([
                 Action::make('contact')
                     ->label('Kapcsolatfelvéve')
-                    ->icon('heroicon-o-phone')
+                    ->icon(Heroicon::OutlinedPhone)
                     ->color('warning')
                     ->visible(fn (QuoteRequest $record): bool => $record->status === 'new')
                     ->action(function (QuoteRequest $record): void {
@@ -190,7 +198,7 @@ final class QuoteRequestResource extends Resource
 
                 Action::make('close')
                     ->label('Lezárás')
-                    ->icon('heroicon-o-check-circle')
+                    ->icon(Heroicon::OutlinedCheckCircle)
                     ->color('success')
                     ->visible(fn (QuoteRequest $record): bool => $record->status !== 'closed')
                     ->action(function (QuoteRequest $record): void {
@@ -209,7 +217,7 @@ final class QuoteRequestResource extends Resource
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
@@ -217,6 +225,7 @@ final class QuoteRequestResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [
@@ -229,13 +238,13 @@ final class QuoteRequestResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = self::getModel()::where('status', 'new')->count();
+        $count = self::getModel()::query()->where('status', 'new')->count();
 
         return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return self::getModel()::where('status', 'new')->count() > 0 ? 'danger' : null;
+        return self::getModel()::query()->where('status', 'new')->count() > 0 ? 'danger' : null;
     }
 }

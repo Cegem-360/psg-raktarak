@@ -3,11 +3,11 @@
         <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
-                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" wire:click="closeModal"></div>
+                <div class="fixed inset-0 bg-gray-500/75 transition-opacity" wire:click="closeModal"></div>
 
                 <!-- Modal panel -->
                 <div
-                    class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white shadow-xl sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                    class="relative inline-block align-bottom bg-white text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
                     <!-- Modal Header -->
                     <div class="px-8 py-5 bg-orange-500">
                         <h3 class="text-2xl font-semibold text-center text-white">Kapcsolatfelvétel</h3>

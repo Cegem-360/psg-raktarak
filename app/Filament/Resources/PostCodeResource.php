@@ -8,14 +8,18 @@ use App\Filament\Resources\PostCodeResource\Pages\CreatePostCode;
 use App\Filament\Resources\PostCodeResource\Pages\EditPostCode;
 use App\Filament\Resources\PostCodeResource\Pages\ListPostCodes;
 use App\Models\PostCode;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class PostCodeResource extends Resource
 {
@@ -23,7 +27,7 @@ final class PostCodeResource extends Resource
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $navigationLabel = 'Irányítószámok';
 
@@ -31,12 +35,14 @@ final class PostCodeResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Irányítószámok';
 
-    protected static ?string $navigationGroup = 'Rendszer';
+    protected static string|UnitEnum|null $navigationGroup = 'Rendszer';
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('iranyitoszam')
                     ->label('Irányítószám')
                     ->required()
@@ -52,9 +58,11 @@ final class PostCodeResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('iranyitoszam')
                     ->label('Irányítószám')
@@ -79,16 +87,17 @@ final class PostCodeResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -96,6 +105,7 @@ final class PostCodeResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

@@ -15,6 +15,13 @@ final class LanguageController extends Controller
      */
     public function switch(Request $request, string $locale): RedirectResponse
     {
+        if ($request->routeIs('en.properties.show', 'en.properties.show-for-sale', 'en.property.pdf')) {
+            App::setLocale('en');
+            Session::put('locale', 'en');
+
+            return back();
+        }
+
         App::setLocale($locale);
         session()->put('locale', $locale);
 

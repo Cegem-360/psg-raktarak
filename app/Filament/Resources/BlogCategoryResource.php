@@ -9,30 +9,34 @@ use App\Filament\Resources\BlogCategoryResource\Pages\EditBlogCategory;
 use App\Filament\Resources\BlogCategoryResource\Pages\ListBlogCategories;
 use App\Filament\Resources\BlogCategoryResource\RelationManagers\BlogPostsRelationManager;
 use App\Models\BlogCategory;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\ColorPicker;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Override;
+use UnitEnum;
 
 final class BlogCategoryResource extends Resource
 {
     protected static ?string $model = BlogCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTag;
 
     protected static ?string $navigationLabel = 'Blog Kategóriák';
 
@@ -40,14 +44,16 @@ final class BlogCategoryResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Blog Kategóriák';
 
-    protected static ?string $navigationGroup = 'Blog';
+    protected static string|UnitEnum|null $navigationGroup = 'Blog';
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Section::make('Alapadatok')
                     ->schema([
                         TextInput::make('name')
@@ -85,9 +91,11 @@ final class BlogCategoryResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('name')
                     ->label('Név')
@@ -112,8 +120,8 @@ final class BlogCategoryResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktív')
                     ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseIcon(Heroicon::OutlinedXCircle)
                     ->trueColor('success')
                     ->falseColor('danger'),
 
@@ -130,11 +138,11 @@ final class BlogCategoryResource extends Resource
                     ->trueLabel('Aktív')
                     ->falseLabel('Inaktív'),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
@@ -142,6 +150,7 @@ final class BlogCategoryResource extends Resource
             ->defaultSort('name');
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -149,6 +158,7 @@ final class BlogCategoryResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

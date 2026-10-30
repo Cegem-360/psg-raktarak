@@ -8,26 +8,30 @@ use App\Filament\Resources\ReferenceResource\Pages\CreateReference;
 use App\Filament\Resources\ReferenceResource\Pages\EditReference;
 use App\Filament\Resources\ReferenceResource\Pages\ListReferences;
 use App\Models\Reference;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class ReferenceResource extends Resource
 {
     protected static ?string $model = Reference::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-star';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
     protected static ?string $navigationLabel = 'Referenciák';
 
@@ -35,14 +39,16 @@ final class ReferenceResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Referenciák';
 
-    protected static ?string $navigationGroup = 'Referenciák';
+    protected static string|UnitEnum|null $navigationGroup = 'Referenciák';
 
     protected static ?int $navigationSort = 4;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -63,9 +69,11 @@ final class ReferenceResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 ImageColumn::make('image')
                     ->label('Kép')
@@ -84,8 +92,8 @@ final class ReferenceResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktív')
                     ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseIcon(Heroicon::OutlinedXCircle)
                     ->trueColor('success')
                     ->falseColor('danger'),
                 TextColumn::make('created_at')
@@ -106,13 +114,13 @@ final class ReferenceResource extends Resource
                     ->trueLabel('Csak aktív')
                     ->falseLabel('Csak inaktív'),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()
                     ->label('Szerkesztés'),
                 DeleteAction::make()
                     ->label('Törlés'),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->label('Törlés'),
@@ -123,6 +131,7 @@ final class ReferenceResource extends Resource
             ->paginationPageOptions([10, 25, 50]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -130,6 +139,7 @@ final class ReferenceResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

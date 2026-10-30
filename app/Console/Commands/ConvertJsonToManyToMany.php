@@ -9,25 +9,15 @@ use App\Models\Property;
 use App\Models\Service;
 use App\Models\Tag;
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
+#[Description('Convert JSON stored tags, services, and categories to many-to-many relationships')]
+#[Signature('properties:convert-json-relations {--dry-run : Run without making changes}')]
 final class ConvertJsonToManyToMany extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'properties:convert-json-relations {--dry-run : Run without making changes}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Convert JSON stored tags, services, and categories to many-to-many relationships';
-
     /**
      * Execute the console command.
      */
@@ -44,7 +34,7 @@ final class ConvertJsonToManyToMany extends Command
         DB::beginTransaction();
 
         try {
-            $properties = Property::whereNotNull('tags')
+            $properties = Property::query()->whereNotNull('tags')
                 ->orWhereNotNull('services')
                /*  ->orWhereNotNull('categories') */
                 ->get();
@@ -109,7 +99,7 @@ final class ConvertJsonToManyToMany extends Command
                 continue;
             }
 
-            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $tag = Tag::query()->firstOrCreate(['name' => $tagName]);
             $tagIds[] = $tag->id;
 
             if (! $dryRun) {
@@ -133,7 +123,7 @@ final class ConvertJsonToManyToMany extends Command
                 continue;
             }
 
-            $service = Service::firstOrCreate(['name' => $serviceName]);
+            $service = Service::query()->firstOrCreate(['name' => $serviceName]);
             $serviceIds[] = $service->id;
 
             if (! $dryRun) {
@@ -157,7 +147,7 @@ final class ConvertJsonToManyToMany extends Command
                 continue;
             }
 
-            $category = Category::firstOrCreate(['name' => $categoryName]);
+            $category = Category::query()->firstOrCreate(['name' => $categoryName]);
             $categoryIds[] = $category->id;
 
             if (! $dryRun) {

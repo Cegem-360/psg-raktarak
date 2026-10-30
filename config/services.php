@@ -50,4 +50,12 @@ return [
         'map_id' => env('GOOGLE_MAPS_MAP_ID', ''),
     ],
 
+    'google_tag_manager' => [
+        'id' => env('GOOGLE_TAG_ID', ''),
+    ],
+
+    'browsershot' => [
+        'not_isolated' => env('NOTISOLATED', false),
+    ],
+
 ];

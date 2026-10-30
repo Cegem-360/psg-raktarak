@@ -19,8 +19,8 @@ final class PropertyController extends Controller
 
         // Filter by districts (multiple)
         if (request('districts')) {
-            $districts = explode(',', request('districts'));
-            $districts = array_map('trim', $districts); // Remove any extra whitespace
+            $districts = explode(',', (string) request('districts'));
+            $districts = array_map(trim(...), $districts); // Remove any extra whitespace
             $districts = array_filter($districts); // Remove empty values
 
             if ($districts !== []) {
@@ -81,7 +81,7 @@ final class PropertyController extends Controller
     {
 
         // Apply the appropriate scope based on property type
-        $similarPropertiesQuery = Property::where('id', '!=', $property->id)
+        $similarPropertiesQuery = Property::query()->where('id', '!=', $property->id)
             ->whereDistrict($property->district)
             ->active();
 
@@ -103,7 +103,7 @@ final class PropertyController extends Controller
             $additionalCount = 3 - $similarProperties->count();
             $excludeIds = $similarProperties->pluck('id')->push($property->id)->toArray();
 
-            $additionalQuery = Property::whereNotIn('id', $excludeIds)
+            $additionalQuery = Property::query()->whereNotIn('id', $excludeIds)
                 ->active();
 
             // Apply the same scope for additional properties
@@ -134,7 +134,7 @@ final class PropertyController extends Controller
     {
         $searchTerm = request('q', '');
 
-        if (mb_strlen($searchTerm) < 2) {
+        if (mb_strlen((string) $searchTerm) < 2) {
             return response()->json([]);
         }
 

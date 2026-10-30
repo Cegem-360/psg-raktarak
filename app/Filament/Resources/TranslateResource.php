@@ -9,22 +9,26 @@ use App\Filament\Resources\TranslateResource\Pages\EditTranslate;
 use App\Filament\Resources\TranslateResource\Pages\ListTranslates;
 use App\Filament\Resources\TranslateResource\Pages\ViewTranslate;
 use App\Models\Translate;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class TranslateResource extends Resource
 {
     protected static ?string $model = Translate::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $navigationLabel = 'Fordítások';
 
@@ -32,12 +36,14 @@ final class TranslateResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Fordítások';
 
-    protected static ?string $navigationGroup = 'Fordítások';
+    protected static string|UnitEnum|null $navigationGroup = 'Fordítások';
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -51,9 +57,11 @@ final class TranslateResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
@@ -68,17 +76,18 @@ final class TranslateResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -86,6 +95,7 @@ final class TranslateResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

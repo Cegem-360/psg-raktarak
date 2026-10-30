@@ -68,7 +68,10 @@ final class ContactController extends Controller
                     ->to(config('mail.admin_address'))
                     ->subject('Új kapcsolatfelvételi üzenet: '.$validated['contact_subject'])
                     ->replyTo($validated['email'], $validated['name']);
-                $message->to('richard.fekete@psg-raktarak.hu')
+            });
+            Mail::send('emails.contact', $validated, function ($message) use ($validated): void {
+                $message->from(config('mail.notification_from.address'), config('mail.notification_from.name'))
+                    ->to('richard.fekete@psg-raktarak.hu')
                     ->subject('Új kapcsolatfelvételi üzenet: '.$validated['contact_subject'])
                     ->replyTo($validated['email'], $validated['name']);
             });

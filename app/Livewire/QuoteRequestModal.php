@@ -90,7 +90,7 @@ final class QuoteRequestModal extends Component
 
         try {
             // Create quote request
-            $quoteRequest = QuoteRequest::create([
+            $quoteRequest = QuoteRequest::query()->create([
                 'name' => $this->name,
                 'phone' => $this->phone,
                 'email' => $this->email,
@@ -114,7 +114,18 @@ final class QuoteRequestModal extends Component
                     ->to(config('mail.admin_address'))
                     ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
                     ->replyTo($this->email, $this->name);
-                $message->to('richard.fekete@psg-raktarak.hu')
+            });
+            Mail::send('emails.quote-request', [
+                'name' => $this->name,
+                'phone' => $this->phone,
+                'email' => $this->email,
+                'company' => $this->company,
+                'subject' => $this->subject,
+                'userMessage' => $this->message,
+                'quoteId' => $quoteRequest->id,
+            ], function ($message): void {
+                $message->from(config('mail.notification_from.address'), config('mail.notification_from.name'))
+                    ->to('richard.fekete@psg-raktarak.hu')
                     ->subject($this->subject ?: 'Új árajánlat kérés érkezett')
                     ->replyTo($this->email, $this->name);
             });

@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
+#[Fillable(['name'])]
 final class Tag extends Model
 {
-    protected $fillable = ['name'];
-
     /**
      * Many-to-many relationship with Properties
+     *
+     * @return BelongsToMany<Property, $this, Pivot>
      */
     public function properties(): BelongsToMany
     {

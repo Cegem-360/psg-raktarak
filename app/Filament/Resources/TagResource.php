@@ -8,20 +8,24 @@ use App\Filament\Resources\TagResource\Pages\CreateTag;
 use App\Filament\Resources\TagResource\Pages\EditTag;
 use App\Filament\Resources\TagResource\Pages\ListTags;
 use App\Models\Tag;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class TagResource extends Resource
 {
     protected static ?string $model = Tag::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $navigationLabel = 'Müszaki paraméterek';
 
@@ -29,12 +33,14 @@ final class TagResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Müszaki paraméterek';
 
-    protected static ?string $navigationGroup = 'Tartalomkezelés';
+    protected static string|UnitEnum|null $navigationGroup = 'Tartalomkezelés';
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 TextInput::make('name')
                     ->label('Név')
                     ->required()
@@ -42,9 +48,11 @@ final class TagResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('name')
                     ->label('Név')
@@ -57,10 +65,10 @@ final class TagResource extends Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
@@ -68,6 +76,7 @@ final class TagResource extends Resource
             ->defaultSort('name', 'asc');
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -75,6 +84,7 @@ final class TagResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

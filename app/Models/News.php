@@ -4,44 +4,52 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Override;
 
+#[Fillable([
+    'title',
+    'slug',
+    'source',
+    'excerpt',
+    'content',
+    'featured_image',
+    'news_category_id',
+    'user_id',
+    'is_published',
+    'published_at',
+    'meta_data',
+    'views_count',
+    'priority',
+    'is_breaking',
+    'created_at',
+    'updated_at',
+])]
+#[Table(name: 'news')]
 final class News extends Model
 {
     use HasFactory;
 
-    protected $table = 'news';
-
-    protected $fillable = [
-        'title',
-        'slug',
-        'source',
-        'excerpt',
-        'content',
-        'featured_image',
-        'news_category_id',
-        'user_id',
-        'is_published',
-        'published_at',
-        'meta_data',
-        'views_count',
-        'priority',
-        'is_breaking',
-        'created_at',
-        'updated_at',
-    ];
-
     // Relationships
+    /**
+     * @return BelongsTo<NewsCategory, $this>
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(NewsCategory::class, 'news_category_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -79,6 +87,7 @@ final class News extends Model
         $this->update(['is_breaking' => false]);
     }
 
+    #[Override]
     protected static function boot(): void
     {
         parent::boot();
@@ -108,48 +117,90 @@ final class News extends Model
         });
     }
 
-    protected function scopeDraft(Builder $query): Builder
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function draft(Builder $query): Builder
     {
         return $query->where('is_published', false);
     }
 
-    protected function scopeBreaking(Builder $query): Builder
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function breaking(Builder $query): Builder
     {
         return $query->where('is_breaking', true);
     }
 
-    // Accessors
-    protected function getReadingTimeAttribute(): string
+    protected function readingTime(): Attribute
     {
-        $wordCount = str_word_count(strip_tags($this->content));
-        $minutes = ceil($wordCount / 200); // Average reading speed
+        return Attribute::make(get: function (): string {
+            $wordCount = str_word_count(strip_tags($this->content));
+            $minutes = ceil($wordCount / 200);
 
-        return $minutes.' perc olvasás';
+            // Average reading speed
+            return $minutes.' perc olvasás';
+        });
     }
 
-    protected function getStatusAttribute(): string
+    protected function status(): Attribute
     {
-        if ($this->is_published && $this->published_at && $this->published_at <= now()) {
-            return 'published';
-        }
+        return Attribute::make(get: function (): string {
+            if ($this->is_published && $this->published_at && $this->published_at <= now()) {
+                return 'published';
+            }
 
-        if ($this->is_published && $this->published_at && $this->published_at > now()) {
-            return 'scheduled';
-        }
+            if ($this->is_published && $this->published_at && $this->published_at > now()) {
+                return 'scheduled';
+            }
 
-        return 'draft';
+            return 'draft';
+        });
     }
 
-    protected function getPriorityLabelAttribute(): string
+    protected function priorityLabel(): Attribute
     {
-        return match ($this->priority) {
+        return Attribute::make(get: fn (): string => match ($this->priority) {
             1 => 'Alacsony',
             2 => 'Normál',
             3 => 'Magas',
             4 => 'Sürgős',
             5 => 'Kritikus',
             default => 'Normál',
-        };
+        });
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function byPriority(Builder $query): void
+    {
+        $query->orderBy('priority', 'desc')
+            ->latest('published_at');
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function byCategory(Builder $query, int $categoryId): void
+    {
+        $query->where('news_category_id', $categoryId);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    #[Scope]
+    protected function published(Builder $query): void
+    {
+        $query->where('is_published', true);
     }
 
     protected function casts(): array
@@ -165,24 +216,5 @@ final class News extends Model
             'updated_at' => 'date',
 
         ];
-    }
-
-    #[Scope]
-    protected function byPriority(Builder $query): void
-    {
-        $query->orderBy('priority', 'desc')
-            ->latest('published_at');
-    }
-
-    #[Scope]
-    protected function byCategory(Builder $query, int $categoryId): void
-    {
-        $query->where('news_category_id', $categoryId);
-    }
-
-    #[Scope]
-    protected function published(Builder $query): void
-    {
-        $query->where('is_published', true);
     }
 }

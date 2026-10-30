@@ -8,28 +8,30 @@ use App\Filament\Resources\BlogPostResource\Pages\CreateBlogPost;
 use App\Filament\Resources\BlogPostResource\Pages\EditBlogPost;
 use App\Filament\Resources\BlogPostResource\Pages\ListBlogPosts;
 use App\Models\BlogPost;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -39,12 +41,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Override;
+use UnitEnum;
 
 final class BlogPostResource extends Resource
 {
     protected static ?string $model = BlogPost::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     protected static ?string $navigationLabel = 'Blog Bejegyzések';
 
@@ -52,14 +56,16 @@ final class BlogPostResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Blog Bejegyzések';
 
-    protected static ?string $navigationGroup = 'Blog';
+    protected static string|UnitEnum|null $navigationGroup = 'Blog';
 
     protected static bool $shouldRegisterNavigation = false;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Group::make()
                     ->schema([
                         Section::make('Alapadatok')
@@ -91,6 +97,10 @@ final class BlogPostResource extends Resource
                                     ->label('Tartalom')
                                     ->required()
                                     ->toolbarButtons([
+                                        'alignStart',
+                                        'alignCenter',
+                                        'alignEnd',
+                                        'alignJustify',
                                         'attachFiles',
                                         'blockquote',
                                         'bold',
@@ -184,9 +194,11 @@ final class BlogPostResource extends Resource
             ->columns(3);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 ImageColumn::make('featured_image')
                     ->label('Kép')
@@ -260,7 +272,7 @@ final class BlogPostResource extends Resource
 
                 Filter::make('status')
                     ->label('Státusz')
-                    ->form([
+                    ->schema([
                         Select::make('status')
                             ->options([
                                 'published' => 'Publikált',
@@ -269,27 +281,23 @@ final class BlogPostResource extends Resource
                             ])
                             ->placeholder('Válassz státuszt'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query->when($data['status'], function (Builder $query, string $status): Builder {
-                            return match ($status) {
-                                'published' => $query->where('is_published', true)
-                                    ->whereNotNull('published_at')
-                                    ->where('published_at', '<=', now()),
-                                'scheduled' => $query->where('is_published', true)
-                                    ->whereNotNull('published_at')
-                                    ->where('published_at', '>', now()),
-                                'draft' => $query->where('is_published', false),
-                                default => $query,
-                            };
-                        });
-                    }),
+                    ->query(fn (Builder $query, array $data): Builder => $query->when($data['status'], fn (Builder $query, string $status): Builder => match ($status) {
+                        'published' => $query->where('is_published', true)
+                            ->whereNotNull('published_at')
+                            ->where('published_at', '<=', now()),
+                        'scheduled' => $query->where('is_published', true)
+                            ->whereNotNull('published_at')
+                            ->where('published_at', '>', now()),
+                        'draft' => $query->where('is_published', false),
+                        default => $query,
+                    })),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
                 Action::make('toggle_publish')
                     ->label(fn (BlogPost $record): string => $record->is_published ? 'Visszavonás' : 'Publikálás')
-                    ->icon(fn (BlogPost $record): string => $record->is_published ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
+                    ->icon(fn (BlogPost $record): string => $record->is_published ? Heroicon::OutlinedEyeSlash : Heroicon::OutlinedEye)
                     ->color(fn (BlogPost $record): string => $record->is_published ? 'warning' : 'success')
                     ->action(function (BlogPost $record): void {
                         if ($record->is_published) {
@@ -301,12 +309,12 @@ final class BlogPostResource extends Resource
                     ->requiresConfirmation(),
                 DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     BulkAction::make('publish')
                         ->label('Publikálás')
-                        ->icon('heroicon-o-eye')
+                        ->icon(Heroicon::OutlinedEye)
                         ->color('success')
                         ->action(function (Collection $records): void {
                             $records->each->publish();
@@ -314,7 +322,7 @@ final class BlogPostResource extends Resource
                         ->requiresConfirmation(),
                     BulkAction::make('unpublish')
                         ->label('Visszavonás')
-                        ->icon('heroicon-o-eye-slash')
+                        ->icon(Heroicon::OutlinedEyeSlash)
                         ->color('warning')
                         ->action(function (Collection $records): void {
                             $records->each->unpublish();
@@ -325,6 +333,7 @@ final class BlogPostResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -332,6 +341,7 @@ final class BlogPostResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

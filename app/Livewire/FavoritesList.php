@@ -41,27 +41,6 @@ final class FavoritesList extends Component
         $this->dispatch('openSendFavoritesModal')->to('favorites-send-modal');
     }
 
-    public function downloadExcel(): StreamedResponse
-    {
-        $this->loadFavorites();
-
-        if ($this->favoriteCount === 0) {
-            $this->dispatch('notify', message: 'Nincsenek kedvenc ingatlanok.');
-
-            return response()->streamDownload(function (): void {}, 'empty.xlsx');
-        }
-
-        $service = resolve(FavoritesExcelExportService::class);
-        $tempFile = $service->generate(collect($this->favoriteProperties));
-
-        return response()->streamDownload(function () use ($tempFile): void {
-            echo file_get_contents($tempFile);
-            File::delete($tempFile);
-        }, 'P.S.G. RAKTÁR ajánlatok.xlsx', [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        ]);
-    }
-
     public function render(): Factory|View
     {
         return view('livewire.favorites-list', [
@@ -76,7 +55,7 @@ final class FavoritesList extends Component
         $this->favoriteCount = count($favorites);
 
         if ($favorites !== []) {
-            $this->favoriteProperties = Property::whereIn('id', $favorites)
+            $this->favoriteProperties = Property::query()->whereIn('id', $favorites)
                 ->active()
                 ->get();
         } else {
@@ -91,7 +70,7 @@ final class FavoritesList extends Component
             $decoded = json_decode($favorites, true);
 
             return is_array($decoded) ? $decoded : [];
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return [];
         }
     }

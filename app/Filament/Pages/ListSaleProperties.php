@@ -6,25 +6,28 @@ namespace App\Filament\Pages;
 
 use App\Filament\Resources\PropertyResource;
 use App\Models\Property;
+use BackedEnum;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
 use Filament\Pages\Page;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\EditAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\URL;
+use UnitEnum;
 
 final class ListSaleProperties extends Page implements HasTable
 {
     use InteractsWithTable;
 
-    protected static string $view = 'filament.pages.properties.sale';
+    protected string $view = 'filament.pages.properties.sale';
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
-    protected static ?string $navigationGroup = 'Ingatlanok';
+    protected static string|UnitEnum|null $navigationGroup = 'Ingatlanok';
 
     protected static ?string $navigationLabel = 'Eladó raktárak';
 
@@ -33,10 +36,7 @@ final class ListSaleProperties extends Page implements HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(function () {
-
-                return Property::query()->sale();
-            })
+            ->query(fn () => Property::query()->sale())
 
             ->columns([
                 TextColumn::make('status')
@@ -69,15 +69,15 @@ final class ListSaleProperties extends Page implements HasTable
             ->headerActions([
                 Action::make('create')
                     ->label('Új ingatlan hozzáadása')
-                    ->icon('heroicon-o-plus')
+                    ->icon(Heroicon::OutlinedPlus)
                     ->color('primary')
                     ->url(PropertyResource::getUrl('create')),
             ])
-            ->actions([
+            ->recordActions([
                 EditAction::make()->url(fn (Property $record): string => PropertyResource::getUrl('edit', ['record' => $record]), shouldOpenInNewTab: true),
                 Action::make('generate_pdf')
                     ->label('PDF')
-                    ->icon('heroicon-o-document-arrow-down')
+                    ->icon(Heroicon::OutlinedDocumentArrowDown)
                     ->color('success')
                     ->url(fn (Property $record) => URL::temporarySignedRoute(
                         'property.pdf',
@@ -89,6 +89,6 @@ final class ListSaleProperties extends Page implements HasTable
                     ->modalHeading('PDF Generálás')
                     ->modalDescription('Biztosan szeretnéd generálni az ingatlan PDF adatlapját?')
                     ->modalSubmitActionLabel('PDF Megnyitás'),
-            ], position: ActionsPosition::BeforeCells);
+            ], position: RecordActionsPosition::BeforeCells);
     }
 }

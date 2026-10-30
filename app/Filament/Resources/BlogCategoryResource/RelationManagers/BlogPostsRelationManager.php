@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\BlogCategoryResource\RelationManagers;
 
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Override;
 
 final class BlogPostsRelationManager extends RelationManager
 {
@@ -19,10 +21,11 @@ final class BlogPostsRelationManager extends RelationManager
 
     protected static ?string $title = 'Blog Bejegyzések';
 
-    public function form(Form $form): Form
+    #[Override]
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('title')
                     ->label('Cím')
                     ->required()
@@ -30,6 +33,7 @@ final class BlogPostsRelationManager extends RelationManager
             ]);
     }
 
+    #[Override]
     public function table(Table $table): Table
     {
         return $table
@@ -47,8 +51,8 @@ final class BlogPostsRelationManager extends RelationManager
                 IconColumn::make('is_published')
                     ->label('Publikált')
                     ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseIcon(Heroicon::OutlinedXCircle)
                     ->trueColor('success')
                     ->falseColor('warning'),
 
@@ -72,12 +76,12 @@ final class BlogPostsRelationManager extends RelationManager
             ->headerActions([
                 // A bejegyzéseket a BlogPostResource-ban hozzuk létre
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make()
                     ->url(fn ($record): string => route('filament.admin.resources.blog-posts.edit', $record))
                     ->openUrlInNewTab(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 // Bulk műveletek
             ]);
     }

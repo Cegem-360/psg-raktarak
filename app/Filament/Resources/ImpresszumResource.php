@@ -8,26 +8,30 @@ use App\Filament\Resources\ImpresszumResource\Pages\CreateImpresszum;
 use App\Filament\Resources\ImpresszumResource\Pages\EditImpresszum;
 use App\Filament\Resources\ImpresszumResource\Pages\ListImpresszums;
 use App\Models\Impresszum;
+use BackedEnum;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Override;
+use UnitEnum;
 
 final class ImpresszumResource extends Resource
 {
     protected static ?string $model = Impresszum::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
     protected static ?string $navigationLabel = 'Impresszum';
 
@@ -35,14 +39,16 @@ final class ImpresszumResource extends Resource
 
     protected static ?string $pluralModelLabel = 'impresszumok';
 
-    protected static ?string $navigationGroup = 'Tartalom';
+    protected static string|UnitEnum|null $navigationGroup = 'Tartalom';
 
     protected static ?int $navigationSort = 6;
 
-    public static function form(Form $form): Form
+    #[Override]
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->columns(1)
+            ->components([
                 Section::make('Impresszum tartalma')
                     ->schema([
                         Select::make('language')
@@ -74,9 +80,11 @@ final class ImpresszumResource extends Resource
             ]);
     }
 
+    #[Override]
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderableColumns()
             ->columns([
                 TextColumn::make('language')
                     ->label('Nyelv')
@@ -101,8 +109,8 @@ final class ImpresszumResource extends Resource
                 IconColumn::make('is_active')
                     ->label('Aktív')
                     ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->trueIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseIcon(Heroicon::OutlinedXCircle)
                     ->trueColor('success')
                     ->falseColor('gray'),
 
@@ -126,7 +134,7 @@ final class ImpresszumResource extends Resource
                         'en' => 'English',
                     ]),
             ])
-            ->actions([
+            ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
                 DeleteAction::make(),
@@ -134,6 +142,7 @@ final class ImpresszumResource extends Resource
             ->defaultSort('language', 'asc');
     }
 
+    #[Override]
     public static function getRelations(): array
     {
         return [
@@ -141,6 +150,7 @@ final class ImpresszumResource extends Resource
         ];
     }
 
+    #[Override]
     public static function getPages(): array
     {
         return [

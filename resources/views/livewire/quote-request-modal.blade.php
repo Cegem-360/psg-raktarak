@@ -53,7 +53,7 @@
                 });">
                 <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <!-- Background overlay -->
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeModal">
+                    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" wire:click="closeModal">
                     </div>
 
                     <!-- Modal panel -->
@@ -189,7 +189,7 @@
                                     <div class="flex items-start">
                                         <div class="flex items-center h-5">
                                             <input id="privacy" type="checkbox" wire:model="privacy"
-                                                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 @error('privacy') border-red-500 @enderror">
+                                                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 checked:bg-blue-600 checked:border-blue-600 focus:ring-3 focus:ring-blue-300 @error('privacy') border-red-500 @enderror">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="privacy" class="font-light text-gray-500">
