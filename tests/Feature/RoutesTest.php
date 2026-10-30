@@ -13,8 +13,8 @@ it('redirects the old and helper addresses', function (string $uri, string $targ
     /** @var TestCase $this */
     $this->get($uri)->assertRedirect($target)->assertStatus($status);
 })->with([
-    'old for-sale category' => ['/budapest/elado-irodak', '/elado-raktarak', 301],
-    'old for-sale category, English' => ['/budapest-en/elado-irodak', '/office-buildings-for-sale', 301],
+    'old for-sale category' => ['/budapest/elado-raktarak', '/elado-raktarak', 301],
+    'old for-sale category, English' => ['/budapest-en/elado-raktarak', '/office-buildings-for-sale', 301],
     'login' => ['/login', '/admin/login', 302],
     'blog without a list page' => ['/news-blog', '/', 302],
 ]);

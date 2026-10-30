@@ -40,8 +40,8 @@ Route::livewire('/adatvedelmi-nyilatkozat', Pages\PrivacyPolicy::class)->name('p
 Route::livewire('/kapcsolat', Pages\Contact::class)->name('kapcsolat');
 Route::livewire('/impresszum', Pages\Impressum::class)->name('impressum');
 
-// Office categories (the old "for sale" category is the sale list itself)
-Route::permanentRedirect('/budapest/elado-irodak', '/elado-raktarak');
+// Categories (the old "for sale" category is the sale list itself)
+Route::permanentRedirect('/budapest/elado-raktarak', '/elado-raktarak');
 Route::livewire('/budapest/{category:slug}', Pages\OfficeCategory::class)->name('budapest.category');
 
 // Properties
@@ -77,7 +77,7 @@ Route::name('en.')->group(function (): void {
     Route::livewire('/impressum', Pages\Impressum::class)->name('impressum');
 
     // Office categories
-    Route::permanentRedirect('/budapest-en/elado-irodak', '/office-buildings-for-sale');
+    Route::permanentRedirect('/budapest-en/elado-raktarak', '/office-buildings-for-sale');
     Route::livewire('/budapest-en/{category:slug}', Pages\OfficeCategory::class)->name('budapest.category');
 
     // Properties
