@@ -46,10 +46,10 @@ it('shows a published news article by its slug and hides the rest', function ():
 
 it('shows similar properties of the same type on a property page', function (): void {
     /** @var TestCase $this */
-    $property = Property::factory()->create(['district' => 'V']);
-    $sameDistrict = Property::factory()->create(['district' => 'V']);
-    $otherDistrict = Property::factory()->create(['district' => 'XIII']);
-    Property::factory()->forSale()->create(['district' => 'V']);
+    $property = Property::factory()->create(['postal_code' => '1051', 'district' => 'V']);
+    $sameDistrict = Property::factory()->create(['postal_code' => '1052', 'district' => 'V']);
+    $otherDistrict = Property::factory()->create(['postal_code' => '1131', 'district' => 'XIII']);
+    Property::factory()->forSale()->create(['postal_code' => '1053', 'district' => 'V']);
 
     $similar = Livewire::test(Pages\PropertyShow::class, ['property' => $property])->instance()->similarProperties;
 

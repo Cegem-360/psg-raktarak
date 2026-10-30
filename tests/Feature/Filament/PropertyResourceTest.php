@@ -117,3 +117,8 @@ it('summarises rent and sale properties differently on their cards', function ()
     expect($render($rent))->toContain($rent->address())->toContain('12 - 15')->toContain('5')
         ->and($render($sale))->toContain('1200 m2')->toContain('990000000');
 });
+
+it('fills in the district from a Budapest postal code', function (): void {
+    expect(Property::factory()->create(['postal_code' => '1134', 'city' => 'Budapest', 'district' => null])->district)->toBe('XIII')
+        ->and(Property::factory()->create(['postal_code' => '2040', 'city' => 'Budaörs', 'district' => null])->district)->toBeNull();
+});
