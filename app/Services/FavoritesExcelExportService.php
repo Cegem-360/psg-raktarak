@@ -154,14 +154,14 @@ final class FavoritesExcelExportService
     private function formatAddress(mixed $property): string
     {
         $parts = array_filter([
-            $property->cim_irsz ?? '',
-            $property->cim_varos ?? '',
+            $property->postal_code ?? '',
+            $property->city ?? '',
         ]);
 
         $streetParts = array_filter([
-            $property->cim_utca ?? '',
-            $property->cim_utca_addons ?? '',
-            $property->cim_hazszam ?? '',
+            $property->street ?? '',
+            $property->street_type ?? '',
+            $property->house_number ?? '',
         ]);
 
         $city = implode(' ', $parts);
@@ -176,9 +176,9 @@ final class FavoritesExcelExportService
 
     private function formatRentalFee(mixed $property): string
     {
-        $min = $property->min_berleti_dij ?? '';
-        $max = $property->max_berleti_dij ?? '';
-        $addons = $property->min_berleti_dij_addons ?? '';
+        $min = $property->min_rent ?? '';
+        $max = $property->max_rent ?? '';
+        $addons = $property->min_rent_unit ?? '';
 
         if ($min === '' && $max === '') {
             return '';
@@ -193,8 +193,8 @@ final class FavoritesExcelExportService
 
     private function formatOperatingFee(mixed $property): string
     {
-        $fee = $property->uzemeletetesi_dij ?? '';
-        $addons = $property->uzemeletetesi_dij_addons ?? '';
+        $fee = $property->operating_fee ?? '';
+        $addons = $property->operating_fee_unit ?? '';
 
         if ($fee === '') {
             return '';
@@ -205,8 +205,8 @@ final class FavoritesExcelExportService
 
     private function formatCommonAreaRatio(mixed $property): string
     {
-        $ratio = $property->kozos_teruleti_arany ?? '';
-        $addons = $property->kozos_teruleti_arany_addons ?? '';
+        $ratio = $property->common_area_ratio ?? '';
+        $addons = $property->common_area_ratio_unit ?? '';
 
         if ($ratio === '') {
             return '';
@@ -217,9 +217,9 @@ final class FavoritesExcelExportService
 
     private function formatParkingFee(mixed $property): string
     {
-        $min = $property->min_parkolas_dija ?? '';
-        $max = $property->max_parkolas_dija ?? '';
-        $addons = $property->min_parkolas_dija_addons ?? '';
+        $min = $property->min_parking_fee ?? '';
+        $max = $property->max_parking_fee ?? '';
+        $addons = $property->min_parking_fee_unit ?? '';
 
         if ($min === '' && $max === '') {
             return '';
@@ -234,8 +234,8 @@ final class FavoritesExcelExportService
 
     private function formatMinRentalPeriod(mixed $property): string
     {
-        $period = $property->min_berleti_idoszak ?? '';
-        $addons = $property->min_berleti_idoszak_addons ?? '';
+        $period = $property->min_lease_term ?? '';
+        $addons = $property->min_lease_term_unit ?? '';
 
         if ($period === '') {
             return '';

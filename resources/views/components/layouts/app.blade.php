@@ -1,3 +1,9 @@
+@props(['breadcrumbs' => []])
+@inject('structuredData', 'App\\Services\\StructuredDataService')
+@inject('localizedRoutes', 'App\\Services\\LocalizedRoutes')
+@php
+    $alternateUrls = $localizedRoutes->alternates(request()->route());
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -12,23 +18,21 @@
         @php
             $metaSlotHtml = isset($meta) ? (string) $meta : '';
             $metaSlotHas = fn (string $needle): bool => str_contains($metaSlotHtml, $needle);
+
+            $defaultDescription = __('Warehouses for rent in Budapest! Rent from traditional and serviced warehouses on favourable lease terms, with an overview of the entire warehouse market database. Offers sent the same day.');
+            $pageTitleText = Str::squish(isset($title) ? strip_tags((string) $title) : '') ?: __('page.title.default');
+            $pageDescriptionText = Str::squish(isset($metaDescription) ? strip_tags((string) $metaDescription) : '');
+            if ($pageDescriptionText === '' && preg_match('/name="description"\s+content="([^"]*)"/', $metaSlotHtml, $slotDescription)) {
+                $pageDescriptionText = html_entity_decode($slotDescription[1]);
+            }
+            $pageDescriptionText = $pageDescriptionText ?: $defaultDescription;
         @endphp
 
-        <meta name="author" content="{{ $metaAuthor ?? 'Cegem360 Kft.' }}">
-        @isset($title)
-            <title>{{ $title }}</title>
-        @else
-            <title>{{ __('page.title.default') }}</title>
-        @endisset
-        <meta name="author" content="{{ $metaAuthor ?? 'Cegem360 Kft.' }}">
+        <title>{{ $pageTitleText }}</title>
+        <meta name="author" content="{{ $metaAuthor ?? 'Property Solution Group Kft.' }}">
 
         @unless ($metaSlotHas('name="description"'))
-            @isset($metaDescription)
-                <meta name="description" content="{{ $metaDescription }}">
-            @else
-                <meta name="description"
-                    content="Kiadó irodák Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes irodapiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó irodák közül. Ajánlatküldés még a mai napon. ">
-            @endisset
+            <meta name="description" content="{{ $pageDescriptionText }}">
         @endunless
 
         @unless ($metaSlotHas('name="keywords"'))
@@ -36,44 +40,55 @@
                 <meta name="keywords" content="{{ $metaKeywords }}">
             @else
                 <meta name="keywords"
-                    content="kiadó irodaházak,bérbeadó irodák,azonnali irodák,kiadó iroda,eladó irodaházak,belvárosi irodák,loft iroda,kiadó iroda Budán,kiadó iroda Pesten,A-kategóriás irodaházak,zöld irodák,irodaházak listája,Bérlő képviselet,">
+                    content="{{ __('warehouses for rent,warehouses for lease,logistics warehouses,warehouse for rent,warehouses for sale,warehouse for rent in Buda,warehouse for rent in Pest,warehouses in the countryside,list of warehouses,Tenant representation,') }}">
             @endisset
         @endunless
-        
-@unless ($metaSlotHas('property="og:title"'))
-    <meta property="og:title"
-                content="{{ $metaOgTitle ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali raktár megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
-@endunless
+
+        @unless ($metaSlotHas('property="og:title"'))
+            <meta property="og:title" content="{{ $metaOgTitle ?? $pageTitleText }}">
+        @endunless
         @unless ($metaSlotHas('property="og:type"'))
             <meta property="og:type" content="{{ $metaOgType ?? 'website' }}">
         @endunless
         @unless ($metaSlotHas('property="og:url"'))
-            <meta property="og:url" content="{{ $metaOgUrl ?? Request::url() }}">
+            <meta property="og:url" content="{{ $metaOgUrl ?? Context::get('canonical', Request::url()) }}">
         @endunless
         @unless ($metaSlotHas('property="og:description"'))
-            <meta property="og:description" content="{{ $metaOgDescription ?? '' }}">
+            <meta property="og:description" content="{{ $metaOgDescription ?? $pageDescriptionText }}">
         @endunless
         <meta name="twitter:card" content="{{ $metaTwitterCard ?? 'summary' }}">
-        <meta name="twitter:url" content="{{ $metaTwitterUrl ?? Request::url() }}">
-        <meta name="twitter:title"
-            content="{{ $metaTwitterTitle ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
-        <meta name="twitter:description"
-            content="{{ $metaTwitterDescription ?? 'Kiadó raktárak Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó raktárak közül. Ajánlatküldés még a mai napon. ' }}">
-        <meta itemprop="name"
-            content="{{ $metaItempropName ?? 'PSG-RAKTÁRAK |  Kiadó raktárak, eladó raktárak, szolgáltatott azonnali iroda megoldások, bérbeadó loft és zöld irodaházak Budapesten. Bérlő képviselet! | ' }}">
-        <meta itemprop="description"
-            content="{{ $metaItempropDescription ?? 'Kiadó raktárak Budapesten! Kedvező bérleti konstrukciókkal bérelhet a teljes raktárpiaci adatbázis áttekintésével hagyományos és szolgáltatott kiadó raktárak közül. Ajánlatküldés még a mai napon. ' }}">
-        @unless ($metaSlotHas('rel="canonical"'))
-            <link rel="canonical" href="{{ $metaCanonical ?? Request::url() }}">
-        @endunless
+        <meta name="twitter:url" content="{{ $metaTwitterUrl ?? Context::get('canonical', Request::url()) }}">
+        <meta name="twitter:title" content="{{ $metaTwitterTitle ?? $pageTitleText }}">
+        <meta name="twitter:description" content="{{ $metaTwitterDescription ?? $pageDescriptionText }}">
+        <meta itemprop="name" content="{{ $metaItempropName ?? $pageTitleText }}">
+        <meta itemprop="description" content="{{ $metaItempropDescription ?? $pageDescriptionText }}">
+        @context('canonical')
+            <link rel="canonical" href="{{ $value }}">
+        @endcontext
+        @foreach ($alternateUrls as $alternateLocale => $alternateUrl)
+            <link rel="alternate" hreflang="{{ $alternateLocale }}" href="{{ $alternateUrl }}">
+        @endforeach
+        @isset($alternateUrls[App\Services\LocalizedRoutes::DEFAULT_LOCALE])
+            <link rel="alternate" hreflang="x-default" href="{{ $alternateUrls[App\Services\LocalizedRoutes::DEFAULT_LOCALE] }}">
+        @endisset
+        <meta property="og:locale" content="{{ app()->getLocale() === 'en' ? 'en_GB' : 'hu_HU' }}">
+        @foreach (array_keys($alternateUrls) as $alternateLocale)
+            @if ($alternateLocale !== app()->getLocale())
+                <meta property="og:locale:alternate" content="{{ $alternateLocale === 'en' ? 'en_GB' : 'hu_HU' }}">
+            @endif
+        @endforeach
         @unless ($metaSlotHas('name="robots"'))
-            <meta name="robots" content="{{ $metaRobots ?? 'index, follow' }}">
-        @endunless
-        @unless ($metaSlotHas('name="googlebot"'))
-            <meta name="googlebot" content="{{ $metaGooglebot ?? 'index, follow' }}">
+            <meta name="robots"
+                content="{{ $metaRobots ?? 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1' }}">
         @endunless
 
         {{ $meta ?? '' }}
+
+        @if (file_exists(public_path('llms.txt')))
+            <link rel="alternate" type="text/plain" href="/llms.txt">
+        @endif
+
+        {{ $structuredData->toScript($structuredData->siteGraph($breadcrumbs)) }}
 
         @include('googletagmanager::head')
 
@@ -116,7 +131,6 @@
         @filamentScripts
         @stack('scripts')
 
-        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     </body>
 
 </html>

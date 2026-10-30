@@ -42,18 +42,13 @@ final class ListSaleProperties extends Page implements HasTable
                 TextColumn::make('status')
                     ->label('Státusz')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'active' => 'success',
-                        'inactive' => 'danger',
-                        default => 'gray',
-                    })
                     ->searchable(),
                 TextColumn::make('title')
                     ->label('Cím')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('kodszam')
+                TextColumn::make('code')
                     ->label('Kódszám')
                     ->sortable()
                     ->searchable(),

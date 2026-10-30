@@ -1,354 +1,242 @@
-@use('App\Models\Translate')
-<x-layouts.app>
-    <x-slot name="title">
-        @if (app()->getLocale() === 'en' && $property->meta_title_en)
-            {{ $property->meta_title_en }}
-        @elseif ($property->meta_title)
-            {{ $property->meta_title }}
-        @endif
-    </x-slot>
+@inject('structuredData', 'App\Services\StructuredDataService')
+<x-slot name="title">
+    {{ $property->localized('meta_title', 'meta_title_en') ?: $property->title.' | PSG Raktárak' }}
+</x-slot>
 
-    <x-slot name="metaDescription">
-        @if (app()->getLocale() === 'en' && $property->meta_description_en)
-            {{ $property->meta_description_en }}
-        @elseif ($property->meta_description)
-            {{ $property->meta_description }}
-        @endif
-    </x-slot>
+<x-slot name="meta">
+    {{ $structuredData->toScript($structuredData->property($property, $property->url())) }}
+</x-slot>
 
-    <x-slot name="metaKeywords">
-        @if (app()->getLocale() === 'en' && $property->meta_keywords_en)
-            {{ $property->meta_keywords_en }}
-        @elseif ($property->meta_keywords)
-            {{ $property->meta_keywords }}
-        @endif
-    </x-slot>
-    @if ($property->status !== 'active')
-        <x-slot name="metaRobots">noindex, nofollow</x-slot>
-        <x-slot name="metaGooglebot">noindex, nofollow</x-slot>
-    @endif
-    <div class="relative bg-fixed bg-center bg-no-repeat bg-cover"
-        style="background-image: url({{ Vite::asset('resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="container relative z-10 pt-24 pb-20 mx-auto space-y-8">
-            <h2 class="mt-4 mb-16 text-5xl text-center font-font-bold drop-shadow text-logogray/80">
-                @if (app()->getLocale() === 'en')
-                    {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
-                @else
-                    {{ $property->title }}
-                @endif
-            </h2>
-            <div
-                class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
-                <div>
-                    <x-cards.ingatlan-gallery-carousel :images="collect($property->property_photos)" :title="$property->title" />
-                </div>
-                <div class="p-4">
+<x-slot name="metaDescription">
+    {{ $property->localized('meta_description', 'meta_description_en') ?: Str::limit(Str::squish(strip_tags((string) $property->localized('content', 'en_content'))), 160) }}
+</x-slot>
 
-                    <table class="w-full mt-4 table-auto">
-                        <tbody>
-                            @if ($property->elado_v_kiado === 'elado-raktar')
-                                @if ($property->cim_irsz || $property->cim_varos)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Address') }}:</td>
-                                        <td>{{ $property->cim_irsz }} {{ $property->cim_varos }},</td>
-                                    </tr>
-                                @endif
-                                @if ($property->total_area)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Total Area') }}:</td>
-                                        <td>{{ $property->total_area }}
-                                            {{ __($property->osszterulet_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->min_berleti_dij)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Price') }}:</td>
-                                        <td>{{ $property->min_berleti_dij }}
-                                            {{ __($property->min_berleti_dij_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->parkolas)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Parking') }}:</td>
-                                        <td>{{ __($property->parkolas) }}</td>
-                                    </tr>
-                                @endif
-                                @if ($property->kodszam)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Code') }}:</td>
-                                        <td>{{ $property->kodszam }}</td>
-                                    </tr>
-                                @endif
-                            @else
-                                {{-- Default fields for rental offices --}}
+<x-slot name="metaKeywords">
+    {{ $property->localized('meta_keywords', 'meta_keywords_en') }}
+</x-slot>
+
+@if (!$property->isActive())
+    <x-slot name="metaRobots">noindex, nofollow</x-slot>
+@endif
+
+<div>
+    <x-page-section spacing="space-y-8">
+        <x-slot:heading>{{ translate_value($property->title) }}</x-slot:heading>
+        <x-glass-panel class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <x-property.gallery-carousel :images="collect($property->property_photos)" :title="$property->title" />
+            </div>
+            <div class="p-4">
+
+                <table class="table-auto w-full mt-4">
+                    <tbody>
+                        @if ($property->isSale())
+
+                            <x-property.spec-row :label="__('Address')">
+                                {{ $property->postal_code ?? '' }}
+                                {{ $property->city ?? '' }}, {{ $property->street ?? '' }}
+                                {{ __($property->street_type ?? '') }}
+                            </x-property.spec-row>
+
+                            @if ($property->total_area)
+                                <x-property.spec-row :label="__('Total Area')">
+                                    {{ $property->total_area }}
+                                    {{ __($property->total_area_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->min_rent)
+                                <x-property.spec-row :label="__('Price')">
+                                    {{ $property->min_rent ?? '' }}
+                                    {{ __($property->min_rent_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->parking)
+                                <x-property.spec-row
+                                    :label="__('Parking')">{{ __($property->parking) }}</x-property.spec-row>
+                            @endif
+                            @if ($property->code)
+                                <x-property.spec-row :label="__('Code')">{{ $property->code }}</x-property.spec-row>
+                            @endif
+                        @else
+                            {{-- Default fields for rental offices --}}
+                            <x-property.spec-row :label="__('Address')">
+                                {{ $property->postal_code }} {{ $property->city }},
+                                {{ $property->street }}
+                                {{ __($property->street_type ?? '') }} {{ $property->house_number }}
+                            </x-property.spec-row>
+                            @if ($property->construction_year)
+                                <x-property.spec-row
+                                    :label="__('Construction Year')">{{ $property->construction_year }}</x-property.spec-row>
+                            @endif
+                            @if ($property->total_area)
+                                <x-property.spec-row :label="__('Total Area')">
+                                    {{ $property->total_area }}
+                                    {{ __($property->total_area_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->available_area)
+                                <x-property.spec-row :label="__('Currently Available')">{{ $property->available_area }}
+                                    m2</x-property.spec-row>
+                            @endif
+                            @if ($property->min_available_area)
+                                <x-property.spec-row :label="__('Min. Available')">
+                                    {{ $property->min_available_area }}
+                                    {{ __($property->min_available_area_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->min_rent)
+                                <x-property.spec-row :label="__('Rent')">
+                                    {{ $property->min_rent }}{{ $property->max_rent && $property->max_rent !== $property->min_rent ? ' - ' . $property->max_rent : '' }}
+                                    {{ __($property->min_rent_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->operating_fee)
+                                <x-property.spec-row :label="__('Operating Fee')">
+                                    {{ translate_value($property->operating_fee) }}
+                                    {{ __($property->operating_fee_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+
+                            @if ($property->storage_area)
+                                <x-property.spec-row :label="__('Office Area')">
+                                    {{ number_format((int) $property->storage_area) }}
+                                    {{ __($property->storage_area_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->storage_rent)
+                                <x-property.spec-row :label="__('Office Rent')">
+                                    {{ $property->storage_rent }}
+                                    {{ __($property->storage_rent_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->parking)
+                                <x-property.spec-row
+                                    :label="__('Parking')">{{ __($property->parking) }}</x-property.spec-row>
+                            @endif
+                            @if ($property->min_parking_fee)
+                                <x-property.spec-row :label="__('Parking Fee')">
+                                    {{ $property->min_parking_fee }}{{ $property->max_parking_fee ? ' - ' . $property->max_parking_fee : '' }}
+                                    {{ __($property->min_parking_fee_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->common_area_ratio)
+                                <x-property.spec-row :label="__('Common Area Ratio')">
+                                    {{ $property->common_area_ratio }}
+                                    {{ __($property->common_area_ratio_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->min_lease_term)
+                                <x-property.spec-row :label="__('Min. Rental Period')">
+                                    {{ $property->min_lease_term }}
+                                    {{ __($property->min_lease_term_unit ?? '') }}
+                                </x-property.spec-row>
+                            @endif
+                            @if ($property->code)
+                                <x-property.spec-row :label="__('Code')">{{ $property->code }}</x-property.spec-row>
+                            @endif
+                            @if (!$property->available_area)
                                 <tr>
-                                    <td class="font-bold">{{ __('Address') }}:</td>
-                                    <td>{{ $property->cim_irsz }} {{ $property->cim_varos }},
-                                        {{ $property->cim_utca }}
-                                        {{ __($property->cim_utca_addons ?? '') }} {{ $property->cim_hazszam }}
+                                    <td class="py-8 text-red-500 italic font-font-bold text-center text-xl"
+                                        colspan="2">
+                                        {{ __('The warehouse is currently 100% rented out!') }}
                                     </td>
                                 </tr>
-                                @if ($property->construction_year)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Construction Year') }}:</td>
-                                        <td>{{ $property->construction_year }}</td>
-                                    </tr>
-                                @endif
-                                @if ($property->total_area)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Total Area') }}:</td>
-                                        <td>{{ $property->total_area }}
-                                            {{ __($property->osszterulet_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->jelenleg_kiado)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Currently Available') }}:</td>
-                                        <td>{{ $property->jelenleg_kiado }} m²</td>
-                                    </tr>
-                                @endif
-                                @if ($property->min_kiado)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Min. Available') }}:</td>
-                                        <td>{{ $property->min_kiado }}
-                                            {{ __($property->min_kiado_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->min_berleti_dij)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Rent') }}:</td>
-                                        <td>{{ $property->min_berleti_dij }}{{ $property->max_berleti_dij && $property->max_berleti_dij !== $property->min_berleti_dij ? ' - ' . $property->max_berleti_dij : '' }}
-                                            {{ __($property->min_berleti_dij_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->uzemeletetesi_dij)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Operating Fee') }}:</td>
-                                        <td>
-                                            {{ translate_value($property->uzemeletetesi_dij) }}
-                                            {{ __($property->uzemeletetesi_dij_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->raktar_terulet)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Office Area') }}:</td>
-                                        <td>{{ number_format((int) $property->raktar_terulet) }}
-                                            {{ __($property->raktar_terulet_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->raktar_berleti_dij)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Office Rent') }}:</td>
-                                        <td>{{ $property->raktar_berleti_dij }}
-                                            {{ __($property->raktar_berleti_dij_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->parkolas)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Parking') }}:</td>
-                                        <td>{{ __($property->parkolas) }}</td>
-                                    </tr>
-                                @endif
-                                @if ($property->min_parkolas_dija)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Parking Fee') }}:</td>
-                                        <td>{{ $property->min_parkolas_dija }}{{ $property->max_parkolas_dija ? ' - ' . $property->max_parkolas_dija : '' }}
-                                            {{ __($property->min_parkolas_dija_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->kozos_teruleti_arany)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Common Area Ratio') }}:</td>
-                                        <td>{{ $property->kozos_teruleti_arany }}
-                                            {{ __($property->kozos_teruleti_arany_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->min_berleti_idoszak)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Min. Rental Period') }}:</td>
-                                        <td>
-                                            {{ $property->min_berleti_idoszak }}
-                                            {{ __($property->min_berleti_idoszak_addons ?? '') }}
-                                        </td>
-                                    </tr>
-                                @endif
-                                @if ($property->kodszam)
-                                    <tr>
-                                        <td class="font-bold">{{ __('Code') }}:</td>
-                                        <td>{{ $property->kodszam }}</td>
-                                    </tr>
-                                @endif
-                                @if (!$property->jelenleg_kiado)
-                                    <tr>
-                                        <td class="py-8 text-xl italic text-center text-red-500 font-font-bold"
-                                            colspan="2">
-                                            {{ __('The office building is currently 100% rented out!') }}
-                                        </td>
-                                    </tr>
-                                @endif
-
-                                @if ($property->vat)
-                                    <tr>
-                                        <td style="padding-top: 20px" class="font-bold" colspan="2">
-                                            @if ($property->vat)
-                                                {{ __('The above fees are subject to an additional 27% VAT!') }}
-                                            @else
-                                                {{ __('The above fees are NOT subject to an additional 27% VAT!') }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endif
                             @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @if (auth()->check() || request()->hasValidSignature())
-                <div class="max-w-screen-xl p-8 mx-auto border shadow-xl backdrop-blur-3xl rounded-xl border-white/15">
-                    <div class="text-center">
-                        <h3 class="mb-4 text-2xl font-bold">{{ __('Property Details') }}</h3>
-                        <p class="mb-6 text-gray-600">{{ __('Download detailed information about this property') }}</p>
 
-                        <a href="{{ URL::signedRoute('property.pdf', ['property' => $property->id]) }}" target="_blank"
-                            class="inline-flex items-center px-6 py-3 font-medium text-white transition-colors rounded-lg bg-accent hover:bg-accent/90">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            {{ __('Printable Version') }}
-                        </a>
-
-                    </div>
-
-                </div>
-            @endif
-            <div
-                class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
-                <div>
-                    @if (!$property->isSale())
-                        @if ($property->maps_lat && $property->maps_lng)
-                            {{-- Ingyenes: Koordináta alapú térkép pin-nel --}}
-                            <iframe
-                                src="https://maps.google.com/maps?q={{ $property->maps_lat }},{{ $property->maps_lng }}&hl={{ app()->getLocale() }}&z=16&output=embed"
-                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        @else
-                            {{-- Ingyenes: Cím alapú keresés pin-nel --}}
-                            <iframe
-                                src="https://maps.google.com/maps?q={{ urlencode($property->cim_irsz . ' ' . $property->cim_varos . ', ' . $property->cim_utca . ' ' . $property->cim_hazszam . ($property->cim_utca_addons ? ', ' . $property->cim_utca_addons : '')) }}&hl={{ app()->getLocale() }}&z=16&output=embed"
-                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            @if ($property->vat)
+                                <tr>
+                                    <td class="pt-5 font-bold" colspan="2">
+                                        {{ __('The above fees are subject to an additional 27% VAT!') }}
+                                    </td>
+                                </tr>
+                            @endif
                         @endif
-                    @else
-                        <x-forms.contact :selected_property_id="$property->id" :selected_property_type_is_rent="$property->isRent()" />
-                    @endif
-
-                </div>
-                <div class="p-4">
-                    <h2 class="text-3xl">
-                        {{ __(':title Presentation', ['title' => app()->getLocale() === 'en' ? (Translate::whereName($property->title)->first()?->translated ?: $property->title) : $property->title]) }}
-                    </h2>
-                    <div class="mt-4 space-y-4">
-                        <div class="leading-relaxed text-justify">
-                            @if (app()->getLocale() === 'en' && $property->en_content)
-                                {!! $property->en_content !!}
-                            @elseif ($property->content)
-                                {!! $property->content !!}
-                            @endif
-                        </div>
-                    </div>
-
-                </div>
+                    </tbody>
+                </table>
             </div>
-            @if (!$property->isSale())
-                <div
-                    class="grid max-w-screen-xl grid-cols-1 gap-8 p-8 mx-auto border shadow-xl md:grid-cols-2 backdrop-blur-3xl rounded-xl border-white/15">
-                    <div class="order-2 md:order-none">
-                        <section class="bg-white rounded-xl">
-                            <div class="max-w-screen-md px-4 py-8 mx-auto lg:py-16">
-                                <h2 class="mb-4 text-4xl tracking-tight text-center font-extrafont-bold text-accent">
-                                    {{ __('Contact Us!') }}</h2>
-                                <p class="mb-8 font-light text-center text-gray-500 lg:mb-16 sm:text-xl">
-                                    {{ __('Request a personalized offer online!') }}</p>
-                                <x-forms.contact :selected_property_id="$property->id" :selected_property_type_is_rent="$property->isRent()" />
-                            </div>
-                        </section>
+        </x-glass-panel>
+        @if (auth()->check() || request()->hasValidSignature())
+            <x-glass-panel>
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold mb-4">{{ __('Property Details') }}</h3>
+                    <p class="mb-6 text-gray-600">{{ __('Download detailed information about this property') }}</p>
 
-                    </div>
-                    <div class="order-1 p-4 space-y-4 md:order-none">
-                        <div class="space-y-4">
-                            <h2 class="text-3xl">{{ __('Features') }}</h2>
-                            <ul class="text-lg list-disc sm:columns-2 gap-x-8 gap-y-3">
+                    <a href="{{ URL::signedRoute(app()->getLocale() === 'en' ? 'en.property.pdf' : 'property.pdf', ['property' => $property->id]) }}" target="_blank"
+                        class="inline-flex items-center px-6 py-3 bg-accent text-white font-medium rounded-lg hover:bg-accent/90 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                        {{ __('Printable Version') }}
+                    </a>
 
-                                @if ($property->services || $property->tags)
-                                    @php
-                                        $allItems = collect($property->services)
-                                            ->merge($property->tags ?? [])
-                                            ->sortBy(function ($item) {
-                                                // Ékezetek eltávolítása és kisbetűsítés a rendezéshez
-                                                $normalized = strtolower($item->name);
-                                                $normalized = str_replace(
-                                                    ['á', 'é', 'í', 'ó', 'ő', 'ú', 'ű', 'ü', 'ö'],
-                                                    ['a', 'e', 'i', 'o', 'o', 'u', 'u', 'u', 'o'],
-                                                    $normalized,
-                                                );
-                                                return $normalized;
-                                            });
-                                    @endphp
-                                    @foreach ($allItems as $item)
-                                        <li class="pb-1 jellemzok">
-                                            @if (app()->getLocale() === 'en')
-                                                {{ Translate::whereName($item->name)->first()?->translated ?? $item->name }}
-                                            @else
-                                                {{ $item->name }}
-                                            @endif
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </div>
+                </div>
 
+            </x-glass-panel>
+        @endif
+        <x-glass-panel class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                @if (!$property->isSale())
+                    <iframe src="{{ $property->mapEmbedUrl() }}" width="100%" height="100%" style="border:0;"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                @else
+                    <livewire:contact-form :selected-property-id="$property->id" :selected-property-type-is-rent="$property->isRent()" />
+                @endif
+
+            </div>
+            <div class="p-4">
+                <h2 class="text-3xl">
+                    {{ __(':title Presentation', ['title' => translate_value($property->title)]) }}
+                </h2>
+                <div class="space-y-4 mt-4">
+                    <div class="text-justify leading-relaxed">
+                        {!! $property->localized('content', 'en_content') !!}
                     </div>
                 </div>
-            @endif
-        </div>
-    </div>
 
-    <div class="relative bg-center bg-no-repeat bg-cover"
+            </div>
+        </x-glass-panel>
+        @if (!$property->isSale())
+            <x-glass-panel class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="order-2 md:order-0">
+                    <section class="bg-white rounded-xl">
+                        <div class="py-8 lg:py-16 px-4 mx-auto max-w-3xl">
+                            <h2 class="mb-4 text-4xl tracking-tight font-extrafont-bold text-center text-accent">
+                                {{ __('Contact Us!') }}</h2>
+                            <p class="mb-8 lg:mb-16 font-light text-center text-gray-500 sm:text-xl">
+                                {{ __('Request a personalized offer online!') }}</p>
+                            <livewire:contact-form :selected-property-id="$property->id" :selected-property-type-is-rent="$property->isRent()" />
+                        </div>
+                    </section>
+
+                </div>
+                <div class="order-1 md:order-0 space-y-4 p-4">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl">{{ __('Features') }}</h2>
+                        <ul class="sm:columns-2 gap-x-8 gap-y-3 list-disc text-lg">
+                            @foreach (collect($property->services)->merge($property->tags ?? [])->sortBy(fn ($item) => Str::lower(Str::ascii($item->name))) as $item)
+                                <li class="jellemzok pb-1">{{ translate_value($item->name) }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </x-glass-panel>
+        @endif
+    </x-page-section>
+
+    <div class="relative bg-cover bg-center bg-no-repeat"
         style="background-image: url({{ Vite::asset('resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white to-white/30"></div>
-        <div class="container relative z-10 pt-12 pb-20 mx-auto kiemelt-ajanlatok">
-            <h2 class="mt-4 mb-16 text-5xl text-center font-font-bold drop-shadow text-logogray/80">
+        <div class="absolute inset-0 z-1 bg-linear-to-b from-white to-white/30"></div>
+        <div class="kiemelt-ajanlatok relative z-10 container mx-auto pt-12 pb-20">
+            <h2 class="mt-4 mb-16 font-font-bold text-5xl text-center drop-shadow text-logogray/80">
                 {{ __('Similar Offices') }}</h2>
-            <div class="grid max-w-screen-xl grid-cols-1 gap-4 mx-auto md:grid-cols-2 lg:grid-cols-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
                 @foreach ($similarProperties ?? [] as $similarProperty)
-                    @if ($similarProperty->isRent())
-                        <x-cards.ingatlan-card
-                            image="{{ $similarProperty->getFirstImageUrl() ?: Vite::asset('resources/images/default-office.jpg') }}"
-                            title="{{ $similarProperty->title }}" :description="$similarProperty->getAddressFormated()"
-                            link="{{ route('properties.show', $similarProperty->slug) }}" />
-                    @else
-                        <x-cards.ingatlan-card
-                            image="{{ $similarProperty->getFirstImageUrl() ?: Vite::asset('resources/images/default-office.jpg') }}"
-                            title="{{ $similarProperty->title }}" :description="$similarProperty->getAddressFormatedForSale()"
-                            link="{{ route('properties.show-for-sale', $similarProperty->slug) }}" />
-                    @endif
+                    <x-property.similar-card :property="$similarProperty" />
                 @endforeach
 
             </div>
         </div>
     </div>
-
-</x-layouts.app>
+</div>

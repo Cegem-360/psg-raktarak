@@ -1,42 +1,14 @@
-<x-layouts.app>
-    <x-slot name="title">Hírek | PSG-RAKTÁRAK</x-slot>
-    <x-slot name="meta">
-        <meta name="robots" content="index, follow">
-        <meta name="googlebot" content="index, follow">
-        <meta name="description"
-            content="PSG-RAKTÁRAK hírek - Legfrissebb hírek, fejlesztések és szakmai információk a raktárpiaci világból.">
-        <meta name="keywords" content="hírek, raktárpiac, ingatlan hírek, raktárak, raktárbérlet, szakmai hírek">
-        <link rel="canonical" href="{{ Request::url() }}">
-    </x-slot>
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
-        style="background-image: url({{ Vite::asset('resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-            <h2 class="mt-4 mb-16 font-bold text-5xl text-center drop-shadow text-logogray/80">
-                Hírek</h2>
+<x-slot name="title">{{ __('News') }} | PSG-RAKTÁRAK</x-slot>
+<x-slot name="meta">
+    <meta name="description"
+        content="{{ __('PSG-RAKTÁRAK news - The latest news, developments and professional insights from the warehouse market.') }}">
+    <meta name="keywords" content="{{ __('news, warehouse market, real estate news, warehouses, warehouse rental, industry news') }}">
+</x-slot>
 
-            <div class="max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                @foreach ($news as $index => $article)
-                    <div
-                        class="relative flex flex-col md:flex-row justify-start items-center gap-6 p-6 border-b border-gray-300 hover:brightness-95 transition-all duration-300 ease-in-out">
-                        <p class="text-gray-600">{{ $article->published_at?->format('Y-m-d') }}</p>
-                        <h3 class="text-xl font-semibold">{{ $article->title }}</h3>
-                        <div class="md:ml-auto">
-                            <a href="{{ localized_route('news.show', ['slug' => $article->slug]) }}"
-                                class="px-3 py-1 text-sm bg-primary/70 text-white rounded hover:bg-primary/90 transition-colors duration-300 ease-in-out after:absolute after:inset-0 after:cursor-pointer">Részletek</a>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+<div>
+    <x-page-section>
+        <x-slot:heading>{{ __('News') }}</x-slot:heading>
 
-            @if ($news->lastPage() > 1)
-                <div
-                    class="flex justify-center gap-8 max-w-screen-xl mx-auto px-8 py-3 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                    {{-- Pagination --}}
-                    {{ $news->links() }}
-                </div>
-            @endif
-
-        </div>
-    </div>
-</x-layouts.app>
+        <livewire:news-list />
+    </x-page-section>
+</div>

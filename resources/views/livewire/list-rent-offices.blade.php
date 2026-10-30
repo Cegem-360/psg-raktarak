@@ -1,43 +1,34 @@
 @use('App\Models\Translate')
 <div wire:key="list-rent-offices" class="list-rent-offices">
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
-        style="background-image: url({{ Vite::asset('resources/images/cargo-loading-dock-doors-of-big-warehouse-building-2024-10-31-00-59-14-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-            <h2 class="mt-4 mb-4 font-bold text-5xl text-center drop-shadow text-logogray/80">
-
-                {{-- Check if the title is set and if a translation exists --}}
-                @if (app()->getLocale() === 'en' && $title && Translate::whereName($title)->exists())
-                    {{ Translate::whereName($title)->first()->translated }}
-                @else
-                    {{ $title ? __($title) : __('page.rent_offices') }}
-                @endif
-            </h2>
-            <h4 class="text-xl text-center mb-8">({{ $totalOffices }} {{ __('page.results') }})</h4>
-            <div
-                class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                <div class="hidden md:block relative">
-                    <div wire:ignore id="map" class="sticky top-0 h-[120vh] rounded-lg border border-gray-300"
-                        style="width: 100%;"></div>
-                </div>
-                <div class="col-span-2">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-fit">
-                        @foreach ($offices ?? [] as $office)
-                            <livewire:ingatlan-card :property="$office" :image="$office->getFirstImageUrl()" :images="collect($office->property_photos)"
-                                :title="$office->title" :description="$office->getAddressFormated()" :link="localized_route('properties.show', ['property' => $office->slug])" :small="true"
-                                :minicarousel="true" wire:key="office-{{ $office->id }}" />
-                        @endforeach
-                    </div>
+    <x-page-section heading-margin="mb-8">
+        <x-slot:heading>
+            {{-- Check if the title is set and if a translation exists --}}
+            @if (app()->getLocale() === 'en' && $title && Translate::whereName($title)->exists())
+                {{ Translate::whereName($title)->first()->translated }}
+            @else
+                {{ $title ? __($title) : __('page.title.offices_for_rent') }}
+            @endif
+            <span class="block mt-4 text-xl font-normal text-gray-700">({{ __(':count warehouses', ['count' => $totalOffices]) }})</span>
+        </x-slot:heading>
+        <x-glass-panel class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="hidden md:block relative">
+                <div wire:ignore id="map" class="sticky top-0 h-[120vh] rounded-lg border border-gray-300"
+                    style="width: 100%;"></div>
+            </div>
+            <div class="col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-fit">
+                    @foreach ($offices ?? [] as $office)
+                        <livewire:property-card :property="$office" :small="true" :minicarousel="true" wire:key="office-{{ $office->id }}" />
+                    @endforeach
                 </div>
             </div>
+        </x-glass-panel>
 
-            <div
-                class="flex justify-center gap-8 max-w-screen-xl mx-auto px-8 py-3 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                {{-- Pagination --}}
-                {{ $offices->links() }}
-            </div>
-        </div>
-    </div>
+        <x-glass-panel padding="px-8 py-3" class="flex justify-center gap-8">
+            {{-- Pagination --}}
+            {{ $offices->links() }}
+        </x-glass-panel>
+    </x-page-section>
 
     @script
         <script>
@@ -45,7 +36,7 @@
             import('{{ Vite::asset('resources/js/rent-offices-map.js') }}').then(module => {
                 const apiKey = '{{ config('services.google_maps.api_key') }}';
                 const mapId = '{{ config('services.google_maps.map_id') }}';
-                let officesData = @json($this->getOfficesForMap());
+                let officesData = {{ Js::from($this->getOfficesForMap()) }};
 
                 // Check if API key and map ID are available
                 if (!apiKey || apiKey.trim() === '') {
@@ -61,8 +52,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 616 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Térkép nem elérhető</h3>
-                                <p class="text-gray-500">Google Maps API kulcs szükséges a térkép megjelenítéséhez.</p>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Map not available') }}</h3>
+                                <p class="text-gray-500">{{ __('A Google Maps API key is required to display the map.') }}</p>
                             </div>
                         </div>
                     `;
@@ -83,8 +74,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 616 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Térkép nem elérhető</h3>
-                                <p class="text-gray-500">Google Maps Map ID szükséges a térkép megjelenítéséhez.</p>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Map not available') }}</h3>
+                                <p class="text-gray-500">{{ __('A Google Maps Map ID is required to display the map.') }}</p>
                             </div>
                         </div>
                     `;
@@ -133,7 +124,7 @@
                                     console.error('Failed to fetch fresh office data:',
                                         error);
                                     // Fallback to current visible data (no server call)
-                                    const currentData = @json($this->getOfficesForMap());
+                                    const currentData = {{ Js::from($this->getOfficesForMap()) }};
                                     window.rentOfficesMapHandler.refreshMarkers(
                                         currentData);
                                 }).finally(() => {

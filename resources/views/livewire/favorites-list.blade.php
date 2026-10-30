@@ -1,30 +1,26 @@
 <div>
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
-        style="background-image: url({{ Vite::asset('resources/images/view-of-london-city-united-kingdom-2025-02-19-07-53-44-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-            <h2 class="mt-4 mb-4 font-bold text-5xl text-center drop-shadow text-logogray/80">
-                {{ __('My Favorites') }}
-            </h2>
-            @if ($favoriteCount > 0)
-                <h4 class="text-xl text-center mb-8">
-                    {{ __('You have') }} {{ $favoriteCount }} {{ __('favorite properties') }}
-                </h4>
-                <p class="text-center text-gray-600 mb-16">
-                    {{ __('Here you can find all the properties you have marked as favorites') }}
-                </p>
-            @else
-                <h4 class="text-xl text-center mb-8">
-                    {{ __('No favorites yet') }}
-                </h4>
-                <p class="text-center text-gray-600 mb-16">
-                    {{ __('Start adding properties to your favorites by clicking the heart icon on property cards.') }}
-                </p>
-            @endif
-        </div>
-    </div>
+    <x-page-section>
+        <h2 class="mt-4 mb-4 font-bold text-5xl text-center drop-shadow text-logogray/80">
+            {{ __('My Favorites') }}
+        </h2>
+        @if ($favoriteCount > 0)
+            <h4 class="text-xl text-center mb-8">
+                {{ __('You have :count favorite properties', ['count' => $favoriteCount]) }}
+            </h4>
+            <p class="text-center text-gray-600 mb-16">
+                {{ __('Here you can find all the properties you have marked as favorites') }}
+            </p>
+        @else
+            <h4 class="text-xl text-center mb-8">
+                {{ __('No favorites yet') }}
+            </h4>
+            <p class="text-center text-gray-600 mb-16">
+                {{ __('Start adding properties to your favorites by clicking the heart icon on property cards.') }}
+            </p>
+        @endif
+    </x-page-section>
     @if ($favoriteCount > 0)
-        <div class="flex justify-end gap-3 max-w-screen-xl mx-auto px-8 pt-8">
+        <div class="flex justify-end gap-3 max-w-7xl mx-auto px-8 pt-8">
             <a href="{{ localized_route('favorites.export-excel') }}"
                 class="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +28,7 @@
                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                     </path>
                 </svg>
-                {{ __('Letöltés Excel-ben') }}
+                {{ __('Export to Excel') }}
             </a>
             <button wire:click="$dispatch('openSendFavoritesModal')"
                 class="flex items-center gap-2 px-6 py-2 bg-primary text-white rounded hover:bg-primary/90 transition-colors">
@@ -40,7 +36,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M16 12H8m8 0a4 4 0 11-8 0 4 4 0 018 0zm0 0v4m0-4V8"></path>
                 </svg>
-                Kedvencek elküldése e-mailben
+                {{ __('Send favorites via email') }}
             </button>
         </div>
     @endif
@@ -48,15 +44,9 @@
     @if ($favoriteCount > 0)
         <div class="relative bg-white">
             <div class="container mx-auto py-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-screen-xl mx-auto px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-8">
                     @foreach ($favoriteProperties as $property)
-                        @if ($property->isRent())
-                            <livewire:ingatlan-card :property="$property" :image="$property->getFirstImageUrl()" :title="$property->title"
-                                :description="$property->getAddressFormated()" :link="localized_route('properties.show', ['property' => $property->slug])" :small="false" :key="'favorite-' . $property->id" />
-                        @else
-                            <livewire:ingatlan-card :property="$property" :image="$property->getFirstImageUrl()" :title="$property->title"
-                                :description="$property->getAddressFormated()" :link="localized_route('properties.show-for-sale', ['property' => $property->slug])" :small="false" :key="'favorite-' . $property->id" />
-                        @endif
+                        <livewire:property-card :property="$property" :key="'favorite-' . $property->id" />
                     @endforeach
                 </div>
             </div>
@@ -76,7 +66,7 @@
                     <p class="text-gray-600 mb-8">
                         {{ __('Start adding properties to your favorites by clicking the heart icon on property cards.') }}
                     </p>
-                    <a href="{{ route('kiado-raktarak') }}"
+                    <a wire:navigate.hover href="{{ route('kiado-raktarak') }}"
                         class="inline-block px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-300">
                         {{ __('Browse Properties') }}
                     </a>

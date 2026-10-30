@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\Property as Offices;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\On;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,21 +17,21 @@ final class ListSaleOffices extends Component
 {
     use WithPagination;
 
-    public $search = '';
+    /** Columns the visitor may sort by. */
+    private const array SORTABLE_FIELDS = ['title', 'date', 'ord'];
 
-    public $sortField = 'title';
+    public string $search = '';
 
-    public $sortDirection = 'asc';
+    public string $sortField = 'title';
 
-    public $perPage = 6;
+    #[Locked]
+    public int $perPage = 6;
 
-    public $totalOffices;
+    #[Locked]
+    public int $totalOffices = 0;
 
-    public $selectedOffice;
-
-    public $showModal = false;
-
-    public $officeDetails = [];
+    /** @var array<string, mixed> Per-request memo of getOffices(), keyed by the list state. */
+    private array $officesMemo = [];
 
     public function mount(): void
     {
@@ -38,48 +40,42 @@ final class ListSaleOffices extends Component
 
     public function updateTotalOffices(): void
     {
-        $this->totalOffices = Offices::query()
-            ->sale()
-            ->when($this->search, function ($query): void {
-                $query->searchText($this->search);
-            })
-            ->active()
-            ->count();
+        $this->totalOffices = $this->getOffices()->total();
     }
 
-    public function getOffices()
+    /**
+     * The current page of offices. Memoised per state, because the count, the list,
+     * the pagination and the map markers all read it during one request.
+     */
+    public function getOffices(): LengthAwarePaginator
     {
-        return Offices::query()
+        $sortField = in_array($this->sortField, self::SORTABLE_FIELDS, true) ? $this->sortField : 'title';
+        $state = serialize([$this->search, $sortField, $this->perPage, $this->getPage()]);
+
+        return $this->officesMemo[$state] ??= Offices::query()
             ->when($this->search, function ($query): void {
                 $query->searchText($this->search);
             })
             ->sale()
             ->active()
-            ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy($sortField)
             ->paginate($this->perPage);
     }
 
-    public function getOfficesForMap()
+    /**
+     * @return Collection<int, array<string, mixed>>
+     */
+    public function getOfficesForMap(): Collection
     {
-        // Get only the currently paginated offices
-        $paginatedOffices = Offices::query()
-            ->when($this->search, function ($query): void {
-                $query->searchText($this->search);
-            })
-            ->sale()
-            ->active()
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
-
-        // Transform all offices to map format (coordinates will be geocoded on frontend)
-        return $paginatedOffices->getCollection()
+        // Transform the current page of offices to map format (coordinates will be geocoded on frontend)
+        return $this->getOffices()->getCollection()
             ->map(function ($office): array {
                 // Build full address for geocoding
                 $addressParts = array_filter([
-                    $office->cim_irsz,
-                    $office->cim_varos,
-                    $office->cim_utca,
-                    $office->cim_hazszam,
+                    $office->postal_code,
+                    $office->city,
+                    $office->street,
+                    $office->house_number,
                 ]);
                 $fullAddress = implode(' ', $addressParts);
 
@@ -87,14 +83,13 @@ final class ListSaleOffices extends Component
                     'id' => $office->id,
                     'title' => $office->title,
                     'address' => $fullAddress,
-                    'postal_code' => $office->cim_irsz ?? '',
-                    'city' => $office->cim_varos ?? '',
-                    'street' => $office->cim_utca ?? '',
-                    'house_number' => $office->cim_hazszam ?? '',
-                    'rent' => ($office->min_berleti_dij ?? '').' - '.($office->max_berleti_dij ?? '').' '.($office->max_berleti_dij_addons ?? ''),
-                    'operating_fee' => (translate_value($office->uzemeletetesi_dij) ?? '').' '.($office->uzemeletetesi_dij_addons ?? ''),
-                    'url' => route('properties.show', ['property' => $office]),
-
+                    'postal_code' => $office->postal_code ?? '',
+                    'city' => $office->city ?? '',
+                    'street' => $office->street ?? '',
+                    'house_number' => $office->house_number ?? '',
+                    'rent' => ($office->min_rent ?? '').' - '.($office->max_rent ?? '').' '.($office->max_rent_unit ?? ''),
+                    'operating_fee' => (translate_value($office->operating_fee) ?? '').' '.($office->operating_fee_unit ?? ''),
+                    'url' => $office->url(),
                 ];
             })
             ->values(); // Reset array keys to ensure clean JSON
@@ -106,22 +101,8 @@ final class ListSaleOffices extends Component
         $this->updateTotalOffices();
     }
 
-    public function sortBy($field): void
+    public function updatedSortField(): void
     {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
-        }
-
-        $this->resetPage();
-    }
-
-    #[On('refreshList')]
-    public function refreshList(): void
-    {
-        $this->updateTotalOffices();
         $this->resetPage();
     }
 

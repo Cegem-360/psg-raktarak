@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Enums\BudapestDistrict;
 use App\Models\Property;
 use Illuminate\Console\Command;
 
@@ -36,11 +37,11 @@ final class UpdatePropertyDistricts extends Command
         }
 
         // Get all Budapest properties that need district updates
-        $properties = Property::where(function ($query): void {
-            $query->where('cim_varos', 'like', '%Budapest%')
-                ->orWhere('cim_irsz', 'like', '1%');
+        $properties = Property::query()->where(function ($query): void {
+            $query->where('city', 'like', '%Budapest%')
+                ->orWhere('postal_code', 'like', '1%');
         })
-            ->whereNotNull('cim_irsz')
+            ->whereNotNull('postal_code')
             ->where(function ($query): void {
                 $query->whereNull('district')
                     ->orWhere('district', '')
@@ -60,19 +61,19 @@ final class UpdatePropertyDistricts extends Command
         $skipped = 0;
 
         foreach ($properties as $property) {
-            $district = Property::postalCodeToDistrict($property->cim_irsz);
+            $district = BudapestDistrict::tryFromPostalCode((string) $property->postal_code)?->roman();
 
             if ($district) {
                 if ($dryRun) {
-                    $this->line(sprintf('Would update Property ID %s: %s → %s', $property->id, $property->cim_irsz, $district));
+                    $this->line(sprintf('Would update Property ID %s: %s → %s', $property->id, $property->postal_code, $district));
                 } else {
                     $property->update(['district' => $district]);
-                    $this->line(sprintf('Updated Property ID %s: %s → %s', $property->id, $property->cim_irsz, $district));
+                    $this->line(sprintf('Updated Property ID %s: %s → %s', $property->id, $property->postal_code, $district));
                 }
 
                 $updated++;
             } else {
-                $this->line(sprintf('Skipped Property ID %s: Invalid postal code %s', $property->id, $property->cim_irsz));
+                $this->line(sprintf('Skipped Property ID %s: Invalid postal code %s', $property->id, $property->postal_code));
                 $skipped++;
             }
         }

@@ -21,25 +21,25 @@ function createPropertyStub(array $overrides = []): stdClass
 {
     $defaults = [
         'title' => 'Test Office Building',
-        'cim_irsz' => '1051',
-        'cim_varos' => 'Budapest',
-        'cim_utca' => 'Nádor',
-        'cim_utca_addons' => 'utca',
-        'cim_hazszam' => '23',
+        'postal_code' => '1051',
+        'city' => 'Budapest',
+        'street' => 'Nádor',
+        'street_type' => 'utca',
+        'house_number' => '23',
         'construction_year' => '2010',
-        'min_berleti_dij' => '12',
-        'max_berleti_dij' => '18',
-        'min_berleti_dij_addons' => 'EUR/m2/hó',
-        'uzemeletetesi_dij' => '4.5',
-        'uzemeletetesi_dij_addons' => 'EUR/m2/hó',
-        'kozos_teruleti_arany' => '5%',
-        'kozos_teruleti_arany_addons' => '',
-        'min_parkolas_dija' => '120',
-        'max_parkolas_dija' => '150',
-        'min_parkolas_dija_addons' => 'EUR/hely/hó',
-        'max_parkolas_dija_addons' => 'EUR/hely/hó',
-        'min_berleti_idoszak' => '3',
-        'min_berleti_idoszak_addons' => 'év',
+        'min_rent' => '12',
+        'max_rent' => '18',
+        'min_rent_unit' => 'EUR/m2/hó',
+        'operating_fee' => '4.5',
+        'operating_fee_unit' => 'EUR/m2/hó',
+        'common_area_ratio' => '5%',
+        'common_area_ratio_unit' => '',
+        'min_parking_fee' => '120',
+        'max_parking_fee' => '150',
+        'min_parking_fee_unit' => 'EUR/hely/hó',
+        'max_parking_fee_unit' => 'EUR/hely/hó',
+        'min_lease_term' => '3',
+        'min_lease_term_unit' => 'év',
     ];
 
     return (object) array_merge($defaults, $overrides);
@@ -132,11 +132,11 @@ it('populates data rows starting at row 4', function (): void {
 
 it('formats address correctly', function (): void {
     $properties = collect([createPropertyStub([
-        'cim_irsz' => '1051',
-        'cim_varos' => 'Budapest',
-        'cim_utca' => 'Nádor',
-        'cim_utca_addons' => 'utca',
-        'cim_hazszam' => '23',
+        'postal_code' => '1051',
+        'city' => 'Budapest',
+        'street' => 'Nádor',
+        'street_type' => 'utca',
+        'house_number' => '23',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -150,9 +150,9 @@ it('formats address correctly', function (): void {
 
 it('formats rental fee with range when min and max differ', function (): void {
     $properties = collect([createPropertyStub([
-        'min_berleti_dij' => '12',
-        'max_berleti_dij' => '18',
-        'min_berleti_dij_addons' => 'EUR/m2/hó',
+        'min_rent' => '12',
+        'max_rent' => '18',
+        'min_rent_unit' => 'EUR/m2/hó',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -166,9 +166,9 @@ it('formats rental fee with range when min and max differ', function (): void {
 
 it('formats rental fee without range when min equals max', function (): void {
     $properties = collect([createPropertyStub([
-        'min_berleti_dij' => '15',
-        'max_berleti_dij' => '15',
-        'min_berleti_dij_addons' => 'EUR/m2/hó',
+        'min_rent' => '15',
+        'max_rent' => '15',
+        'min_rent_unit' => 'EUR/m2/hó',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -182,9 +182,9 @@ it('formats rental fee without range when min equals max', function (): void {
 
 it('formats rental fee without range when max is empty', function (): void {
     $properties = collect([createPropertyStub([
-        'min_berleti_dij' => '15',
-        'max_berleti_dij' => '',
-        'min_berleti_dij_addons' => 'EUR/m2/hó',
+        'min_rent' => '15',
+        'max_rent' => '',
+        'min_rent_unit' => 'EUR/m2/hó',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -198,9 +198,9 @@ it('formats rental fee without range when max is empty', function (): void {
 
 it('formats parking fee with range', function (): void {
     $properties = collect([createPropertyStub([
-        'min_parkolas_dija' => '120',
-        'max_parkolas_dija' => '150',
-        'min_parkolas_dija_addons' => 'EUR/hely/hó',
+        'min_parking_fee' => '120',
+        'max_parking_fee' => '150',
+        'min_parking_fee_unit' => 'EUR/hely/hó',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -276,24 +276,24 @@ it('handles empty collection gracefully', function (): void {
 it('handles properties with null fields', function (): void {
     $properties = collect([createPropertyStub([
         'title' => null,
-        'cim_irsz' => null,
-        'cim_varos' => null,
-        'cim_utca' => null,
-        'cim_utca_addons' => null,
-        'cim_hazszam' => null,
+        'postal_code' => null,
+        'city' => null,
+        'street' => null,
+        'street_type' => null,
+        'house_number' => null,
         'construction_year' => null,
-        'min_berleti_dij' => null,
-        'max_berleti_dij' => null,
-        'min_berleti_dij_addons' => null,
-        'uzemeletetesi_dij' => null,
-        'uzemeletetesi_dij_addons' => null,
-        'kozos_teruleti_arany' => null,
-        'kozos_teruleti_arany_addons' => null,
-        'min_parkolas_dija' => null,
-        'max_parkolas_dija' => null,
-        'min_parkolas_dija_addons' => null,
-        'min_berleti_idoszak' => null,
-        'min_berleti_idoszak_addons' => null,
+        'min_rent' => null,
+        'max_rent' => null,
+        'min_rent_unit' => null,
+        'operating_fee' => null,
+        'operating_fee_unit' => null,
+        'common_area_ratio' => null,
+        'common_area_ratio_unit' => null,
+        'min_parking_fee' => null,
+        'max_parking_fee' => null,
+        'min_parking_fee_unit' => null,
+        'min_lease_term' => null,
+        'min_lease_term_unit' => null,
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -314,8 +314,8 @@ it('handles properties with null fields', function (): void {
 
 it('formats operating fee correctly', function (): void {
     $properties = collect([createPropertyStub([
-        'uzemeletetesi_dij' => '4.5',
-        'uzemeletetesi_dij_addons' => 'EUR/m2/hó',
+        'operating_fee' => '4.5',
+        'operating_fee_unit' => 'EUR/m2/hó',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -329,8 +329,8 @@ it('formats operating fee correctly', function (): void {
 
 it('formats common area ratio correctly', function (): void {
     $properties = collect([createPropertyStub([
-        'kozos_teruleti_arany' => '5%',
-        'kozos_teruleti_arany_addons' => '',
+        'common_area_ratio' => '5%',
+        'common_area_ratio_unit' => '',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -344,8 +344,8 @@ it('formats common area ratio correctly', function (): void {
 
 it('formats min rental period correctly', function (): void {
     $properties = collect([createPropertyStub([
-        'min_berleti_idoszak' => '3',
-        'min_berleti_idoszak_addons' => 'év',
+        'min_lease_term' => '3',
+        'min_lease_term_unit' => 'év',
     ])]);
 
     $this->tempFile = $this->service->generate($properties);

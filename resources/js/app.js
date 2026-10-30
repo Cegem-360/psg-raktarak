@@ -12,11 +12,31 @@ import "swiper/css";
 import "swiper/css/bundle";
 import "swiper/css/navigation";
 
+// Expose Swiper globally so Alpine.js components can access it
+window.Swiper = Swiper;
 import "flowbite";
 import { initFlowbite } from "flowbite";
+import "./office-search-form.js";
+import "./counters.js";
+document.addEventListener("livewire:navigated", () => {
+    initFlowbite();
+});
 
-document.addEventListener("DOMContentLoaded", function () {
-    const galleryCarouselSwiperThumbs = new Swiper(
+// Swipers are (re)initialised on every "livewire:navigated", which also fires on the
+// first page load, so carousels work after wire:navigate page changes too. An
+// element that already carries a Swiper instance is skipped.
+function initSwiper(selector, options) {
+    const element = document.querySelector(selector);
+
+    if (!element || element.swiper) {
+        return element?.swiper ?? null;
+    }
+
+    return new Swiper(element, options);
+}
+
+document.addEventListener("livewire:navigated", function () {
+    const galleryCarouselSwiperThumbs = initSwiper(
         ".gallery-carousel-swiper-thumbs",
         {
             slidesPerView: 4,
@@ -25,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
-    const galleryCarouselSwiper = new Swiper(".gallery-carousel-swiper", {
+    const galleryCarouselSwiper = initSwiper(".gallery-carousel-swiper", {
         direction: "horizontal",
         loop: true,
         thumbs: {
@@ -37,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    const referenceSwiper = new Swiper(".reference-swiper", {
+    const referenceSwiper = initSwiper(".reference-swiper", {
         direction: "horizontal",
         autoplay: {
             delay: 3000,
@@ -64,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    const rolunkmondtakSwiper = new Swiper(".rolunkmondtak-swiper", {
+    const rolunkmondtakSwiper = initSwiper(".rolunkmondtak-swiper", {
         direction: "horizontal",
         autoplay: {
             delay: 5000,
@@ -92,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    const kiemeltajanlatokSwiper = new Swiper(".kiemeltajanlatok-swiper", {
+    const kiemeltajanlatokSwiper = initSwiper(".kiemeltajanlatok-swiper", {
         direction: "horizontal",
         autoplay: {
             delay: 5000,
@@ -116,32 +136,11 @@ document.addEventListener("DOMContentLoaded", function () {
         },
     });
 
-    initMiniCarousels();
+    // NOTE: minicarousel-swiper initialization has been moved to Alpine.js
+    // in the property-card Livewire component. Each card now initializes its own
+    // Swiper instance via x-data/x-init, which ensures Swiper works correctly
+    // after Livewire pagination re-renders the DOM.
 });
-
-// The property cards are re-rendered by Livewire (pagination, filters), and that
-// new markup never sees DOMContentLoaded. Initialise per element rather than by
-// selector so already-live carousels are skipped, and resolve each card's arrows
-// inside that card — a shared selector would point every instance at the first
-// card's buttons.
-function initMiniCarousels() {
-    document.querySelectorAll(".minicarousel-swiper").forEach((el) => {
-        if (el.swiper) {
-            return;
-        }
-
-        new Swiper(el, {
-            direction: "horizontal",
-            loop: true,
-            slidesPerView: 1,
-            spaceBetween: 0,
-            navigation: {
-                nextEl: el.querySelector(".minicarousel-button-next"),
-                prevEl: el.querySelector(".minicarousel-button-prev"),
-            },
-        });
-    });
-}
 
 // Cookie management for favorites
 function setCookie(name, value, days) {
@@ -157,14 +156,11 @@ function getCookie(name) {
     for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == " ") c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        if (c.indexOf(nameEQ) == 0) return decodeURIComponent(c.substring(nameEQ.length, c.length));
     }
     return null;
 }
-document.addEventListener("livewire:navigated", () => {
-    initFlowbite();
-    initMiniCarousels();
-});
+
 // Listen for Livewire events
 document.addEventListener("livewire:initialized", function () {
     // Listen for cookie setting events from Livewire
@@ -174,27 +170,30 @@ document.addEventListener("livewire:initialized", function () {
     });
 
     Livewire.on("favorites-updated", updateFavoritesCounter);
-
-    Livewire.hook("morphed", () => initMiniCarousels());
 });
 
-// Update favorites counter in navigation
+// The favorites heart and count next to the language switcher, filled from the cookie.
 function updateFavoritesCounter() {
-    const favorites = getCookie("property_favorites");
-    const count = favorites ? JSON.parse(favorites).length : 0;
+    let count = 0;
 
-    const counter = document.querySelector(".favorites-counter");
+    try {
+        count = JSON.parse(getCookie("property_favorites") || "[]").length;
+    } catch {
+        count = 0;
+    }
+
+    const heart = document.getElementById("favorites-heart-icon");
+    if (heart) {
+        heart.setAttribute("fill", count > 0 ? "currentColor" : "none");
+    }
+
+    const counter = document.getElementById("favorites-count-lang");
     if (counter) {
         counter.textContent = count;
-        if (count > 0) {
-            counter.style.display = "flex";
-        } else {
-            counter.style.display = "none";
-        }
+        counter.classList.toggle("hidden", count === 0);
+        counter.classList.toggle("flex", count > 0);
     }
 }
 
-// Initialize counter on page load
-document.addEventListener("DOMContentLoaded", function () {
-    updateFavoritesCounter();
-});
+// Initialize counter on page load and after every wire:navigate page change
+document.addEventListener("livewire:navigated", updateFavoritesCounter);

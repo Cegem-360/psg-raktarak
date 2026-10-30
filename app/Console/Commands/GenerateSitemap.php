@@ -7,19 +7,20 @@ namespace App\Console\Commands;
 use App\Models\BlogPost;
 use App\Models\News;
 use App\Models\Property;
+use App\Services\LocalizedRoutes;
 use Closure;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Routing\Route as RoutingRoute;
-use Illuminate\Routing\ViewController;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\SitemapIndex;
 use Spatie\Sitemap\Tags\Url;
 
-#[Description('Write sitemap.xml from the published content')]
-#[Signature('sitemap:generate {--path= : Where to write the file (defaults to public/sitemap.xml)}')]
+#[Description('Write the sitemap index (sitemap.xml) and its page, property and article sitemaps')]
+#[Signature('sitemap:generate {--path= : Where to write the index; the sitemaps go next to it (defaults to public/sitemap.xml)}')]
 final class GenerateSitemap extends Command
 {
     /**
@@ -31,45 +32,93 @@ final class GenerateSitemap extends Command
         'favorites',
         'kedvencek',
         'favorites.export-excel',
-        'clearCache',
+        'adatlap-oldal',
     ];
 
-    public function handle(): int
+    private LocalizedRoutes $localizedRoutes;
+
+    public function handle(LocalizedRoutes $localizedRoutes): int
+    {
+        $this->localizedRoutes = $localizedRoutes;
+        $indexPath = $this->option('path') ?: public_path('sitemap.xml');
+        $directory = dirname((string) $indexPath);
+
+        $sitemaps = [
+            'sitemap-oldalak.xml' => $this->pagesSitemap(),
+            'sitemap-ingatlanok.xml' => $this->propertiesSitemap(),
+            'sitemap-hirek.xml' => $this->articlesSitemap(),
+        ];
+
+        $index = SitemapIndex::create();
+
+        foreach ($sitemaps as $fileName => $sitemap) {
+            $sitemap->writeToFile($directory.'/'.$fileName);
+            $index->add(url($fileName));
+
+            $this->info(sprintf('Wrote %d URLs to %s', count($sitemap->getTags()), $directory.'/'.$fileName));
+        }
+
+        $index->writeToFile($indexPath);
+
+        $this->info('Wrote the sitemap index to '.$indexPath);
+
+        return self::SUCCESS;
+    }
+
+    private function pagesSitemap(): Sitemap
     {
         $sitemap = Sitemap::create();
 
-        foreach ($this->staticUrls() as $url) {
-            $sitemap->add(Url::create($url)->setPriority(0.8));
+        foreach ($this->staticRoutes() as $route) {
+            $this->addLocalized($sitemap, $route, [], fn (Url $url): Url => $url->setPriority(0.8));
         }
 
+        return $sitemap;
+    }
+
+    private function propertiesSitemap(): Sitemap
+    {
+        $sitemap = Sitemap::create();
+
         $properties = Property::query()
-            ->where('status', 'active')
+            ->active()
             ->whereNotNull('slug')
             ->where('slug', '!=', '')
             ->cursor();
 
         foreach ($properties as $property) {
-            $route = str_starts_with((string) $property->elado_v_kiado, 'elado')
-                ? 'properties.show-for-sale'
-                : 'properties.show';
-
-            $sitemap->add(
-                Url::create(route($route, ['property' => $property->slug]))
-                    ->setLastModificationDate($property->updated_at ?? now())
-                    ->setPriority(0.9)
+            $this->addLocalized(
+                $sitemap,
+                $property->offer_type?->showRoute() ?? 'properties.show',
+                ['property' => $property->slug],
+                fn (Url $url): Url => $url->setLastModificationDate($property->updated_at ?? now())->setPriority(0.9),
             );
         }
 
+        return $sitemap;
+    }
+
+    private function articlesSitemap(): Sitemap
+    {
+        $sitemap = Sitemap::create();
+
         foreach (News::query()->where('is_published', true)->whereNotNull('slug')->cursor() as $news) {
-            $sitemap->add(
-                Url::create(route('news.show', ['slug' => $news->slug]))
-                    ->setLastModificationDate($news->updated_at ?? now())
-                    ->setPriority(0.6)
+            $this->addLocalized(
+                $sitemap,
+                'news.show',
+                ['news' => $news->slug],
+                fn (Url $url): Url => $url->setLastModificationDate($news->updated_at ?? now())->setPriority(0.6),
             );
         }
 
         if (Route::has('en.blog.show')) {
-            foreach (BlogPost::query()->where('is_published', true)->whereNotNull('slug')->cursor() as $post) {
+            $posts = BlogPost::query()
+                ->published()
+                ->where('noindex', false)
+                ->whereNotNull('slug')
+                ->cursor();
+
+            foreach ($posts as $post) {
                 $sitemap->add(
                     Url::create(route('en.blog.show', ['post' => $post->slug]))
                         ->setLastModificationDate($post->updated_at ?? now())
@@ -78,22 +127,40 @@ final class GenerateSitemap extends Command
             }
         }
 
-        $path = $this->option('path') ?: public_path('sitemap.xml');
-        $sitemap->writeToFile($path);
-
-        $this->info(sprintf('Wrote %d URLs to %s', count($sitemap->getTags()), $path));
-
-        return self::SUCCESS;
+        return $sitemap;
     }
 
     /**
-     * Every public GET page that takes no route parameters. Discovered from the
+     * Adds the page in every language it exists in, each entry listing all of
+     * them as hreflang alternates; a page without an English twin goes in once.
+     *
+     * @param  array<string, mixed>  $parameters
+     * @param  Closure(Url): Url  $configure
+     */
+    private function addLocalized(Sitemap $sitemap, string $routeName, array $parameters, Closure $configure): void
+    {
+        $alternates = $this->localizedRoutes->alternatesFor($routeName, $parameters);
+
+        foreach ($alternates ?: [LocalizedRoutes::DEFAULT_LOCALE => route($routeName, $parameters)] as $pageUrl) {
+            $url = $configure(Url::create($pageUrl));
+
+            foreach ($alternates as $locale => $alternateUrl) {
+                $url->addAlternate($alternateUrl, $locale);
+            }
+
+            $sitemap->add($url);
+        }
+    }
+
+    /**
+     * The names of every public GET page that takes no route parameters, in
+     * Hungarian; English twins are added alongside them. Discovered from the
      * router rather than hard-coded, so both sites can share this command
      * despite their different Hungarian URLs.
      *
      * @return Collection<int, string>
      */
-    private function staticUrls(): Collection
+    private function staticRoutes(): Collection
     {
         return collect(Route::getRoutes()->getRoutes())
             ->filter(fn (RoutingRoute $route): bool => in_array('GET', $route->methods(), true)
@@ -105,7 +172,7 @@ final class GenerateSitemap extends Command
                 && ! str_starts_with((string) $route->getName(), 'en.')
                 && ! in_array($route->getName(), self::EXCLUDED_ROUTES, true)
                 && $this->isAppOwned($route))
-            ->map(fn (RoutingRoute $route): string => url($route->uri() === '/' ? '/' : '/'.$route->uri()))
+            ->map(fn (RoutingRoute $route): string => (string) $route->getName())
             ->unique()
             ->values();
     }
@@ -117,26 +184,15 @@ final class GenerateSitemap extends Command
      */
     private function isAppOwned(RoutingRoute $route): bool
     {
+        // The pages are full-page Livewire components of the app.
+        $component = $route->getAction('livewire_component');
+
+        if (is_string($component)) {
+            return str_starts_with($component, 'App\\');
+        }
+
         $action = $route->getAction('uses');
 
-        if ($action instanceof Closure) {
-            return true;
-        }
-
-        if (! is_string($action)) {
-            return false;
-        }
-
-        // Route::view() records the action with a leading backslash. Both spellings
-        // are matched rather than trimmed: Pint's mb_str_functions rule rewrites
-        // ltrim() to mb_ltrim(), which needs PHP 8.4, and this command runs from
-        // the schedule:run cron that is still on 8.3.
-        foreach (['App\\', ViewController::class] as $prefix) {
-            if (str_starts_with($action, $prefix) || str_starts_with($action, '\\'.$prefix)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $action instanceof Closure || (is_string($action) && str_starts_with($action, 'App\\'));
     }
 }

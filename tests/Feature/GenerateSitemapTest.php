@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Models\BlogPost;
 use App\Models\Property;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
 
-it('writes a sitemap with the static pages and published properties', function (): void {
+it('writes a sitemap index pointing at the page, property and article sitemaps', function (): void {
     // forceCreate rather than the factory: PropertyFactory is still an empty stub
     // and the model does not use HasFactory.
     /** @var TestCase $this */
@@ -14,26 +15,44 @@ it('writes a sitemap with the static pages and published properties', function (
         'title' => 'Teszt ingatlan',
         'status' => 'active',
         'slug' => 'teszt-ingatlan-sitemap',
-        'elado_v_kiado' => 'kiado',
+        'offer_type' => 'kiado-raktar',
     ]);
 
     $hidden = Property::query()->forceCreate([
         'title' => 'Nem aktív ingatlan',
         'status' => 'inactive',
         'slug' => 'nem-aktiv-ingatlan',
-        'elado_v_kiado' => 'kiado',
+        'offer_type' => 'kiado-raktar',
     ]);
 
-    $path = sys_get_temp_dir().'/sitemap-test-'.bin2hex(random_bytes(6)).'.xml';
+    // BlogCategoryFactory picks from eight fixed names, so two posts share one category to avoid a slug clash.
+    $indexedPost = BlogPost::factory()->published()->create();
+    $noindexPost = BlogPost::factory()->published()->create(['noindex' => true, 'blog_category_id' => $indexedPost->blog_category_id]);
 
-    $this->artisan('sitemap:generate', ['--path' => $path])->assertSuccessful();
+    $directory = sys_get_temp_dir().'/sitemap-test-'.bin2hex(random_bytes(6));
+    File::ensureDirectoryExists($directory);
 
-    $xml = (string) file_get_contents($path);
-    File::delete($path);
+    $this->artisan('sitemap:generate', ['--path' => $directory.'/sitemap.xml'])->assertSuccessful();
 
-    expect($xml)->toContain('<urlset')
-        ->and($xml)->toContain(route('properties.show', ['property' => $property->slug]))
-        ->and($xml)->toContain(url('/kapcsolat'))
-        ->and($xml)->not->toContain($hidden->slug)
-        ->and($xml)->not->toContain('/admin');
+    $index = (string) file_get_contents($directory.'/sitemap.xml');
+    $pages = (string) file_get_contents($directory.'/sitemap-oldalak.xml');
+    $properties = (string) file_get_contents($directory.'/sitemap-ingatlanok.xml');
+    $articles = (string) file_get_contents($directory.'/sitemap-hirek.xml');
+    File::deleteDirectory($directory);
+
+    expect($index)->toContain('<sitemapindex')
+        ->and($index)->toContain(url('sitemap-oldalak.xml'))
+        ->and($index)->toContain(url('sitemap-ingatlanok.xml'))
+        ->and($index)->toContain(url('sitemap-hirek.xml'))
+        ->and($pages)->toContain('<urlset')
+        ->and($pages)->toContain(url('/kapcsolat'))
+        ->and($pages)->not->toContain('/adatlap-oldal')
+        ->and($pages)->not->toContain('/admin')
+        ->and($pages)->toContain('<loc>'.url('/offices-for-rent').'</loc>')
+        ->and($pages)->toContain('hreflang="en" href="'.url('/offices-for-rent').'"')
+        ->and($properties)->toContain(route('properties.show', ['property' => $property->slug]))
+        ->and($properties)->toContain('<loc>'.route('en.properties.show', ['property' => $property->slug]).'</loc>')
+        ->and($properties)->not->toContain($hidden->slug)
+        ->and($articles)->toContain(route('en.blog.show', ['post' => $indexedPost->slug]))
+        ->and($articles)->not->toContain($noindexPost->slug);
 });

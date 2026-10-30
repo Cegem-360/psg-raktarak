@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "647ccd86ad251a82d014feb0b4e7832e",
+    "content-hash": "c17f8af114b51ccc1787b33eb5546588",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3767,6 +3767,64 @@
             "time": "2026-10-27T07:14:23+00:00"
         },
         {
+            "name": "livewire/blaze",
+            "version": "v1.0.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/livewire/blaze.git",
+                "reference": "518679566eb57ea1f5f63cba551239c13d9b3e9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/livewire/blaze/zipball/518679566eb57ea1f5f63cba551239c13d9b3e9c",
+                "reference": "518679566eb57ea1f5f63cba551239c13d9b3e9c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
+                "illuminate/view": "^10.0|^11.0|^12.0|^13.0",
+                "nikic/php-parser": "^5.0",
+                "php": "^8.1"
+            },
+            "conflict": {
+                "livewire/flux": "<2.12.1"
+            },
+            "require-dev": {
+                "livewire/flux": "dev-main",
+                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
+                "pestphp/pest": "^2.0|^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.0|^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Livewire\\Blaze\\BlazeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Livewire\\Blaze\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Caleb Porzio"
+                }
+            ],
+            "description": "A tool for optimizing Blade component performance by folding them into parent templates",
+            "support": {
+                "issues": "https://github.com/livewire/blaze/issues",
+                "source": "https://github.com/livewire/blaze/tree/v1.0.20"
+            },
+            "time": "2026-10-25T20:07:27+00:00"
+        },
+        {
             "name": "livewire/livewire",
             "version": "v4.4.8",
             "source": {
@@ -3841,6 +3899,66 @@
                 }
             ],
             "time": "2026-10-21T12:53:46+00:00"
+        },
+        {
+            "name": "madbox-99/filament-essentials",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MadBox-99/filament-essentials.git",
+                "reference": "a8d853d10884bbe11da6443e4611c9b597912f7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MadBox-99/filament-essentials/zipball/a8d853d10884bbe11da6443e4611c9b597912f7a",
+                "reference": "a8d853d10884bbe11da6443e4611c9b597912f7a",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^5.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MadBox99\\FilamentEssentials\\FilamentEssentialsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MadBox99\\FilamentEssentials\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zoltán Tamás Szabó",
+                    "email": "zoli.szabok@gmail.com"
+                }
+            ],
+            "description": "Sensible defaults for Filament: translated labels on every field, entry and column, plus optional component defaults.",
+            "keywords": [
+                "defaults",
+                "filament",
+                "labels",
+                "laravel",
+                "translation"
+            ],
+            "support": {
+                "issues": "https://github.com/MadBox-99/filament-essentials/issues",
+                "source": "https://github.com/MadBox-99/filament-essentials/tree/v2.0.0"
+            },
+            "time": "2026-10-27T08:39:01+00:00"
         },
         {
             "name": "maennchen/zipstream-php",

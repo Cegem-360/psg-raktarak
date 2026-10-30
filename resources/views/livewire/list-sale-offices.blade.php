@@ -1,82 +1,72 @@
 <div>
 
-    <div class="relative bg-cover bg-center bg-no-repeat bg-fixed"
-        style="background-image: url({{ Vite::asset('resources/images/engineer-plan-green-railway-project-with-infrastru-2025-01-10-03-41-57-utc.webp') }});">
-        <div class="absolute inset-0 z-1 bg-gradient-to-b from-white/90 to-white/70"></div>
-        <div class="relative z-10 container mx-auto space-y-3 pt-24 pb-20">
-            <h2 class="mt-4 mb-4 font-bold text-5xl text-center drop-shadow text-logogray/80">
-                {{ __('page.title.office_buildings_for_sale') }}</h2>
-            <h4 class="text-xl text-center mb-16">({{ $totalOffices }} {{ __('page.results') }})</h4>
-            <div
-                class="flex justify-end gap-8 max-w-screen-xl mx-auto px-8 py-3 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                <div class="">
-                    <form action="#" class="">
-                        <div>
-                            <select id="szuro" wire:model.live="sortField"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                                <option value="title">{{ __('page.sort.by_name') }}</option>
-                                <option value="date">{{ __('page.sort.by_date') }}</option>
-                                <option value="ord">{{ __('page.sort.by_order') }}</option>
-                            </select>
-                        </div>
-                    </form>
-                </div>
+    <x-page-section>
+        <x-slot:heading>
+            {{ __('page.title.office_buildings_for_sale') }}
+            <span class="block mt-4 text-xl font-normal text-gray-700">({{ __(':count warehouses', ['count' => $totalOffices]) }})</span>
+        </x-slot:heading>
+        <x-glass-panel padding="px-8 py-3" class="flex justify-end gap-8">
+            <div class="">
+                <form action="#" class="">
+                    <div>
+                        <select id="szuro" wire:model.live="sortField"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                            <option value="title">{{ __('page.sort.by_name') }}</option>
+                            <option value="date">{{ __('page.sort.by_date') }}</option>
+                            <option value="ord">{{ __('page.sort.by_order') }}</option>
+                        </select>
+                    </div>
+                </form>
             </div>
+        </x-glass-panel>
 
-            <div
-                class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-screen-xl mx-auto p-8 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                <div class="relative hidden md:block">
-                    <!-- Google Maps Container -->
-                    <div wire:ignore id="map"
-                        class="sticky top-8 h-[120vh] rounded-lg shadow-lg bg-gray-100 flex items-center justify-center">
-                        <div class="text-center text-gray-500" id="map-placeholder">
-                            <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <p>{{ __('Térkép betöltése...') }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Map Error Display -->
-                    <div id="map-error"
-                        class="sticky top-8 h-[120vh] rounded-lg shadow-lg bg-red-50 border-2 border-red-200 items-center justify-center text-center p-8 hidden">
-                        <div class="text-red-600">
-                            <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
-                                </path>
-                            </svg>
-                            <h3 class="text-lg font-semibold mb-2">{{ __('Térkép betöltési hiba') }}</h3>
-                            <p id="map-error-message" class="text-sm"></p>
-                        </div>
+        <x-glass-panel class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="relative hidden md:block">
+                {{-- Google Maps Container --}}
+                <div wire:ignore id="map"
+                    class="sticky top-8 h-[120vh] rounded-lg shadow-lg bg-gray-100 flex items-center justify-center">
+                    <div class="text-center text-gray-500" id="map-placeholder">
+                        <svg class="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <p>{{ __('Loading map...') }}</p>
                     </div>
                 </div>
-                <div class="col-span-2">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        @foreach ($offices ?? [] as $office)
-                            <livewire:ingatlan-card :property="$office" :image="$office->getFirstImageUrl()" :images="collect($office->property_photos)"
-                                :title="$office->title" :description="$office->getAddressFormatedForSale()" :link="localized_route('properties.show-for-sale', [
-                                    'property' => $office->slug,
-                                ])" :small="true"
-                                :minicarousel="true" wire:key="office-{{ $office->id }}" />
-                        @endforeach
+
+                {{-- Map Error Display --}}
+                <div id="map-error"
+                    class="sticky top-8 h-[120vh] rounded-lg shadow-lg bg-red-50 border-2 border-red-200 items-center justify-center text-center p-8 hidden">
+                    <div class="text-red-600">
+                        <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z">
+                            </path>
+                        </svg>
+                        <h3 class="text-lg font-semibold mb-2">{{ __('Map loading error') }}</h3>
+                        <p id="map-error-message" class="text-sm"></p>
                     </div>
                 </div>
             </div>
-
-            <div
-                class="flex justify-center gap-8 max-w-screen-xl mx-auto px-8 py-3 backdrop-blur-3xl rounded-xl border border-white/15 shadow-xl">
-                {{-- Pagination --}}
-                {{ $this->getOffices()->links() }}
+            <div class="col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    @foreach ($offices ?? [] as $office)
+                        <livewire:property-card :property="$office" :small="true" :minicarousel="true" wire:key="office-{{ $office->id }}" />
+                    @endforeach
+                </div>
             </div>
-        </div>
-    </div>
+        </x-glass-panel>
+
+        <x-glass-panel padding="px-8 py-3" class="flex justify-center gap-8">
+            {{-- Pagination --}}
+            {{ $this->getOffices()->links() }}
+        </x-glass-panel>
+    </x-page-section>
 
 </div>
 @script
@@ -85,7 +75,7 @@
         import('{{ Vite::asset('resources/js/sale-offices-map.js') }}').then(module => {
             const apiKey = @js(config('services.google_maps.api_key'));
             const mapId = @js(config('services.google_maps.map_id'));
-            let officesData = @json($this->getOfficesForMap());
+            let officesData = {{ Js::from($this->getOfficesForMap()) }};
 
             // Check if API key is available
             if (!apiKey || apiKey.trim() === '') {
@@ -101,8 +91,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 616 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Térkép nem elérhető</h3>
-                                <p class="text-gray-500">Google Maps API kulcs szükséges a térkép megjelenítéséhez.</p>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Map not available') }}</h3>
+                                <p class="text-gray-500">{{ __('A Google Maps API key is required to display the map.') }}</p>
                             </div>
                         </div>
                     `;
@@ -123,8 +113,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 616 0z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-lg font-medium text-gray-900 mb-2">Térkép nem elérhető</h3>
-                                <p class="text-gray-500">Google Maps Map ID szükséges a térkép megjelenítéséhez.</p>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ __('Map not available') }}</h3>
+                                <p class="text-gray-500">{{ __('A Google Maps Map ID is required to display the map.') }}</p>
                             </div>
                         </div>
                     `;
@@ -173,7 +163,7 @@
                                 console.error('Failed to fetch fresh office data:',
                                     error);
                                 // Fallback to current visible data (no server call)
-                                const currentData = @json($this->getOfficesForMap());
+                                const currentData = {{ Js::from($this->getOfficesForMap()) }};
                                 window.saleOfficesMapHandler.refreshMarkers(
                                     currentData);
                             }).finally(() => {

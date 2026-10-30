@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\BudapestDistrict;
+use App\Enums\PropertyStatus;
+use App\Enums\PropertyType;
 use App\Observers\PropertyObserver;
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 #[ObservedBy(PropertyObserver::class)]
 #[Fillable([
-
     'title',
     'status',
     'content',
@@ -34,149 +37,94 @@ use Illuminate\Support\Str;
     'meta_description_en',
     'construction_year',
     'total_area',
-    'uzemeletetesi_dij',
-    'raktar_berleti_dij',
-    'parkolas',
-    'kozos_teruleti_arany',
-    'cim_irsz',
-    'cim_varos',
+    'operating_fee',
+    'storage_rent',
+    'parking',
+    'common_area_ratio',
+    'postal_code',
+    'city',
     'district',
-    'cim_utca',
-    'cim_hazszam',
+    'street',
+    'house_number',
     'maps_lat',
     'maps_lng',
-    'azonosito',
-    'osszterulet_addons',
-    'max_berleti_dij',
-    'max_berleti_dij_addons',
-    'min_berleti_dij',
-    'min_berleti_dij_addons',
-    'raktar_terulet',
-    'raktar_terulet_addons',
-    'raktar_berleti_dij_addons',
-    'uzemeletetesi_dij_addons',
-    'min_parkolas_dija',
-    'min_parkolas_dija_addons',
-    'max_parkolas_dija',
-    'max_parkolas_dija_addons',
-    'kozos_teruleti_arany_addons',
-    'min_kiado',
-    'min_kiado_addons',
-    'jelenleg_kiado',
-    'jelenleg_kiado_addons',
-    'kodszam',
+    'identifier',
+    'total_area_unit',
+    'max_rent',
+    'max_rent_unit',
+    'min_rent',
+    'min_rent_unit',
+    'storage_area',
+    'storage_area_unit',
+    'storage_rent_unit',
+    'operating_fee_unit',
+    'min_parking_fee',
+    'min_parking_fee_unit',
+    'max_parking_fee',
+    'max_parking_fee_unit',
+    'common_area_ratio_unit',
+    'min_available_area',
+    'min_available_area_unit',
+    'available_area',
+    'available_area_unit',
+    'code',
     'en_content',
-    'min_berleti_idoszak',
-    'min_berleti_idoszak_addons',
-    'cim_utca_addons',
-    'cimke',
+    'min_lease_term',
+    'min_lease_term_unit',
+    'street_type',
+    'label',
     'service',
     'maps',
-    'elado_v_kiado',
+    'offer_type',
     'updated',
-    'egyeb',
+    'other_info',
     'vat',
     'slug',
     'featured',
     'property_photos',
-    'created_at',
-    'updated_at',
 ])]
-#[Unguarded]
 final class Property extends Model
 {
     use HasFactory;
 
+    public const string DISTRICT_COUNTS_CACHE_KEY = 'properties.rent_count_by_district';
+
+    /**
+     * Active rental offices per Budapest district (1–23), for the district map.
+     *
+     * One query plus PHP matching instead of 23 counts, cached until a property is
+     * saved or deleted. A property counts in a district when its district column
+     * names it (Roman or Arabic numeral) or its postal code belongs to it, the same
+     * rule as the inDistrict() scope.
+     *
+     * @return array<int, int>
+     */
     public static function countByDistrict(): array
     {
-        // Kerületek római számmal
-        $romanNumerals = [
-            1 => 'I',
-            2 => 'II',
-            3 => 'III',
-            4 => 'IV',
-            5 => 'V',
-            6 => 'VI',
-            7 => 'VII',
-            8 => 'VIII',
-            9 => 'IX',
-            10 => 'X',
-            11 => 'XI',
-            12 => 'XII',
-            13 => 'XIII',
-            14 => 'XIV',
-            15 => 'XV',
-            16 => 'XVI',
-            17 => 'XVII',
-            18 => 'XVIII',
-            19 => 'XIX',
-            20 => 'XX',
-            21 => 'XXI',
-            22 => 'XXII',
-            23 => 'XXIII',
-        ];
+        return once(fn (): array => Cache::remember(self::DISTRICT_COUNTS_CACHE_KEY, now()->addDay(), function (): array {
+            $properties = self::query()->rent()->active()->budapestOnly()->get(['district', 'postal_code']);
 
-        $result = [];
+            return collect(BudapestDistrict::cases())
+                ->mapWithKeys(fn (BudapestDistrict $district): array => [
+                    $district->value => $properties->filter(fn (self $property): bool => $property->isInDistrict($district))->count(),
+                ])
+                ->all();
+        }));
+    }
 
-        foreach (array_keys($romanNumerals) as $num) {
-            $count = self::query()->where(function (\Illuminate\Contracts\Database\Eloquent\Builder $q) use ($num): void {
-                $q->rent()->active()->budapestOnly()->inDistrict((string) $num);
-            })->count();
-
-            $result[$num] = $count;
-        }
-
-        return $result;
+    public static function forgetDistrictCounts(): void
+    {
+        Cache::forget(self::DISTRICT_COUNTS_CACHE_KEY);
     }
 
     /**
-     * Convert Budapest postal code to district Roman numeral
+     * The PHP counterpart of the inDistrict() scope: the district column names the
+     * district (by number or Roman numeral), or the postal code belongs to it.
      */
-    public static function postalCodeToDistrict(string $postalCode): ?string
+    public function isInDistrict(BudapestDistrict $district): bool
     {
-        // Check if it's a valid 4-digit Budapest postal code
-        if (mb_strlen($postalCode) !== 4 || ! ctype_digit($postalCode)) {
-            return null;
-        }
-
-        $code = (int) $postalCode;
-
-        // Check if it's a Budapest postal code (1000-1999)
-        if ($code < 1000 || $code > 1999) {
-            return null;
-        }
-
-        // Calculate district number using the mathematical formula
-        $districtNum = floor($code / 10) - 100;
-
-        // Roman numerals mapping
-        $romanNumerals = [
-            1 => 'I',
-            2 => 'II',
-            3 => 'III',
-            4 => 'IV',
-            5 => 'V',
-            6 => 'VI',
-            7 => 'VII',
-            8 => 'VIII',
-            9 => 'IX',
-            10 => 'X',
-            11 => 'XI',
-            12 => 'XII',
-            13 => 'XIII',
-            14 => 'XIV',
-            15 => 'XV',
-            16 => 'XVI',
-            17 => 'XVII',
-            18 => 'XVIII',
-            19 => 'XIX',
-            20 => 'XX',
-            21 => 'XXI',
-            22 => 'XXII',
-            23 => 'XXIII',
-        ];
-
-        return $romanNumerals[$districtNum] ?? null;
+        return BudapestDistrict::tryFromName((string) $this->district) === $district
+            || BudapestDistrict::tryFromPostalCode((string) $this->postal_code) === $district;
     }
 
     /**
@@ -203,50 +151,95 @@ final class Property extends Model
         return $this->belongsToMany(Category::class);
     }
 
-
-    public function getAddressFormated(): string
+    /**
+     * @return HasMany<Gallery, $this>
+     */
+    public function images(): HasMany
     {
-        $address = mb_trim(sprintf('%s %s, %s %s %s', $this->cim_irsz, $this->cim_varos, $this->cim_utca, __($this->cim_utca_addons), $this->cim_hazszam));
-        $rent = __('Rental fee');
-        $address .=
-         '<br><strong>'.$rent.':</strong> '.
-          $this->min_berleti_dij
-          .($this->max_berleti_dij && $this->max_berleti_dij !== $this->min_berleti_dij ? ' - '.$this->max_berleti_dij.' '.__($this->min_berleti_dij_addons) : ' '.__($this->min_berleti_dij_addons))
-          .'<br><strong>'.__('Operating Fee').': </strong>'.translate_value($this->uzemeletetesi_dij).' '.__($this->uzemeletetesi_dij_addons);
-
-        return $address ?: null;
+        return $this->hasMany(Gallery::class, 'target_table_id')
+            ->where('target_table', 'property')
+            ->orderBy('ord');
     }
 
-    public function getAddressFormatedForSale(): string
+    /**
+     * The street address on one line: "1051 Budapest, Szabadság tér 7."
+     */
+    public function address(): string
     {
-        return sprintf('%s %s, %s %s <br><strong>', $this->cim_irsz, $this->cim_varos, $this->cim_utca ?? '', __($this->cim_utca_addons) ?? '').__('Total Area').sprintf(':</strong> %s m2<br><strong>', $this->total_area).__('Price').sprintf(':</strong> %s %s', $this->min_berleti_dij, __($this->min_berleti_dij_addons));
+        return Str::squish(sprintf('%s %s, %s %s %s', $this->postal_code, $this->city, $this->street, __($this->street_type ?? ''), $this->house_number));
     }
 
+    /**
+     * The English version of a text field on the English site when it is filled
+     * in, the Hungarian one otherwise.
+     */
+    public function localized(string $field, string $englishField): ?string
+    {
+        if (app()->getLocale() === 'en' && filled($this->{$englishField})) {
+            return $this->{$englishField};
+        }
 
+        return $this->{$field};
+    }
+
+    /**
+     * A Google Maps embed of the building: its coordinates when known, its address otherwise.
+     */
+    public function mapEmbedUrl(): string
+    {
+        $query = $this->maps_lat && $this->maps_lng ? $this->maps_lat.','.$this->maps_lng : $this->address();
+
+        return 'https://maps.google.com/maps?'.http_build_query(['q' => $query, 'hl' => app()->getLocale(), 'z' => 16, 'output' => 'embed']);
+    }
+
+    /**
+     * The public URL of the first gallery photo, or null when the property has none.
+     */
     public function getFirstImageUrl(): ?string
     {
-        return Storage::url(collect($this->property_photos)->first());
+        $firstPhoto = collect($this->property_photos)->first();
+
+        return $firstPhoto === null ? null : Storage::url($firstPhoto);
+    }
+
+    /**
+     * Rent or sale; a property without a type is treated as a rental, as the site always has.
+     */
+    public function type(): PropertyType
+    {
+        return $this->offer_type ?? PropertyType::Rent;
     }
 
     public function isRent(): bool
     {
-        return $this->elado_v_kiado === 'kiado-raktar';
+        return $this->offer_type === PropertyType::Rent;
     }
 
     public function isSale(): bool
     {
-        return $this->elado_v_kiado === 'elado-raktar';
+        return $this->offer_type === PropertyType::Sale;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === PropertyStatus::Active;
+    }
+
+    /**
+     * The public page of the property: /kiado-raktar/… or /elado-raktar/…
+     */
+    public function url(): string
+    {
+        return localized_route($this->type()->showRoute(), ['property' => $this->slug]);
     }
 
     /**
      * @param  Builder<self>  $query
      */
     #[Scope]
-    protected function byCategory(Builder $query, string $category): void
+    protected function inCategory(Builder $query, Category $category): void
     {
-        $query->whereHas('categories', function (Builder $q) use ($category): void {
-            $q->where('name', $category);
-        });
+        $query->whereRelation('categories', 'categories.id', $category->id);
     }
 
     /**
@@ -264,7 +257,7 @@ final class Property extends Model
     #[Scope]
     protected function active(Builder $query): void
     {
-        $query->where('status', 'active');
+        $query->where('status', PropertyStatus::Active);
     }
 
     /**
@@ -273,7 +266,7 @@ final class Property extends Model
     #[Scope]
     protected function inactive(Builder $query): void
     {
-        $query->where('status', 'inactive');
+        $query->where('status', PropertyStatus::Inactive);
     }
 
     /**
@@ -282,7 +275,7 @@ final class Property extends Model
     #[Scope]
     protected function sale(Builder $query): void
     {
-        $query->where('elado_v_kiado', 'elado-raktar');
+        $query->where('offer_type', PropertyType::Sale);
     }
 
     /**
@@ -291,7 +284,7 @@ final class Property extends Model
     #[Scope]
     protected function rent(Builder $query): void
     {
-        $query->where('elado_v_kiado', 'kiado-raktar');
+        $query->where('offer_type', PropertyType::Rent);
     }
 
     /**
@@ -300,7 +293,7 @@ final class Property extends Model
     #[Scope]
     protected function agglomeration(Builder $query): void
     {
-        $query->where('cim_varos', 'not like', '%Budapest%');
+        $query->whereNot(fn (Builder $q): Builder => $q->budapestOnly());
     }
 
     /**
@@ -309,120 +302,34 @@ final class Property extends Model
     #[Scope]
     protected function budapestOnly(Builder $query): void
     {
-        $query->where(function (\Illuminate\Contracts\Database\Query\Builder $q): void {
-            $q->where('cim_varos', 'like', '%Budapest%')
-                ->orWhere(function (\Illuminate\Contracts\Database\Query\Builder $subQ): void {
-                    $subQ->where('cim_irsz', 'like', '1%');
-                });
-        });
+        $query->where(fn (QueryBuilder $q): QueryBuilder => $q
+            ->where('city', 'like', '%Budapest%')
+            ->orWhere('postal_code', 'like', '1%'));
     }
 
     /**
+     * Properties in one Budapest district, given by number ("5") or Roman numeral ("V").
+     *
      * @param  Builder<self>  $query
      */
     #[Scope]
     protected function inDistrict(Builder $query, string $district): void
     {
-        $districtNum = (int) $district;
-
-        // Roman numerals mapping
-        $romanNumerals = [
-            1 => 'I',
-            2 => 'II',
-            3 => 'III',
-            4 => 'IV',
-            5 => 'V',
-            6 => 'VI',
-            7 => 'VII',
-            8 => 'VIII',
-            9 => 'IX',
-            10 => 'X',
-            11 => 'XI',
-            12 => 'XII',
-            13 => 'XIII',
-            14 => 'XIV',
-            15 => 'XV',
-            16 => 'XVI',
-            17 => 'XVII',
-            18 => 'XVIII',
-            19 => 'XIX',
-            20 => 'XX',
-            21 => 'XXI',
-            22 => 'XXII',
-            23 => 'XXIII',
-        ];
-
-        $romanDistrict = $romanNumerals[$districtNum] ?? $district;
-
-        $query->where(function (\Illuminate\Contracts\Database\Query\Builder $q) use ($romanDistrict, $district, $districtNum): void {
-            // District oszlopban keresés
-            $q->where('district', $romanDistrict)
-                ->orWhere('district', $district);
-
-            // Irányítószám alapú keresés - matematikai megoldás
-            if ($districtNum >= 1 && $districtNum <= 23) {
-                $q->orWhere(function (\Illuminate\Contracts\Database\Query\Builder $subQ) use ($districtNum): void {
-                    // Irányítószám → szám → osztás 10-zel → kivonás 100
-                    // Például: 1051 → 1051/10=105 → 105-100=5 → 5. kerület
-                    $this->applyPostalCodeDistrictFilter($subQ, $districtNum);
-                });
-            }
-        });
+        $query->where(fn (QueryBuilder $q) => $this->whereInDistrict($q, $district));
     }
 
     /**
+     * Properties in any of the given Budapest districts.
+     *
      * @param  Builder<self>  $query
+     * @param  array<int, string>  $districts
      */
     #[Scope]
     protected function inDistricts(Builder $query, array $districts): void
     {
-        $query->where(function (\Illuminate\Contracts\Database\Query\Builder $q) use ($districts): void {
+        $query->where(function (QueryBuilder $q) use ($districts): void {
             foreach ($districts as $district) {
-                $q->orWhere(function (\Illuminate\Contracts\Database\Query\Builder $subQ) use ($district): void {
-                    $districtNum = (int) $district;
-
-                    // Roman numerals mapping
-                    $romanNumerals = [
-                        1 => 'I',
-                        2 => 'II',
-                        3 => 'III',
-                        4 => 'IV',
-                        5 => 'V',
-                        6 => 'VI',
-                        7 => 'VII',
-                        8 => 'VIII',
-                        9 => 'IX',
-                        10 => 'X',
-                        11 => 'XI',
-                        12 => 'XII',
-                        13 => 'XIII',
-                        14 => 'XIV',
-                        15 => 'XV',
-                        16 => 'XVI',
-                        17 => 'XVII',
-                        18 => 'XVIII',
-                        19 => 'XIX',
-                        20 => 'XX',
-                        21 => 'XXI',
-                        22 => 'XXII',
-                        23 => 'XXIII',
-                    ];
-
-                    $romanDistrict = $romanNumerals[$districtNum] ?? $district;
-
-                    // District oszlopban keresés
-                    $subQ->where('district', $romanDistrict)
-                        ->orWhere('district', $district);
-
-                    // Irányítószám alapú keresés - matematikai megoldás
-                    if ($districtNum >= 1 && $districtNum <= 23) {
-                        $subQ->orWhere(function (\Illuminate\Contracts\Database\Query\Builder $postalQ) use ($districtNum): void {
-                            // Irányítószám → szám → osztás 10-zel → kivonás 100
-                            // Például: 1051 → 1051/10=105 → 105-100=5 → 5. kerület
-                            $this->applyPostalCodeDistrictFilter($postalQ, $districtNum);
-                        });
-                    }
-                });
+                $q->orWhere(fn (QueryBuilder $subQ) => $this->whereInDistrict($subQ, (string) $district));
             }
         });
     }
@@ -436,8 +343,8 @@ final class Property extends Model
         $query->where(function (Builder $subQ) use ($search): void {
             $subQ->where('title', 'like', '%'.$search.'%')
                 ->orWhere('content', 'like', '%'.$search.'%')
-                ->orWhere('cim_varos', 'like', '%'.$search.'%')
-                ->orWhere('kodszam', 'like', '%'.$search.'%')
+                ->orWhere('city', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%')
                 ->orWhereHas('tags', function (Builder $q) use ($search): void {
                     $q->where('name', 'like', '%'.$search.'%');
                 })
@@ -460,93 +367,67 @@ final class Property extends Model
      * @param  Builder<self>  $query
      */
     #[Scope]
-    protected function areaRange(Builder $query, ?int $minArea = null, ?int $maxArea = null): void
-    {
-        if ($minArea && $maxArea) {
-            $query->whereBetween('total_area', [$minArea, $maxArea]);
-        } elseif ($minArea) {
-            $query->where('total_area', '>=', $minArea);
-        } elseif ($maxArea) {
-            $query->where('total_area', '<=', $maxArea);
-        }
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
-    #[Scope]
     protected function priceRange(Builder $query, ?int $minPrice = null, ?int $maxPrice = null): void
     {
         if ($minPrice && $maxPrice) {
-            $query->whereBetween('max_berleti_dij', [$minPrice, $maxPrice]);
+            $query->whereBetween('max_rent', [$minPrice, $maxPrice]);
         } elseif ($minPrice) {
-            $query->where('max_berleti_dij', '>=', $minPrice);
+            $query->where('max_rent', '>=', $minPrice);
         } elseif ($maxPrice) {
-            $query->where('max_berleti_dij', '<=', $maxPrice);
+            $query->where('max_rent', '<=', $maxPrice);
         }
-    }
-
-    protected function slug(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $value ?: Str::slug($this->title),
-            set: fn ($value) => $value ?: Str::slug($this->title)
-        );
-    }
-
-    /**
-     * Automatically set district when postal code is set
-     */
-    protected function cimIrsz(): Attribute
-    {
-        return Attribute::make(
-            set: function ($value) {
-                // Auto-set district if it's a Budapest postal code
-                if ($value && $this->cim_varos && str_contains($this->cim_varos, 'Budapest')) {
-                    $district = self::postalCodeToDistrict($value);
-                    if ($district) {
-                        $this->attributes['district'] = $district;
-                    }
-                }
-
-                return $value;
-            }
-        );
     }
 
     protected function casts(): array
     {
         return [
-            'updated_at' => 'datetime',
-            'created_at' => 'datetime',
             'featured' => 'boolean',
             'vat' => 'boolean',
             'property_photos' => 'array',
+            'status' => PropertyStatus::class,
+            'offer_type' => PropertyType::class,
         ];
+    }
+
+    /**
+     * The district column names the district (by number or Roman numeral), or the
+     * postal code belongs to it. A free-text value that is not a district only
+     * matches the district column literally.
+     */
+    private function whereInDistrict(QueryBuilder $query, string $district): void
+    {
+        $budapestDistrict = BudapestDistrict::tryFromName($district);
+
+        $query->where('district', $budapestDistrict?->roman() ?? $district)
+            ->orWhere('district', $district);
+
+        if ($budapestDistrict !== null) {
+            $query->orWhere(fn (QueryBuilder $postalQuery) => $this->applyPostalCodeDistrictFilter($postalQuery, $budapestDistrict->value));
+        }
     }
 
     /**
      * Apply the postal-code based district filter in a database-portable way.
      *
-     * A `cim_irsz` postal code such as 1051 maps to a Budapest district via
+     * A `postal_code` postal code such as 1051 maps to a Budapest district via
      * floor(1051 / 10) - 100 = 5. MySQL and SQLite spell the required string and
      * math functions differently, so we branch on the active driver while keeping
      * identical semantics.
      */
-    private function applyPostalCodeDistrictFilter(\Illuminate\Contracts\Database\Query\Builder $query, int $districtNum): void
+    private function applyPostalCodeDistrictFilter(QueryBuilder $query, int $districtNum): void
     {
         if ($query->getConnection()->getDriverName() === 'sqlite') {
-            $query->whereRaw('LENGTH(cim_irsz) = 4')
-                ->whereRaw('CAST(cim_irsz AS INTEGER) > 999')
-                ->whereRaw('CAST(cim_irsz AS INTEGER) < 10000')
-                ->whereRaw('(CAST(cim_irsz AS INTEGER) / 10) - 100 = ?', [$districtNum]);
+            $query->whereRaw('LENGTH(postal_code) = 4')
+                ->whereRaw('CAST(postal_code AS INTEGER) > 999')
+                ->whereRaw('CAST(postal_code AS INTEGER) < 10000')
+                ->whereRaw('(CAST(postal_code AS INTEGER) / 10) - 100 = ?', [$districtNum]);
 
             return;
         }
 
-        $query->whereRaw('CHAR_LENGTH(cim_irsz) = 4')
-            ->whereRaw('CAST(cim_irsz AS UNSIGNED) > 999')
-            ->whereRaw('CAST(cim_irsz AS UNSIGNED) < 10000')
-            ->whereRaw('FLOOR(CAST(cim_irsz AS UNSIGNED) / 10) - 100 = ?', [$districtNum]);
+        $query->whereRaw('CHAR_LENGTH(postal_code) = 4')
+            ->whereRaw('CAST(postal_code AS UNSIGNED) > 999')
+            ->whereRaw('CAST(postal_code AS UNSIGNED) < 10000')
+            ->whereRaw('FLOOR(CAST(postal_code AS UNSIGNED) / 10) - 100 = ?', [$districtNum]);
     }
 }

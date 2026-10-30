@@ -5,73 +5,40 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use App\Models\Property;
-use App\Services\FavoritesExcelExportService;
-use Exception;
+use App\Services\FavoriteProperties;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Component;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 final class FavoritesList extends Component
 {
-    public $favoriteProperties = [];
+    /** @var Collection<int, Property> */
+    public Collection $favoriteProperties;
 
-    public $favoriteCount = 0;
+    public int $favoriteCount = 0;
 
-    protected $listeners = [
-        'favorites-updated' => 'refreshFavorites',
-        'refresh-favorites' => 'refreshFavorites',
-        'openSendFavoritesModal' => 'openSendFavoritesModal',
-    ];
-
-    public function mount(): void
+    public function mount(FavoriteProperties $favorites): void
     {
-        $this->loadFavorites();
+        $this->loadFavorites($favorites);
     }
 
-    public function refreshFavorites(): void
+    #[On('favorites-updated')]
+    #[On('refresh-favorites')]
+    public function refreshFavorites(FavoriteProperties $favorites): void
     {
-        $this->loadFavorites();
-    }
-
-    public function openSendFavoritesModal(): void
-    {
-        $this->dispatch('openSendFavoritesModal')->to('favorites-send-modal');
+        $this->loadFavorites($favorites);
     }
 
     public function render(): Factory|View
     {
-        return view('livewire.favorites-list', [
-            'favoriteProperties' => $this->favoriteProperties,
-            'favoriteCount' => $this->favoriteCount,
-        ]);
+        return view('livewire.favorites-list');
     }
 
-    private function loadFavorites(): void
+    private function loadFavorites(FavoriteProperties $favorites): void
     {
-        $favorites = $this->getFavorites();
-        $this->favoriteCount = count($favorites);
-
-        if ($favorites !== []) {
-            $this->favoriteProperties = Property::query()->whereIn('id', $favorites)
-                ->active()
-                ->get();
-        } else {
-            $this->favoriteProperties = collect();
-        }
-    }
-
-    private function getFavorites(): array
-    {
-        try {
-            $favorites = Cookie::get('property_favorites', '[]');
-            $decoded = json_decode($favorites, true);
-
-            return is_array($decoded) ? $decoded : [];
-        } catch (Exception) {
-            return [];
-        }
+        $this->favoriteProperties = $favorites->properties();
+        $this->favoriteCount = $this->favoriteProperties->count();
     }
 }

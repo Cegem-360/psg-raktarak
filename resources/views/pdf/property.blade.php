@@ -55,19 +55,19 @@
         </style>
     </head>
 
-    <body class="text-sm leading-normal text-gray-800 bg-white">
+    <body class="text-gray-800 bg-white text-sm leading-normal">
         <div class="max-w-[210mm] mx-auto p-0">
-            <!-- Header -->
+            {{-- Header --}}
             <div class="bg-white text-black px-6 py-4 relative min-h-[80px]">
-                <!-- Logo bal felső sarokban -->
+                {{-- Logo bal felső sarokban --}}
                 <div class="absolute top-3 left-6">
-                    <img src="{{ Vite::asset('resources/images/psg-irodahazak-logo.png') }}" alt="PSG Logo"
-                        class="w-auto h-16" loading="lazy">
+                    <img src="{{ Vite::asset('resources/images/psg-raktarak-logo.webp') }}" alt="PSG Logo"
+                        class="h-16 w-auto" loading="lazy">
                 </div>
 
-                <!-- Cím középen, több távolsággal a logótól -->
-                <div class="pt-8 text-center">
-                    <h1 class="mb-1 text-xl font-bold">
+                {{-- Cím középen, több távolsággal a logótól --}}
+                <div class="text-center pt-8 px-40">
+                    <h1 class="text-xl font-bold mb-1 break-words">
                         @if (app()->getLocale() === 'en')
                             {{ Translate::whereName($property->title)->first()?->translated ?: $property->title }}
                         @else
@@ -76,17 +76,17 @@
                     </h1>
                     <div class="text-sm font-medium opacity-90">
 
-                        {{ $property->cim_irsz ?? '' }} {{ $property->cim_varos ?? '' }},
-                        {{ $property->cim_utca ?? '' }} {{ $property->cim_utca_addons ?? '' }}
-                        {{ $property->cim_hazszam ?? '' }}
+                        {{ $property->postal_code ?? '' }} {{ $property->city ?? '' }},
+                        {{ $property->street ?? '' }} {{ $property->street_type ?? '' }}
+                        {{ $property->house_number ?? '' }}
 
                     </div>
                 </div>
             </div>
 
-            <!-- Main Content -->
+            {{-- Main Content --}}
             <div class="flex min-h-[380px]">
-                <!-- Left Column - Image -->
+                {{-- Left Column - Image --}}
                 <div class="w-1/2 p-0">
                     @if ($property->property_photos && collect($property->property_photos)->count() > 0)
                         <img src="{{ $property->getFirstImageUrl() }}" alt="{{ $property->title }}"
@@ -98,93 +98,88 @@
                     @endif
                 </div>
 
-                <!-- Right Column - Details -->
-                <!-- Right Column - Details -->
-                <div class="w-1/2 p-6 text-sm leading-snug bg-gray-50">
+                {{-- Right Column - Details --}}
+                <div class="w-1/2 p-6 bg-gray-50 text-sm leading-snug">
                     @if ($property->construction_year)
                         <x-pdf.property-column :first_span="__('Construction Year')" :second_span="$property->construction_year" />
                     @endif
 
                     @if ($property->total_area)
-                        <x-pdf.property-column :first_span="__('Total Area')" :second_span="$property->total_area . ' m²'" />
+                        <x-pdf.property-column :first_span="__('Total Area')" :second_span="$property->total_area . ' m2'" />
                     @endif
 
-                    @if ($property->jelenleg_kiado)
-                        <x-pdf.property-column :first_span="__('Currently Available')" :second_span="$property->jelenleg_kiado . ' m²'" />
+                    @if ($property->available_area)
+                        <x-pdf.property-column :first_span="__('Currently Available')" :second_span="$property->available_area . ' m2'" />
                     @endif
 
-                    @if ($property->min_kiado)
-                        <x-pdf.property-column :first_span="__('Min. Available')" :second_span="number_format((float) $property->min_kiado, 0, ',', ' ') .
-                            ' ' .
-                            __($property->min_kiado_addons ?? '')" />
+                    @if ($property->min_available_area)
+                        <x-pdf.property-column :first_span="__('Min. Available')" :second_span="$property->min_available_area . ' ' . __($property->min_available_area_unit ?? '')" />
                     @endif
 
                     @if ($property->isSale())
-                        <x-pdf.property-column :first_span="__('Sale Price')" :second_span="number_format((float) $property->min_berleti_dij, 2, ',', ' ') .
-                            ' ' .
-                            __($property->min_berleti_dij_addons ?? '')" />
+                        <x-pdf.property-column :first_span="__('Sale Price')" :second_span="$property->min_rent . ' ' . __($property->min_rent_unit ?? '')" />
                     @endif
 
                     @if ($property->isRent())
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Rent') }}:</span>
                             <span class="font-medium text-gray-900">
-                                @if ($property->min_berleti_dij && $property->max_berleti_dij)
-                                    {{ number_format((float) $property->min_berleti_dij, 2, ',', ' ') . ' - ' . number_format((float) $property->max_berleti_dij, 2, ',', ' ') }}
+                                @if ($property->min_rent && $property->max_rent)
+                                    {{ $property->min_rent . ' - ' . $property->max_rent }}
                                 @else
-                                    {{ number_format((float) $property->min_berleti_dij, 2, ',', ' ') }}
+                                    {{ $property->min_rent }}
                                 @endif
-                                {{ __($property->min_berleti_dij_addons ?? '') }}
+                                {{ __($property->min_rent_unit ?? '') }}
                             </span>
                         </div>
                     @endif
-                    @if ($property->uzemeletetesi_dij)
-                        <x-pdf.property-column :first_span="__('Operating Fee')" :second_span="translate_value($property->uzemeletetesi_dij) . ' ' . __($property->uzemeletetesi_dij_addons ?? '')" />
+                    @if ($property->operating_fee)
+                        <x-pdf.property-column :first_span="__('Operating Fee')" :second_span="translate_value($property->operating_fee) . ' ' . __($property->operating_fee_unit ?? '')" />
                     @endif
 
-                    @if ($property->raktar_terulet)
-                        <x-pdf.property-column :first_span="__('Storage Area')" :second_span="number_format((float) $property->raktar_terulet, 0, ',', ' ') .
+                    @if ($property->storage_area)
+                        <x-pdf.property-column :first_span="__('Storage Area')" :second_span="number_format((int) $property->storage_area, 0, ',', ' ') .
                             ' ' .
-                            __($property->raktar_terulet_addons ?? '')" />
+                            __($property->storage_area_unit ?? '')" />
                     @endif
-                    @if ($property->raktar_berleti_dij)
-                        <x-pdf.property-column :first_span="__('Storage Rent')" :second_span="number_format((float) $property->raktar_berleti_dij, 2, ',', ' ') .
+                    @if ($property->storage_rent)
+                        <x-pdf.property-column :first_span="__('Storage Rent')" :second_span="number_format((int) $property->storage_rent, 0, ',', ' ') .
                             ' ' .
-                            __($property->raktar_berleti_dij_addons ?? '')" />
+                            __($property->storage_rent_unit ?? '')" />
                     @endif
-                    @if ($property->parkolas)
-                        <x-pdf.property-column :first_span="__('Parking')" :second_span="__($property->parkolas)" />
+                    @if ($property->parking)
+                        <x-pdf.property-column :first_span="__('Parking')" :second_span="__($property->parking)" />
                     @endif
-                    @if ($property->min_parkolas_dija)
+                    @if ($property->min_parking_fee)
                         <div class="flex justify-between items-center py-1.5 border-b border-gray-200">
                             <span class="font-bold text-gray-600">{{ __('Parking Fee') }}:</span>
                             <span class="font-medium text-gray-900">
-                                @if ($property->min_parkolas_dija && $property->max_parkolas_dija)
-                                    {{ $property->min_parkolas_dija . ' - ' . $property->max_parkolas_dija }}
+                                @if ($property->min_parking_fee && $property->max_parking_fee)
+                                    {{ $property->min_parking_fee . ' - ' . $property->max_parking_fee }}
                                 @else
-                                    {{ $property->min_parkolas_dija }}
+                                    {{ $property->min_parking_fee }}
                                 @endif
-                                {{ __($property->min_parkolas_dija_addons ?? '') }}
+                                {{ __($property->min_parking_fee_unit ?? '') }}
                             </span>
                         </div>
                     @endif
 
-                    @if ($property->kozos_teruleti_arany)
-                        <x-pdf.property-column :first_span="__('Common Area Ratio')" :second_span="$property->kozos_teruleti_arany . '%'" />
+                    @if ($property->common_area_ratio)
+                        <x-pdf.property-column :first_span="__('Common Area Ratio')" :second_span="$property->common_area_ratio . '%'" />
                     @endif
 
-                    @if ($property->min_berleti_idoszak)
-                        <x-pdf.property-column :first_span="__('Min. Rental Period')" :second_span="$property->min_berleti_idoszak .
+                    @if ($property->min_lease_term)
+                        <x-pdf.property-column :first_span="__('Min. Rental Period')" :second_span="$property->min_lease_term .
                             ' ' .
-                            __($property->min_berleti_idoszak_addons ?? '')" />
+                            __($property->min_lease_term_unit ?? '')" />
                     @endif
 
-                    @if ($property->kodszam)
-                        <x-pdf.property-column :first_span="__('Code')" :second_span="$property->kodszam" />
+                    @if ($property->code)
+                        <x-pdf.property-column :first_span="__('Code')" :second_span="$property->code" />
                     @endif
 
                     @if ($property->vat)
-                        <div class="p-3 mt-3 text-sm">
+                        <div class="mt-3 p-3 text-sm">
                             <span
                                 class="font-bold text-red-600">{{ __('The above fees are subject to an additional 27% VAT!') }}
                             </span>
@@ -194,58 +189,88 @@
             </div>
         </div>
 
-        <!-- Images Gallery -->
+        {{-- Images Gallery --}}
         @if ($property->property_photos && collect($property->property_photos)->count() > 1)
-            <div class="px-6 mt-6">
+            <div class="mt-6 px-6">
                 <div class="grid grid-cols-3 gap-3">
                     @foreach (collect($property->property_photos)->skip(1)->take($property->isSale() ? 12 : 9) as $image)
                         <div class="image-item">
                             <img src="{{ Storage::url($image) }}" alt="{{ __('Property image') }}"
-                                class="object-cover w-full h-24 border border-gray-200 rounded" loading="lazy">
+                                class="w-full h-24 object-cover rounded border border-gray-200" loading="lazy">
                         </div>
                     @endforeach
                 </div>
             </div>
         @endif
-        <!-- Egyéb mezők -->
-        @if ($property->egyeb)
-            <div class="px-6 py-4 mt-6 bg-gray-50">
-                <div class="text-sm leading-relaxed text-gray-700">
-                    {!! $property->egyeb !!}
+        {{-- Egyéb mezők --}}
+        @if ($property->other_info)
+            <div class="mt-6 px-6 py-4 bg-gray-50">
+                <div class="text-sm text-gray-700 leading-relaxed">
+                    {!! $property->other_info !!}
                 </div>
             </div>
         @endif
 
-        <!-- Description -->
-        @if ($property->content)
-            <div class="px-6 py-4 mt-6 bg-gray-50">
-                <div class="text-sm leading-relaxed text-justify text-gray-700" style="page-break-inside: auto;">
-                    {!! $property->content !!}
+        {{-- Description --}}
+        @if (app()->getLocale() === 'en' ? $property->en_content : $property->content)
+            <div class="mt-6 px-6 py-4 bg-gray-50">
+                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
+                    {!! app()->getLocale() === 'en' ? $property->en_content : $property->content !!}
                 </div>
             </div>
         @endif
-        @if ($property->tags || $property->services)
-            <div class="px-6 py-4 mt-6 bg-gray-50" style="page-break-inside: auto;">
-                <h3 class="mb-3 text-base font-bold text-gray-800">Műszaki paraméterek és szolgáltatások</h3>
-                <div class="text-sm leading-relaxed text-justify text-gray-700" style="page-break-inside: auto;">
-                    <ul class="mb-4 list-disc list-inside ">
-                        @if ($property->tags->count() > 0)
-                            @foreach ($property->tags as $item)
-                                <li class="mb-1">{{ $item->name }}</li>
-                            @endforeach
+        @php
+            $collator = class_exists(\Collator::class) ? new \Collator('hu_HU') : null;
+            if ($collator) {
+                $collator->setStrength(\Collator::SECONDARY);
+            }
 
-                        @endif
-                        @if ($property->services->count() > 0)
-                            @foreach ($property->services as $item)
+            $huCompare = function ($a, $b) use ($collator) {
+                $an = (string) ($a->name ?? '');
+                $bn = (string) ($b->name ?? '');
+                if ($collator) {
+                    return $collator->compare($an, $bn);
+                }
+                return strcasecmp(\Illuminate\Support\Str::ascii($an), \Illuminate\Support\Str::ascii($bn));
+            };
+
+            $normalize = function ($i) {
+                if (is_string($i)) {
+                    return (object) ['name' => $i];
+                }
+                if (is_array($i)) {
+                    return isset($i['name']) ? (object) ['name' => $i['name']] : null;
+                }
+                return $i; // assume object with ->name
+            };
+
+            $items = collect($property->tags ?? [])
+                ->merge(collect($property->services ?? []))
+                ->map($normalize)
+                ->filter(fn($i) => is_object($i) && filled($i->name ?? null))
+                ->unique(fn($i) => \Illuminate\Support\Str::ascii(\Illuminate\Support\Str::lower($i->name)))
+                ->sort($huCompare)
+                ->values();
+        @endphp
+
+        @if ($items->isNotEmpty())
+            <div class="mt-6 px-6 py-4 bg-gray-50" style="page-break-inside: auto;">
+                <h3 class="text-base font-bold text-gray-800 mb-3">{{ __('Technical specifications and services') }}
+                </h3>
+                <div class="text-sm text-gray-700 leading-relaxed text-justify" style="page-break-inside: auto;">
+                    <ul class="list-disc list-inside mb-4">
+                        @foreach ($items as $item)
+                            @if (app()->getLocale() === 'en')
+                                <li class="mb-1">
+                                    {{ Translate::whereName($item->name)->first()?->translated ?? $item->name }}</li>
+                            @else
                                 <li class="mb-1">{{ $item->name }}</li>
-                            @endforeach
-                        @endif
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
             </div>
         @endif
-
-        </div>
 
     </body>
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\App;
 
 /**
- * Every option of the `parkolas` select in PropertyResource must have an English
+ * Every option of the `parking` select in PropertyResource must have an English
  * translation in lang/en.json, otherwise the raw Hungarian value leaks onto the
  * English property page.
  */
