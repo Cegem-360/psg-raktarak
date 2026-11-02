@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Property;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Replace all double newlines (\\n\\n) with empty string in Property content fields')]
+#[Signature('property:replace-double-newline')]
 final class ReplaceDoubleNewlineInPropertyContent extends Command
 {
-    protected $signature = 'property:replace-double-newline';
-
-    protected $description = 'Replace all double newlines (\\n\\n) with empty string in Property content fields';
-
     public function handle(): void
     {
         $count = 0;
-        Property::chunk(100, function ($properties) use (&$count): void {
+        Property::query()->chunk(100, function ($properties) use (&$count): void {
             foreach ($properties as $property) {
                 $originalContent = $property->content;
                 $originalEnContent = $property->en_content ?? '';

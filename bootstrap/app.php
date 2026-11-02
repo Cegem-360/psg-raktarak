@@ -16,7 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+    ->withMiddleware(function (Middleware $middleware): void {
         $middleware->prepend(RedirectToCanonicalUrl::class);
 
         // The browser reads and writes the favorites list too, so it stays plain JSON.
@@ -27,6 +27,6 @@ return Application::configure(basePath: dirname(__DIR__))
             GoogleTagManagerMiddleware::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
+    ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

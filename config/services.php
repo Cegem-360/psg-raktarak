@@ -37,14 +37,6 @@ return [
         ],
     ],
 
-    'browsershot' => [
-        'not_isolated' => env('NOTISOLATED', false),
-    ],
-
-    'google_tag_manager' => [
-        'id' => env('GOOGLE_TAG_ID', ''),
-    ],
-
     'google_maps' => [
         'api_key' => env('GOOGLE_MAPS_API_KEY', ''),
         'map_id' => env('GOOGLE_MAPS_MAP_ID', ''),

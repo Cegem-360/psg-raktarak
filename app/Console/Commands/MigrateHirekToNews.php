@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use Exception;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+#[Description('Migrate content from Hírek page to News table')]
+#[Signature('hirek:migrate-to-news {--dry-run : Run in dry-run mode without actual database changes}')]
 final class MigrateHirekToNews extends Command
 {
-    /**
-     * The name and signature of the console command.
-     */
-    protected $signature = 'hirek:migrate-to-news {--dry-run : Run in dry-run mode without actual database changes}';
-
-    /**
-     * The console command description.
-     */
-    protected $description = 'Migrate content from Hírek page to News table';
-
     /**
      * Execute the console command.
      */

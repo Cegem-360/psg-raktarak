@@ -6,12 +6,15 @@ use App\Services\FavoritesExcelExportService;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use Tests\TestCase;
 
 beforeEach(function (): void {
+    /** @var TestCase $this */
     $this->service = new FavoritesExcelExportService;
 });
 
 afterEach(function (): void {
+    /** @var TestCase $this */
     if (property_exists($this, 'tempFile') && $this->tempFile !== null && file_exists($this->tempFile)) {
         File::delete($this->tempFile);
     }
@@ -46,6 +49,7 @@ function createPropertyStub(array $overrides = []): stdClass
 }
 
 it('generates a valid xlsx file', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -60,6 +64,7 @@ it('generates a valid xlsx file', function (): void {
 });
 
 it('names the worksheet munkafuzet', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -72,6 +77,7 @@ it('names the worksheet munkafuzet', function (): void {
 });
 
 it('sets the title row correctly', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -91,6 +97,7 @@ it('sets the title row correctly', function (): void {
 });
 
 it('sets all header labels in row 3', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -115,6 +122,7 @@ it('sets all header labels in row 3', function (): void {
 });
 
 it('populates data rows starting at row 4', function (): void {
+    /** @var TestCase $this */
     $properties = collect([
         createPropertyStub(['title' => 'Office Alpha']),
         createPropertyStub(['title' => 'Office Beta']),
@@ -131,6 +139,7 @@ it('populates data rows starting at row 4', function (): void {
 });
 
 it('formats address correctly', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'postal_code' => '1051',
         'city' => 'Budapest',
@@ -149,6 +158,7 @@ it('formats address correctly', function (): void {
 });
 
 it('formats rental fee with range when min and max differ', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'min_rent' => '12',
         'max_rent' => '18',
@@ -165,6 +175,7 @@ it('formats rental fee with range when min and max differ', function (): void {
 });
 
 it('formats rental fee without range when min equals max', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'min_rent' => '15',
         'max_rent' => '15',
@@ -181,6 +192,7 @@ it('formats rental fee without range when min equals max', function (): void {
 });
 
 it('formats rental fee without range when max is empty', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'min_rent' => '15',
         'max_rent' => '',
@@ -197,6 +209,7 @@ it('formats rental fee without range when max is empty', function (): void {
 });
 
 it('formats parking fee with range', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'min_parking_fee' => '120',
         'max_parking_fee' => '150',
@@ -213,6 +226,7 @@ it('formats parking fee with range', function (): void {
 });
 
 it('leaves column I empty for user input', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -225,6 +239,7 @@ it('leaves column I empty for user input', function (): void {
 });
 
 it('applies medium borders to header and data rows', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -243,6 +258,7 @@ it('applies medium borders to header and data rows', function (): void {
 });
 
 it('sets correct column widths', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub()]);
 
     $this->tempFile = $this->service->generate($properties);
@@ -257,6 +273,7 @@ it('sets correct column widths', function (): void {
 });
 
 it('handles empty collection gracefully', function (): void {
+    /** @var TestCase $this */
     $properties = collect();
 
     $this->tempFile = $this->service->generate($properties);
@@ -274,6 +291,7 @@ it('handles empty collection gracefully', function (): void {
 });
 
 it('handles properties with null fields', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'title' => null,
         'postal_code' => null,
@@ -313,6 +331,7 @@ it('handles properties with null fields', function (): void {
 });
 
 it('formats operating fee correctly', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'operating_fee' => '4.5',
         'operating_fee_unit' => 'EUR/m2/hó',
@@ -328,6 +347,7 @@ it('formats operating fee correctly', function (): void {
 });
 
 it('formats common area ratio correctly', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'common_area_ratio' => '5%',
         'common_area_ratio_unit' => '',
@@ -343,6 +363,7 @@ it('formats common area ratio correctly', function (): void {
 });
 
 it('formats min rental period correctly', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'min_lease_term' => '3',
         'min_lease_term_unit' => 'év',
@@ -358,6 +379,7 @@ it('formats min rental period correctly', function (): void {
 });
 
 it('populates construction year from property', function (): void {
+    /** @var TestCase $this */
     $properties = collect([createPropertyStub([
         'construction_year' => '2015',
     ])]);
@@ -373,6 +395,7 @@ it('populates construction year from property', function (): void {
 });
 
 it('handles multiple properties with correct row placement', function (): void {
+    /** @var TestCase $this */
     $properties = collect([
         createPropertyStub(['title' => 'First Building', 'construction_year' => '2010']),
         createPropertyStub(['title' => 'Second Building', 'construction_year' => '2015']),

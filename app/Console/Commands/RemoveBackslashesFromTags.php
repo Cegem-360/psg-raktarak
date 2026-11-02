@@ -5,24 +5,14 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Models\Property;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
+#[Description('Remove backslashes from the tags field in all Property models')]
+#[Signature('properties:remove-backslashes-from-tags {--dry-run : Run the command without making changes}')]
 final class RemoveBackslashesFromTags extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'properties:remove-backslashes-from-tags {--dry-run : Run the command without making changes}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Remove backslashes from the tags field in all Property models';
-
     /**
      * Execute the console command.
      */
@@ -36,7 +26,7 @@ final class RemoveBackslashesFromTags extends Command
 
         $this->info('Starting to process Property models...');
 
-        $properties = Property::whereNotNull('tags')->get();
+        $properties = Property::query()->whereNotNull('tags')->get();
         /*  dd($properties->first()->tags); */
         $processedCount = 0;
         $modifiedCount = 0;

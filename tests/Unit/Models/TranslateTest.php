@@ -5,7 +5,7 @@ declare(strict_types=1);
 use App\Models\Translate;
 
 it('can create a translation from the admin panel', function (): void {
-    $translate = Translate::create([
+    $translate = Translate::query()->create([
         'name' => 'Riasztó, videó kamerás rendszer',
         'translated' => 'Alarm and video camera system',
         'lang' => 'EN',
@@ -17,7 +17,7 @@ it('can create a translation from the admin panel', function (): void {
 });
 
 it('can update an existing translation from the admin panel', function (): void {
-    $translate = Translate::create([
+    $translate = Translate::query()->create([
         'name' => 'Riasztó, videó kamerás rendszer',
         'translated' => '',
         'lang' => 'EN',

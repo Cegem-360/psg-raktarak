@@ -12,7 +12,7 @@ it('shows a page in the language of its URL, whatever the session says', functio
     $this->withSession(['locale' => $sessionLocale])
         ->get($uri)
         ->assertOk()
-        ->assertSee('<html lang="'.$expectedLocale.'">', false)
+        ->assertSeeHtml('<html lang="'.$expectedLocale.'">')
         ->assertSessionHas('locale', $expectedLocale);
 })->with([
     'english page, hungarian session' => ['/offices-for-rent', 'hu', 'en'],
@@ -24,11 +24,11 @@ it('links a page to its other language version with hreflang and in the switcher
     /** @var TestCase $this */
     $response = $this->get('/rolunk')->assertOk();
 
-    $response->assertSee('<link rel="alternate" hreflang="hu" href="'.url('/rolunk').'">', false)
-        ->assertSee('<link rel="alternate" hreflang="en" href="'.url('/about-us').'">', false)
-        ->assertSee('<link rel="alternate" hreflang="x-default" href="'.url('/rolunk').'">', false)
-        ->assertSee('<meta property="og:locale" content="hu_HU">', false)
-        ->assertSee('href="'.url('/about-us').'" title="ENG"', false)
+    $response->assertSeeHtml('<link rel="alternate" hreflang="hu" href="'.url('/rolunk').'">')
+        ->assertSeeHtml('<link rel="alternate" hreflang="en" href="'.url('/about-us').'">')
+        ->assertSeeHtml('<link rel="alternate" hreflang="x-default" href="'.url('/rolunk').'">')
+        ->assertSeeHtml('<meta property="og:locale" content="hu_HU">')
+        ->assertSeeHtml('href="'.url('/about-us').'" title="ENG"')
         ->assertDontSee('status=200');
 });
 
@@ -38,8 +38,8 @@ it('keeps the route parameters in the alternates of a property page', function (
 
     $this->get('/office-to-let/'.$property->slug)
         ->assertOk()
-        ->assertSee('<html lang="en">', false)
-        ->assertSee('hreflang="hu" href="'.url('/kiado-raktar/teszt-hreflang').'"', false);
+        ->assertSeeHtml('<html lang="en">')
+        ->assertSeeHtml('hreflang="hu" href="'.url('/kiado-raktar/teszt-hreflang').'"');
 });
 
 it('lets pages without an english twin follow the session', function (): void {
@@ -49,8 +49,8 @@ it('lets pages without an english twin follow the session', function (): void {
     $this->withSession(['locale' => 'en'])
         ->get(route('en.blog.show', ['post' => $post->slug]))
         ->assertOk()
-        ->assertSee('<html lang="en">', false)
-        ->assertDontSee('hreflang', false);
+        ->assertSeeHtml('<html lang="en">')
+        ->assertDontSeeHtml('hreflang');
 });
 
 it('keeps the untranslated english news list and articles out of search engines', function (): void {
@@ -59,22 +59,22 @@ it('keeps the untranslated english news list and articles out of search engines'
 
     $this->get(route('en.news.show', ['news' => $news->slug]))
         ->assertOk()
-        ->assertSee('<html lang="en">', false)
-        ->assertSee('content="noindex, follow"', false)
-        ->assertDontSee('hreflang', false);
+        ->assertSeeHtml('<html lang="en">')
+        ->assertSeeHtml('content="noindex, follow"')
+        ->assertDontSeeHtml('hreflang');
 
     $this->get(route('news.show', ['news' => $news->slug]))
         ->assertOk()
-        ->assertDontSee('noindex', false)
-        ->assertDontSee('hreflang', false);
+        ->assertDontSeeHtml('noindex')
+        ->assertDontSeeHtml('hreflang');
 
     $this->get(route('en.news.index'))
         ->assertOk()
-        ->assertSee('content="noindex, follow"', false)
-        ->assertDontSee('hreflang', false);
+        ->assertSeeHtml('content="noindex, follow"')
+        ->assertDontSeeHtml('hreflang');
 
     $this->get(route('news.index'))
         ->assertOk()
-        ->assertDontSee('noindex', false)
-        ->assertDontSee('hreflang', false);
+        ->assertDontSeeHtml('noindex')
+        ->assertDontSeeHtml('hreflang');
 });

@@ -6,24 +6,15 @@ namespace App\Console\Commands;
 
 use App\Enums\BudapestDistrict;
 use App\Models\Property;
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Database\Query\Builder;
 
+#[Description('Update property districts based on postal codes (Budapest only)')]
+#[Signature('properties:update-districts {--dry-run : Show what would be updated without making changes}')]
 final class UpdatePropertyDistricts extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'properties:update-districts {--dry-run : Show what would be updated without making changes}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Update property districts based on postal codes (Budapest only)';
-
     /**
      * Execute the console command.
      */
@@ -37,12 +28,12 @@ final class UpdatePropertyDistricts extends Command
         }
 
         // Get all Budapest properties that need district updates
-        $properties = Property::query()->where(function ($query): void {
+        $properties = Property::query()->where(function (Builder $query): void {
             $query->where('city', 'like', '%Budapest%')
                 ->orWhere('postal_code', 'like', '1%');
         })
             ->whereNotNull('postal_code')
-            ->where(function ($query): void {
+            ->where(function (Builder $query): void {
                 $query->whereNull('district')
                     ->orWhere('district', '')
                     ->orWhere('district', 'not like', '%I%'); // Not already a Roman numeral
