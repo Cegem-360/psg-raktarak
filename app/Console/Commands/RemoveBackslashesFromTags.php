@@ -54,8 +54,8 @@ final class RemoveBackslashesFromTags extends Command
 
                 $modifiedCount++;
 
-                $this->info('  Original: ' . $originalTags);
-                $this->info('  Cleaned:  ' . $cleanedTags);
+                $this->info('  Original: '.$originalTags);
+                $this->info('  Cleaned:  '.$cleanedTags);
 
                 if (! $isDryRun) {
                     // Update the raw database value directly
@@ -71,8 +71,8 @@ final class RemoveBackslashesFromTags extends Command
 
         $this->newLine();
         $this->info('Processing completed!');
-        $this->info('Total properties processed: ' . $processedCount);
-        $this->info('Properties modified: ' . $modifiedCount);
+        $this->info('Total properties processed: '.$processedCount);
+        $this->info('Properties modified: '.$modifiedCount);
 
         if ($isDryRun) {
             $this->warn('This was a DRY RUN - no actual changes were made.');

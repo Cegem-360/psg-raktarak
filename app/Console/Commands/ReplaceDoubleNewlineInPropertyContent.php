@@ -28,7 +28,7 @@ final class ReplaceDoubleNewlineInPropertyContent extends Command
 
                 $count++;
 
-                $this->info('Updated Property ID: ' . $property->id);
+                $this->info('Updated Property ID: '.$property->id);
 
             }
         });

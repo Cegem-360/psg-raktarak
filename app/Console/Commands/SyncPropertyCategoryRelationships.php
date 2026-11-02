@@ -136,11 +136,11 @@ final class SyncPropertyCategoryRelationships extends Command
         }
 
         $this->info('Sync completed!');
-        $this->info('Created relationships: ' . $relationshipCount);
-        $this->info('Skipped relationships: ' . $skippedCount);
+        $this->info('Created relationships: '.$relationshipCount);
+        $this->info('Skipped relationships: '.$skippedCount);
 
         if ($errorCount > 0) {
-            $this->error('Errors encountered: ' . $errorCount);
+            $this->error('Errors encountered: '.$errorCount);
 
             return Command::FAILURE;
         }
