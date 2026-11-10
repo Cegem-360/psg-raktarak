@@ -105,7 +105,7 @@ it('renders the home page head with robots, author and organization data', funct
         ->toContain('<meta name="author" content="Property Solution Group Kft.">')
         ->not->toMatch('#<title>[^<]*\|\s*</title>#')
         ->and(mb_substr_count($html, '<h1'))->toBe(1)
-        ->and($html)->toContain('Kiadó raktárak Budapesten – a teljes raktárkínálat egy helyen');
+        ->and($html)->toContain('Kiadó Raktárak Budapesten és környékén - modern logisztikai parkok teljes választéka egy helyen');
 
     $organization = jsonLdNode($html, 'Organization');
     $person = jsonLdNode($html, 'Person');

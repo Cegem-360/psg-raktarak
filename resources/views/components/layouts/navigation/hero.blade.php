@@ -14,7 +14,7 @@
         <div class="slogan flex flex-col items-center text-center">
             @if (request()->routeIs('home', 'en.home'))
                 <h1 class="text-xl sm:text-2xl font-bold text-logogray/80 mb-3">
-                    {{ __('Warehouses for rent in Budapest – the whole warehouse market in one place') }}</h1>
+                    {{ __('Warehouses for rent in and around Budapest – the full range of modern logistics parks in one place') }}</h1>
             @endif
             <p class="text-2xl sm:text-3xl">{!! __('page.hero.slogan') !!}</p>
         </div>
