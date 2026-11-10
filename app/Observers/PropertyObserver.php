@@ -7,6 +7,7 @@ namespace App\Observers;
 use App\Enums\BudapestDistrict;
 use App\Jobs\SubmitUrlsToIndexNow;
 use App\Models\Property;
+use App\Models\PropertyRedirect;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -52,21 +53,41 @@ final class PropertyObserver
     }
 
     /**
-     * Pings IndexNow with the property's page after every save in the admin.
+     * Pings IndexNow with the property's pages after every save in the admin:
+     * inactive properties keep a public page too.
      */
     public function saved(Property $property): void
     {
         Property::forgetDistrictCounts();
 
-        if (blank(config('seo.indexnow.key')) || ! $property->isActive() || blank($property->slug)) {
+        $this->pingIndexNow($property);
+    }
+
+    /**
+     * A deleted property keeps its page as an inactive data sheet; search engines
+     * are told to look at it again.
+     */
+    public function deleted(Property $property): void
+    {
+        Property::forgetDistrictCounts();
+
+        $this->pingIndexNow($property);
+    }
+
+    /**
+     * A property deleted for good leaves a 301 behind to its district's page.
+     */
+    public function forceDeleted(Property $property): void
+    {
+        PropertyRedirect::rememberDeleted($property);
+    }
+
+    private function pingIndexNow(Property $property): void
+    {
+        if (blank(config('seo.indexnow.key')) || blank($property->slug)) {
             return;
         }
 
-        SubmitUrlsToIndexNow::dispatchAfterResponse([$property->url()]);
-    }
-
-    public function deleted(): void
-    {
-        Property::forgetDistrictCounts();
+        SubmitUrlsToIndexNow::dispatchAfterResponse($property->publicUrls());
     }
 }
